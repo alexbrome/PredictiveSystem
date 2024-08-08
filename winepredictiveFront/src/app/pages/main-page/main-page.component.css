@@ -1,0 +1,53 @@
+
+#colorVino{
+    width: 80%;
+    height: 68vh;
+    align-items: center;
+    justify-content: center;
+    margin-left: 14%;
+}
+#wines-buttons{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+#wines-buttons button {
+    margin-bottom: 1%; /* Espacio entre los botones */
+}
+
+.red-button {
+    background-color: #8B0000; /* Color vino tinto */
+    color: white; /* Letras en blanco */
+    padding: 10px 20px; /* Espaciado interno del botón */
+    border: none; /* Sin borde */
+    border-radius: 50px; /* Botón redondeado */
+    font-family: 'Arial', sans-serif; /* Fuente estilizada */
+    font-size: 18px; /* Tamaño de la fuente */
+    cursor: pointer; /* Cambia el cursor al pasar por encima */
+    transition: background-color 0.3s ease; /* Transición suave al cambiar de color */
+    width: 18%;
+}
+
+.red-button:hover {
+    background-color: #a52a2a; /* Cambia el color de fondo al pasar el ratón por encima */
+}
+
+.white-button {
+    background-color: #e8dfa0; /* Color vino tinto */
+    color: rgb(26, 25, 25); /* Letras en blanco */
+    padding: 10px 20px; /* Espaciado interno del botón */
+    border: none; /* Sin borde */
+    border-radius: 50px; /* Botón redondeado */
+    font-family: 'Arial', sans-serif; /* Fuente estilizada */
+    font-size: 18px; /* Tamaño de la fuente */
+    cursor: pointer; /* Cambia el cursor al pasar por encima */
+    transition: background-color 0.3s ease; /* Transición suave al cambiar de color */
+    width: 18%;
+}
+
+.white-button:hover {
+    background-color: #e3dfac; /* Cambia el color de fondo al pasar el ratón por encima */
+}
+
