@@ -5,7 +5,7 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background-color: #380707;
+    background: linear-gradient(90deg, #5e0b0b, #f7e381);
     padding: 10px 20px;
 }
 .navbar img {

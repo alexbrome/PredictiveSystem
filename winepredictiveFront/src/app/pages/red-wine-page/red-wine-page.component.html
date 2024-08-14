@@ -1,1 +1,137 @@
-<p>red-wine-page works!</p>
+
+<!--Container-->
+<div id="container">
+
+    <!--section left-->
+  <div>
+   <h1>Red Wine</h1>
+    <img src="../../images/que-es-el-vino-tinto.jpg" alt="colorVino" id="wine-img">
+  </div>  
+
+  <!--form-->
+  
+  <div id="properties-form">
+    <h2>Analysis Measures</h2><br>
+      <form [formGroup]="wineForm" class="flex flex-column align-items-center gap-3" 
+      id="form" (submit)="handleSubmit()">
+        
+        <!--fixed_acidity-->
+        <div>
+            <h4>Fixed Acidity</h4>
+            <p-inputNumber 
+            placeholder="Introduce un valor decimal"
+            formControlName="fixed_acidity"
+            mode="decimal" 
+            [minFractionDigits]="0"
+           [maxFractionDigits]="7"
+            inputId="decimalOnly" 
+            [useGrouping]="false" /> 
+        </div>
+    <!--volatile acidity-->
+    <div>
+        <h4>Volatile Acidity</h4>
+        <p-inputNumber 
+        formControlName="volatile_acidity"
+        mode="decimal" 
+        [minFractionDigits]="0"
+           [maxFractionDigits]="7"
+            inputId="decimalOnly" 
+        [useGrouping]="false" /> 
+    </div>
+    <div>
+        <h4>Citric Acidity</h4>
+        <p-inputNumber 
+        formControlName="citric_acidity"
+        mode="decimal" 
+        [minFractionDigits]="0"
+           [maxFractionDigits]="7"
+            inputId="decimalOnly" 
+        [useGrouping]="false" /> 
+    </div>
+    <div>
+        <h4>Residual sugar Acidity</h4>
+        <p-inputNumber 
+        formControlName="residual_sugar"
+        mode="decimal" 
+        [minFractionDigits]="0"
+           [maxFractionDigits]="7"
+            inputId="decimalOnly"  
+        [useGrouping]="false" /> 
+    </div>
+    <div>
+        <h4>Chlorides</h4>
+        <p-inputNumber 
+        formControlName="chlorides"
+        mode="decimal" 
+        [minFractionDigits]="0"
+        [maxFractionDigits]="7"
+         inputId="decimalOnly" 
+        [useGrouping]="false" /> 
+    </div>
+    <div>
+        <h4>Free sulfur dioxide</h4>
+        <p-inputNumber 
+        formControlName="free_sulfur_dioxide"
+        mode="decimal" 
+        [minFractionDigits]="0"
+           [maxFractionDigits]="7"
+            inputId="decimalOnly" 
+        [useGrouping]="false" /> 
+    </div>
+    <div>
+        <h4>Total sulfur dioxide</h4>
+        <p-inputNumber 
+        formControlName="total_sulfur_dioxide"
+        mode="decimal" 
+        [minFractionDigits]="0"
+           [maxFractionDigits]="7"
+            inputId="decimalOnly" 
+        [useGrouping]="false" /> 
+    </div>
+    <div>
+        <h4>Density</h4>
+        <p-inputNumber 
+        formControlName="density"
+        mode="decimal" 
+        [minFractionDigits]="0"
+        [maxFractionDigits]="7"
+         inputId="decimalOnly" 
+        [useGrouping]="false" /> 
+    </div>
+    <div>
+        <h4>PH</h4>
+        <p-inputNumber 
+        formControlName="ph"
+        mode="decimal" 
+        inputId="locale-german" 
+        [useGrouping]="false" /> 
+    </div>
+    <div>
+        <h4>Sulphates</h4>
+        <p-inputNumber 
+        formControlName="sulphates"
+        mode="decimal" 
+        [minFractionDigits]="0"
+        [maxFractionDigits]="7"
+         inputId="decimalOnly" 
+        [useGrouping]="false" /> 
+    </div>
+    <div>
+        <h4>Alcohol</h4>
+        <p-inputNumber 
+        formControlName="alcohol"
+        mode="decimal" 
+        [minFractionDigits]="0"
+           [maxFractionDigits]="7"
+            inputId="decimalOnly" 
+        [useGrouping]="false" /> 
+    </div>
+    </form>
+    <button id="submit-button" (click)="handleSubmit()"
+    pButton 
+    pRipple 
+    label="Submit" 
+    class="p-button-success">
+</button>
+  </div>
+</div>

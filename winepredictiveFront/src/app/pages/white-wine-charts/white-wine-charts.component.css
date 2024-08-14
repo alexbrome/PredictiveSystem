@@ -1,0 +1,108 @@
+@import "primeicons/primeicons.css";
+#title{
+    margin-top: 1%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+.circle {
+    width: 100px; /* Tamaño del círculo */
+    height: 100px; /* Tamaño del círculo */
+    border-radius: 50%; /* Hacerlo circular */
+    background-color: rgb(239, 220, 115); /* Color dorado */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px; /* Tamaño del texto */
+    font-weight: bold; /* Grosor del texto */
+    color: rgb(14, 8, 8); /* Color del texto */
+    margin-top: 20px; /* Opcional: Espacio arriba del círculo */
+    border:4px solid black;
+  }
+
+  h1, h3 {
+    margin: 0; /* Elimina márgenes por defecto para los encabezados */
+}
+
+.divider {
+    width: 100%; /* Cubre el ancho completo del contenedor */
+    border: none; /* Elimina el borde por defecto */
+    border-top: 2px solid black; /* Línea horizontal, ajusta el grosor y el color según sea necesario */
+    margin: 20px 0; /* Espaciado arriba y abajo de la línea horizontal */
+}
+
+  /*Back button*/
+  .p-button-secondary:hover {
+    background-color: #5a6268;
+    border-color: #545b62;
+}
+
+.p-button-rounded {
+    border-radius: 50px;
+    margin-top: 1.5%;
+  }
+  
+  .p-button-outlined {
+    border: 2px solid #6c757d;
+    background: transparent;
+    color: #6c757d;
+  }
+  
+  .p-button-outlined:hover {
+    background-color: #6c757d;
+    color: white;
+  }
+
+  /*Main chart container*/
+
+  #charts {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    margin: 2% 1.5% 0 1.5%;
+}
+
+.chart-item {
+    width: 48%; /* Cada gráfico ocupa el 48% menos el margen intermedio */
+    margin-bottom: 2%;
+}
+
+#charts .chart-item:nth-child(2n + 1) {
+    margin-right: 3%;
+}
+
+.pi {
+    margin-left: 90%;
+}
+
+/* Diseño responsivo */
+@media (max-width: 1200px) {
+    .chart-item {
+        width: 48%; /* Ajusta el tamaño para pantallas grandes */
+    }
+
+    #charts .chart-item:nth-child(2n + 1) {
+        margin-right: 2%; /* Ajuste del margen entre gráficos */
+    }
+}
+
+@media (max-width: 768px) {
+    .chart-item {
+        width: 100%; /* En pantallas medianas, los gráficos ocupan el 100% */
+        margin-right: 0; /* Elimina el margen entre gráficos */
+    }
+}
+
+@media (max-width: 480px) {
+    #charts {
+        margin: 2% 0; /* Ajusta los márgenes para pantallas pequeñas */
+    }
+
+    .chart-item {
+        width: 100%; /* En pantallas pequeñas, los gráficos ocupan el 100% */
+        margin-right: 0;
+    }
+}

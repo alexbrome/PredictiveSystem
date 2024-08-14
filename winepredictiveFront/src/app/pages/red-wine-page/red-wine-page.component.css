@@ -1,0 +1,30 @@
+
+#container{
+    display: flex;
+    flex-direction: row;
+    width: 80%;
+    margin-top: 2vh;
+    margin-left: 6%;
+    margin-right: 16%;
+     
+}
+
+#container img{
+   height:68%;
+}
+
+#properties-form{
+    margin-left: 3%;
+    margin-right: 6%;
+}
+
+/*fields Form*/
+#form{
+    display:grid;
+    grid-template-columns: auto auto auto;
+    gap:3%;
+}
+#submit-button{
+    margin-top: 8%;
+}
+
