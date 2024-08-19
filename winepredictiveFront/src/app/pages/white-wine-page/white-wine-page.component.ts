@@ -40,9 +40,9 @@ export class WhiteWinePageComponent implements OnInit{
   ];
 
   /*Wine name form*/
-  selectedWine: FormControl = new FormControl('');
+  selectedWine: FormControl = new FormControl('',Validators.required);
   filteredWines!: any[];
-  selectWineFormGroup:FormGroup;
+  selectWineFormGroup!:FormGroup;
 
   /*FormGroup variable wine parameters*/
   wineForm: FormGroup;
@@ -62,7 +62,10 @@ export class WhiteWinePageComponent implements OnInit{
   quality: Number = 0;
   
   ngOnInit(): void {
-   
+   /*Wine name form*/
+   this.selectWineFormGroup = new FormGroup({
+    selectedWine : this.selectedWine
+  })
   }
 
   constructor(private whiteWineQualityService: WhiteWineServiceService, private http: HttpClient,
@@ -88,17 +91,19 @@ export class WhiteWinePageComponent implements OnInit{
     
     
     
-    /*Wine name form*/
-    this.selectWineFormGroup = new FormGroup({
-      selectedWine : this.selectedWine
-    })
+    
   }
   
   /*Submit form*/
   handleSubmit() {
-    if (this.wineForm.invalid) {
+    if(this.selectedWine.invalid){
+      this.messageService.add({ severity: 'error', summary: 'error', detail: 'Must fill out wine name field' });
+    }
+    else{
+    if (this.wineForm.invalid ) {
       this.messageService.add({ severity: 'error', summary: 'error', detail: 'Must fill out all fields' });
     }
+  
     else{
    
     const formData = this.wineForm.value;
@@ -140,9 +145,10 @@ export class WhiteWinePageComponent implements OnInit{
       }
     );
   }
+    }
   }
 
-/*Filter wines from select input*/
+/*Filter wines from name select input*/
 filterWines(event: AutoCompleteCompleteEvent) {
   let filtered: any[] = [];
   let query = event.query;

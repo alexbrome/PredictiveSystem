@@ -2,7 +2,6 @@ package com.winepredictive.winepredictive.service;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-
 import com.winepredictive.winepredictive.dto.SignupRequest;
 import com.winepredictive.winepredictive.dto.UserDto;
 import com.winepredictive.winepredictive.entity.Users;
@@ -46,10 +45,10 @@ private final UserRepository userRepository;
 		return userDto;
 	}
 
-	//Check if email exists
+	//Check out if email exists
 	@Override
 	@Transactional
-	public boolean hasCustomerWithEmail(String email) {		
+	public boolean hasCustomerWithEmail(String email) {	
 		return userRepository.findFirstByEmail(email).isPresent();
 	}
 	

@@ -1,0 +1,50 @@
+<div class="bg" style="background-color: #788177;">
+    <p-toast />
+    <div class="parent">
+        <div class="child">
+            <div class="p-grid imgDiv">
+                <div class="p-col-24">
+                    <h1 style="margin-left: 100px;">LogIn</h1>
+                </div>
+            </div>
+            <form [formGroup]="loginForm">
+                <!-- Campo Email -->
+                <div class="p-field p-grid">
+                    <div class="p-col-12 p-md-12">
+                        <label for="email">Email</label>
+                        <span class="p-input-icon-left">
+                            <i class="pi pi-user"></i>
+                            <input id="email" type="text" pInputText placeholder="Email" formControlName="email" class="p-inputtext p-component" />
+                        </span>
+                        @if(loginForm.get('email')?.invalid && loginForm.get('email')?.touched){
+                            <div  class="p-error">
+                               Please type your email
+                            </div>
+                        }
+                    </div>
+                </div>
+
+                <!-- Campo Password -->
+                <div class="p-field p-grid">
+                    <div class="p-col-12 p-md-12">
+                        <label for="password">Password</label>
+                        <span class="p-input-icon-left">
+                            <i class="pi pi-lock"></i>
+                            <input id="password" type="password" pInputText placeholder="Password" formControlName="password" class="p-inputtext p-component" />
+                        </span>
+                        @if(loginForm.get('password')?.invalid && loginForm.get('password')?.touched){
+                            <div class="p-error">
+                                Por favor introduzca el Password
+                            </div>
+                        }
+                    </div>
+                </div>
+
+                <!-- Botón de Log In -->
+               
+                <button pButton type="button" class="p-button p-component" (click)="login()" >Log In</button>
+                <!--[disabled]="loginForm.invalid"-->
+            </form>
+        </div>
+    </div>
+</div>

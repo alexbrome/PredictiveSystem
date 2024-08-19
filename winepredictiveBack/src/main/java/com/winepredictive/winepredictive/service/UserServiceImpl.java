@@ -1,11 +1,13 @@
 package com.winepredictive.winepredictive.service;
 
+
+import java.util.ArrayList;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-
 import com.winepredictive.winepredictive.entity.Users;
 import com.winepredictive.winepredictive.repository.UserRepository;
 
@@ -14,17 +16,17 @@ public class UserServiceImpl implements UserService{
 
 	@Autowired
     private UserRepository userRepository;
-
-    @Override
+   @Override
     public UserDetailsService userDetailsService() {
-        return new UserDetailsService() {
+        return new UserDetailsService() {    	
             @Override
             public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
                 return userRepository.findFirstByEmail(username)
-                        .orElseThrow(() -> new UsernameNotFoundException("Usuario no encontrado"));
+                        .orElseThrow(() -> new UsernameNotFoundException("User not found"));
             }
         };
     }
+ 
 
 	@Override
 	public String getEmailByUserId(Long id) {

@@ -10,7 +10,7 @@ public class SignupRequest {
 	
 	//constructor
 	public SignupRequest(String email, String name, String password) {
-		super();
+		
 		this.email = email;
 		this.name = name;
 		this.password = password;

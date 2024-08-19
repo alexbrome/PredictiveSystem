@@ -12,7 +12,7 @@ private String jwt;
 
 	//constructor
 	public AuthenticationResponse(String jwt, UserRole userRole, Long userId) {
-		super();
+		
 		this.jwt = jwt;
 		this.userRole = userRole;
 		this.userId = userId;

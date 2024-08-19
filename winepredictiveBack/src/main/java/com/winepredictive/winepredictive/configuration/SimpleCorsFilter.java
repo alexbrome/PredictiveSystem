@@ -20,7 +20,7 @@ public class SimpleCorsFilter implements Filter {
 		HttpServletRequest request = (HttpServletRequest) req;
 		Map<String,String> map = new HashMap<>();
 		String originHeader = request.getHeader("origin");
-		response.setHeader("Access-Control-Allow-Origin", originHeader);
+		response.setHeader("Access-Control-Allow-Origin", "http://localhost:4200");
 		response.setHeader("Access-Control-Allow-Methods", "POST,GET,PUT,OPTIONS,DELETE");//Metodos HTTP permitidos
 		response.setHeader("Access-Control-Max-Age", "3600");//Tiempo maximo almacenado en cache
 		response.setHeader("Access-Control-Allow-Headers", "*");//Permite el encabezado CORS

@@ -1,56 +1,88 @@
 
 <button 
-    pButton 
-    type="button" 
-    label="Back to Prediction" 
-    icon="pi pi-arrow-left" 
-    class="p-button-rounded p-button-outlined p-button-secondary"
-    (click)="goBack()">
+pButton 
+type="button" 
+label="Back to Prediction" 
+icon="pi pi-arrow-left" 
+class="p-button-rounded p-button-outlined p-button-secondary"
+(click)="goBack()">
 </button>
+
+
 <div id = "title">    
     <h1>Prediction summary</h1>
     <hr class="divider">
     <h3>Quality Prediction of this Wine</h3>
-  
-   <div class = "circle">{{ qualityPredicted }}</div>
+    <div class="content-container">
+    <div class = "circle">{{ qualityPredicted }}
+    </div>
+    <button 
+    pButton 
+    id="goSummaryButton"
+    type="button" 
+    label="Go to Summary Predictions -->" 
+    icon="pi pi-arrow-left" 
+    class="p-button-rounded p-button-outlined "
+    (click)="goSummary()">
+    </button>
+    </div>
 </div>
 
 <section id="charts">
+   <!--Fixed acidity-->
     <div class="chart-item">
         <i class="pi pi-info-circle" style="color: slateblue"></i>
         <p-chart type="bar" [data]="fixed_acidityChart" [options]="basicOptions_fixed_acidity" />
     </div>
+<!--Volatile acidity-->
     <div class="chart-item">
-       Gráfico 2
+      <i class="pi pi-info-circle" style="color: slateblue"></i>
+      <p-chart type="bar" [data]="volatile_acidityChart" [options]="basicOptions_volatile_acidity" />
     </div>
+    <!--Citric acidity-->
     <div class="chart-item">
-       Gráfico 3 
+      <i class="pi pi-info-circle" style="color: slateblue"></i>
+      <p-chart type="bar" [data]="citric_acidChart" [options]="basicOptions_citric_acidChart" />
     </div>
+    <!--residual sugar-->
     <div class="chart-item">
-       Gráfico 4 
+      <i class="pi pi-info-circle" style="color: slateblue"></i>
+      <p-chart type="bar" [data]="residual_sugarChart" [options]="basicOptions_residual_sugar" />
     </div>
+    <!--Chlorides-->
     <div class="chart-item">
-        Gráfico 4 
+      <i class="pi pi-info-circle" style="color: slateblue"></i>
+      <p-chart type="bar" [data]="chloridesChart" [options]="basicOptions_chlorides" />
      </div>
+     <!--Free sulfure dioxide-->
      <div class="chart-item">
-        Gráfico 4 
+      <i class="pi pi-info-circle" style="color: slateblue"></i>
+      <p-chart type="bar" [data]="free_sulfur_dioxideChart" [options]="basicOptions_free_sulfur_dioxide"/>
      </div>
+     <!--Total suñfure dioxide-->
      <div class="chart-item">
-        Gráfico 4 
+      <i class="pi pi-info-circle" style="color: slateblue"></i>
+      <p-chart type="bar" [data]="total_sulfure_dioxideChart" [options]="basicOptions_total_sulfure_dioxide" />
      </div>
+     <!--density-->
      <div class="chart-item">
-        Gráfico 4 
+      <i class="pi pi-info-circle" style="color: slateblue"></i>
+      <p-chart type="bar" [data]="densityChart" [options]="basicOptions_density" />
      </div>
+     <!--PH-->
      <div class="chart-item">
-        Gráfico 4 
+        <i class="pi pi-info-circle" style="color: slateblue"></i>
+      <p-chart type="bar" [data]="pHChart" [options]="basicOptions_pH" />
      </div>
+     <!--Sulphure-->
      <div class="chart-item">
-        Gráfico 4 
+        <i class="pi pi-info-circle" style="color: slateblue"></i>
+      <p-chart type="bar" [data]="sulphatesChart" [options]="basicOptions_sulphates" />
      </div>
+     <!--Alcohol-->
      <div class="chart-item">
-        Gráfico 4 
+        <i class="pi pi-info-circle" style="color: slateblue"></i>
+      <p-chart type="bar" [data]="alcoholChart" [options]="basicOptions_alcohol" />
      </div>
-     <div class="chart-item">
-        Gráfico 4 
-     </div>
+    
 </section>

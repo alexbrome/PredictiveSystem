@@ -1,0 +1,106 @@
+<div class="bg">
+    <div class="parent">
+      <div class="child">
+        <div class="p-grid imgDiv">
+          <div class="p-col-24">
+            <h1 >Sign Up</h1>
+          </div>
+        </div>
+        <form [formGroup]="signupForm">
+          <!-- Field Email -->
+          <div class="p-field p-grid">
+            <div class="p-col-12 p-md-4">
+              <label for="email">Email</label>
+            </div>
+            <div class="p-col-12 p-md-8">
+              <input pInputText placeholder="Email" id="email" formControlName="email" class="p-inputtext p-component" />
+              @if(signupForm.get('email')?.invalid && signupForm.get('email')?.touched){
+                <div class="p-error">
+                    <ng-container>
+                      Email Requerided
+                    </ng-container>
+                </div>
+               }
+            </div>
+          </div>
+  
+          <!-- Field Password -->
+          <div class="p-field p-grid">
+            <div class="p-col-12 p-md-4">
+              <label for="password">Password</label>
+            </div>
+            <div class="p-col-12 p-md-8">
+              <input pInputText type="password" placeholder="Password" id="password" formControlName="password" class="p-inputtext p-component" />
+             
+              <!--  error message  -->
+               @if(signupForm.get('password')?.invalid && signupForm.get('password')?.touched){
+                <div class="p-error">
+                    <ng-container>
+                      Password Requerided
+                    </ng-container>
+                </div>
+               }
+               @if(signupForm.get('password')?.hasError('minlength') && signupForm.get('password')?.touched){
+                <div class="p-error">
+                    <ng-container>
+                      Password must be contained by 8 characters
+                    </ng-container>
+                </div>
+               }
+           
+            </div>
+          </div>
+  
+          <!-- Campo Confirmar Password -->
+          <div class="p-field p-grid">
+            <div class="p-col-12 p-md-4">
+              <label for="checkPassword"> Password Confirm</label>
+            </div>
+            <div class="p-col-12 p-md-8">
+                <input pInputText type="password" placeholder="Confirma Password" id="checkPassword" formControlName="checkPassword" class="p-inputtext p-component" />
+              
+                <!-- Mensaje de error -->
+                @if (signupForm.get('checkPassword')?.invalid && signupForm.get('checkPassword')?.touched) {
+                    <div class="p-error">
+                      @if(signupForm.get('checkPassword')?.hasError('required')) {
+                        <ng-container>
+                          Please confirm password
+                        </ng-container>
+                      } 
+                      @if(signupForm.get('checkPassword')?.hasError('confirm')) {
+                        <ng-container>
+                          Passwords don't match
+                        </ng-container>
+                      } 
+                    </div>
+                  } 
+                </div>
+              </div>
+  
+          <!-- Name field -->
+          <div class="p-field p-grid">
+            <div class="p-col-12 p-md-4">
+              <label for="username">Username</label>
+            </div>
+            <div class="p-col-12 p-md-8">
+              <input pInputText placeholder="Name" id="username" formControlName="name" class="p-inputtext p-component" />
+
+              <!-- Name error message -->
+              @if(signupForm.get('name')?.invalid && signupForm.get('name')?.touched){
+                <div  class="p-error">
+                    Please type your username
+                  </div>
+              }
+             
+            </div>
+          </div>
+  
+          <!-- Botón de registro -->
+          <button pButton type="button" class="p-button p-component" (click)="register()">Registrarse</button>
+          <br><br>
+          
+        </form>
+      </div>
+    </div>
+  </div>
+  
