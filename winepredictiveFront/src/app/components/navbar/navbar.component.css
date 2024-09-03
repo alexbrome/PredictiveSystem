@@ -1,31 +1,15 @@
-body {
-    font-family: Arial, sans-serif;
+i{
+    color: white;
+    font-size:x-large;
 }
-.navbar {
+.flex{
+   gap: 45px;
+}
+.userName{
+    color:white;
+}
+.avatar{
     display: flex;
-    justify-content: space-between;
+    gap: 10%;
     align-items: center;
-    background: linear-gradient(90deg, #5e0b0b, #f7e381);
-    padding: 10px 20px;
 }
-.navbar img {
-    height: 40px;
-}
-.navbar .title {
-    color: white;
-    font-size: 24px;
-    text-align: center;
-    flex-grow: 1;
-}
-.navbar button {
-    background-color: #585c58;
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    cursor: pointer;
-    font-size: 16px;
-}
-.navbar button:hover {
-    background-color: #929892;
-}
-

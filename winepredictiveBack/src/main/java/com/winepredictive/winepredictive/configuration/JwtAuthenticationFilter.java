@@ -43,17 +43,21 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter{
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
 			throws ServletException, IOException {
 		
+		   System.out.println("Request received: " + request.getRequestURI());
+		
 		final String authHeader=request.getHeader("Authorization");
+		System.out.println("Authorization Header: " + authHeader);
 		final String jwt;
 		final String userEmail;
 		if(StringUtils.isEmptyOrWhitespaceOnly(authHeader) || StringUtils.startsWithIgnoreCase(authHeader,"Bearer")) {
+			
 			filterChain.doFilter(request, response);
 			return;
 		}
 		
 		jwt = authHeader.substring(7);
 		userEmail = jwtUtil.extractUserName(jwt);
-		if(StringUtils.isNullOrEmpty(userEmail) && SecurityContextHolder.getContext().getAuthentication() == null) {
+		if(!StringUtils.isNullOrEmpty(userEmail) && SecurityContextHolder.getContext().getAuthentication() == null) {
 		UserDetails userDetails = userService.userDetailsService().loadUserByUsername(userEmail);
 			if(jwtUtil.isTokenValid(jwt, userDetails)) {
 				SecurityContext context = SecurityContextHolder.createEmptyContext();

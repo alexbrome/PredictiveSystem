@@ -10,6 +10,9 @@ import { AutoCompleteCompleteEvent, AutoCompleteModule } from 'primeng/autocompl
 import { Message, MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
 import { CommonModule } from '@angular/common';
+import { WineService } from '../../services/wine.service';
+import { StorageService } from '../../auth/services/storage.service';
+import { DropdownModule } from 'primeng/dropdown';
 
 
 
@@ -18,7 +21,7 @@ import { CommonModule } from '@angular/common';
   standalone: true,
   imports: [
     ReactiveFormsModule, InputNumberModule, ButtonModule,AutoCompleteModule
-    ,CommonModule,ToastModule 
+    ,CommonModule,ToastModule,DropdownModule
   ],
   templateUrl: './white-wine-page.component.html',
   styleUrl: './white-wine-page.component.css',
@@ -29,15 +32,10 @@ import { CommonModule } from '@angular/common';
 export class WhiteWinePageComponent implements OnInit{
 
   messages!: Message[] ;
+  idUser:any = +StorageService.getUserId();
 
   /*MOCK Wines available*/
-  wines: any[] = [
-    { name: 'Merlot' },
-    { name: 'Chardonnay' },
-    { name: 'Cabernet Sauvignon' },
-    { name: 'Pinot Noir' },
-    { name: 'Sauvignon Blanc' }
-  ];
+  wines: any[] = [];
 
   /*Wine name form*/
   selectedWine: FormControl = new FormControl('',Validators.required);
@@ -59,19 +57,23 @@ export class WhiteWinePageComponent implements OnInit{
   ph: FormControl = new FormControl('',[Validators.required,Validators.min(0)])
   sulphates: FormControl = new FormControl('',[Validators.required,Validators.min(0)])
   alcohol: FormControl = new FormControl('',[Validators.required,Validators.min(0)])
-  quality: Number = 0;
+  quality: any = 0;
   
   ngOnInit(): void {
+    this.getWinesByUserId();
+
    /*Wine name form*/
    this.selectWineFormGroup = new FormGroup({
     selectedWine : this.selectedWine
   })
   }
 
+  //Constructor
   constructor(private whiteWineQualityService: WhiteWineServiceService, private http: HttpClient,
     private dataSharingService: DataSharingService,
     private router: Router,
-    private messageService:MessageService
+    private messageService:MessageService,
+    private wineService:WineService
   ) {
 
     this.wineForm = new FormGroup({
@@ -147,20 +149,91 @@ export class WhiteWinePageComponent implements OnInit{
   }
     }
   }
+  
+  //Save prediction to BBDD
+  savePrediction() {
+    if (!this.selectedWine.value || this.selectedWine.invalid ) {
+      this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Debe seleccionar un vino' });
+      return;
+    }
 
-/*Filter wines from name select input*/
-filterWines(event: AutoCompleteCompleteEvent) {
-  let filtered: any[] = [];
-  let query = event.query;
+    if (this.wineForm.invalid ) {
+      this.messageService.add({ severity: 'error', summary: 'error', detail: 'Must fill out all fields' });
+    }else{
 
-  for (let i = 0; i < (this.wines as any[]).length; i++) {
-      let wine = (this.wines as any[])[i];
-      if (wine.name.toLowerCase().indexOf(query.toLowerCase()) == 0) {
-          filtered.push(wine);
+    //Data to send API IA
+    const formData = this.wineForm.value;
+    const dataToSend = [
+      parseFloat(formData.fixed_acidity || '0'),
+      parseFloat(formData.volatile_acidity || '0'),
+      parseFloat(formData.citric_acidity || '0'),
+      parseFloat(formData.residual_sugar || '0'),
+      parseFloat(formData.chlorides || '0'),
+      parseFloat(formData.free_sulfur_dioxide || '0'),
+      parseFloat(formData.total_sulfur_dioxide || '0'),
+      parseFloat(formData.density || '0'),
+      parseFloat(formData.ph || '0'),
+      parseFloat(formData.sulphates || '0'),
+      parseFloat(formData.alcohol || '0'),
+
+    ];
+
+    //Data to send to backEnd
+    const predictionData = {
+      idWine: this.selectedWine.value.id,  // 
+      fixedAcidity: parseFloat(this.wineForm.value.fixed_acidity || '0'),
+      volatileAcidity: parseFloat(this.wineForm.value.volatile_acidity || '0'),
+      citricAcid: parseFloat(this.wineForm.value.citric_acidity || '0'),
+      residualSugar: parseFloat(this.wineForm.value.residual_sugar || '0'),
+      chlorides: parseFloat(this.wineForm.value.chlorides || '0'),
+      freeSulfurDioxide: parseFloat(this.wineForm.value.free_sulfur_dioxide || '0'),
+      totalSulfureDioxide: parseFloat(this.wineForm.value.total_sulfur_dioxide || '0'),
+      density: parseFloat(this.wineForm.value.density || '0'),
+      ph: parseFloat(this.wineForm.value.ph || '0'),
+      sulphates: parseFloat(this.wineForm.value.sulphates || '0'),
+      alcohol: parseFloat(this.wineForm.value.alcohol || '0'),
+      quality: 0  
+    };
+  
+    //Service to get quality from IA Servicio 
+    this.whiteWineQualityService.predictWineQuality(dataToSend).subscribe(
+      (response: { quality: Number; }) => {
+        this.quality = response.quality;
+        predictionData.quality = this.quality; // Update quality
+  
+        // Call service to save prediction
+        this.wineService.savePrediction(predictionData).subscribe(
+          (response) => {
+            this.messageService.add({ severity: 'success', summary: 'Éxito', detail: '¡Predicción guardada con éxito!' });
+          },
+          (error) => {
+            console.error('Error al guardar la predicción:', error);
+            this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Error al guardar la predicción' });
+          }
+        );
+      },
+      (error: any) => {
+        console.error('Error al predecir la calidad del vino:', error);
+        this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Error al predecir la calidad del vino' });
       }
+    );}
   }
 
-  this.filteredWines = filtered;
-}
+//GetWineBsyID
+getWinesByUserId(){
+  this.wineService.getAllWinesByUserId(this.idUser).subscribe(
+    (data) => {
+      this.wines = data;
+      console.log('Wines for user desde la clase recien llamado el servicio:', this.wines);
+    },
+    (error) => {
+      console.error('Error fetching wines:', error);
+    }
+  );
+ }
+
+
+/*Filter wines from name select input*/
+
 
 }

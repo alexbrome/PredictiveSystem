@@ -52,9 +52,6 @@ public class AuthController {
 	// Method to save users ( non admin )
 	@PostMapping("/signup")
 	public ResponseEntity<?> signupCustomer(@RequestBody SignupRequest signupRequest) {
-		System.out.println("ha entrado en el signup, objeto entrante :" + signupRequest);
-		System.out.println(
-				"Datos del objeto en el signup: " + signupRequest.getEmail() + ", " + signupRequest.getPassword());
 		// if mail allready exists
 		if (authService.hasCustomerWithEmail(signupRequest.getEmail())) {
 
@@ -74,13 +71,12 @@ public class AuthController {
 	@PostMapping("/login")
 	public AuthenticationResponse createAuthenticationToken(@RequestBody AuthenticationRequest authenticationRequest)
 			throws BadCredentialsException, DisabledException, UsernameNotFoundException {
-		System.out.println(" ha entrado en el metodo del login :"+authenticationRequest);
+		
 		
 		try {
-			System.out.println("Ha entrado en el try");
+			
 			authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authenticationRequest.getEmail(),
 					authenticationRequest.getPassword()));
-			System.out.println("Autenticacion exitosa");
 
 		} catch (BadCredentialsException e) {
 			throw new BadCredentialsException("Nombre de ususario o password incorrecto");
@@ -95,7 +91,7 @@ public class AuthController {
 			authenticationResponse.setUserId(optionalUser.get().getId());
 			authenticationResponse.setUserRole(optionalUser.get().getUserRole());
 		}
-		System.out.println("imprimiendo el authenticationResponse: " + authenticationResponse);
+		
 		return authenticationResponse;
 	}
 

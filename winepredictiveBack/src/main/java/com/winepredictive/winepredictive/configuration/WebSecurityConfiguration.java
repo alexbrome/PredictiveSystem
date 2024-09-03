@@ -43,11 +43,11 @@ private final JwtAuthenticationFilter jwtauthenticationFilter;
 	public SecurityFilterChain securityFilterChain(HttpSecurity http)throws Exception{
 		http.csrf(AbstractHttpConfigurer::disable).authorizeHttpRequests(request->
 		         request
-				.requestMatchers("/api/admin/**").permitAll()//hasAnyAuthority(UserRole.ADMIN.name())
-				.requestMatchers("/api/auth/**").permitAll()
-				.requestMatchers("/api/customer/**").permitAll()
-				.requestMatchers("/api/mensaje/**").permitAll()
-				.requestMatchers("/api/member").permitAll()//.hasAnyAuthority(UserRole.CUSTOMER.name())
+				//.requestMatchers("/api/admin/**").permitAll()//hasAnyAuthority(UserRole.ADMIN.name())
+				//.requestMatchers("/api/auth/**").permitAll()
+				//.requestMatchers("/api/customer/**").permitAll()
+				.requestMatchers("/api/**").permitAll()
+				//.requestMatchers("/api/member").permitAll()//.hasAnyAuthority(UserRole.CUSTOMER.name())
 				.anyRequest().authenticated())
 		.sessionManagement(manager->
 		manager.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

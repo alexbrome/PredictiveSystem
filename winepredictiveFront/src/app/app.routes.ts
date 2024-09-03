@@ -6,6 +6,8 @@ import { RedWineChartsComponent } from './pages/red-wine-charts/red-wine-charts.
 import { WhiteWineChartsComponent } from './pages/white-wine-charts/white-wine-charts.component';
 import { SignupComponent } from './auth/components/signup/signup.component';
 import { LoginComponent } from './auth/components/login/login.component';
+import { SummaryWhiteWineComponent } from './pages/summary-white-wine/summary-white-wine.component';
+import { WineListComponent } from './components/wine-list/wine-list.component';
 
 export const routes: Routes = [
     { path: 'redWine-page', component: RedWinePageComponent },
@@ -14,5 +16,7 @@ export const routes: Routes = [
     { path: 'whiteWine-page/whiteWineCharts', component: WhiteWineChartsComponent },
     { path: 'main' ,component:MainPageComponent },
     { path: 'signup', component : SignupComponent },
+    { path: 'summaryWhite', component : SummaryWhiteWineComponent },
+    { path: 'wineList', component : WineListComponent },
     { path: '', component: LoginComponent }
 ];

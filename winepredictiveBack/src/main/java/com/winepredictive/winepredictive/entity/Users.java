@@ -1,17 +1,20 @@
 package com.winepredictive.winepredictive.entity;
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.winepredictive.winepredictive.enums.UserRole;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Size;
 
@@ -34,6 +37,8 @@ public class Users implements UserDetails{
 	
 	private UserRole userRole;
 	
+	@OneToMany(mappedBy = "idUser")
+    private Set<Wine> wines;
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -73,9 +78,19 @@ public class Users implements UserDetails{
 	
 	//Setter getters constructor
 	
+	
+	
 	public Long getId() {
 		return id;
 	}
+	 public Set<Wine> getWines() {
+	        return wines;
+	    }
+
+	  public void setWines(final Set<Wine> wines) {
+	        this.wines = wines;
+	    }
+
 	public void setId(Long id) {
 		this.id = id;
 	}
@@ -106,14 +121,19 @@ public class Users implements UserDetails{
 	}
 	
 	
-	public Users(Long id, String name, String email, String password, UserRole userRole) {
+	
+	public Users(Long id, String name, String email,
+			@Size(min = 5, max = 80, message = "{password.size}") String password, UserRole userRole,
+			Set<Wine> wines) {
 		
 		this.id = id;
 		this.name = name;
 		this.email = email;
 		this.password = password;
 		this.userRole = userRole;
+		this.wines = wines;
 	}
+
 	public Users() {
 	
 	}

@@ -34,6 +34,7 @@ private final UserRepository userRepository;
 	}
     //Create customer/user
 	public UserDto createCustomer(SignupRequest signupRequest) {
+		System.out.println(signupRequest);
 		Users user = new Users();
 		user.setName(signupRequest.getName());
 		user.setEmail(signupRequest.getEmail());

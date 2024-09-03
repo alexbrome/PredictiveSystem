@@ -1,0 +1,45 @@
+<!--Header-->
+<div class="header">
+    <div class="title-container">
+        <h1>{{ user.name }} Wine List</h1>
+    </div>
+    <p-button label="Create Wine" [rounded]="true" />
+    <hr>
+</div>
+<hr>
+<br><br>
+<div class="table-container">
+
+    <!--Table Body -->
+<p-table [value]="wines"  class="table">
+
+    <ng-template pTemplate="header">
+        <tr>
+            <th pSortableColumn="dateCreated" style="width:16%">
+                Date of creation <p-sortIcon field="dateCreated" />
+            </th>
+            <th pSortableColumn="name" style="width:16%">
+                Name <p-sortIcon field="name" />
+            </th>
+            <th pSortableColumn="quality" style="width:16%">
+                Latest Quality Predicted <p-sortIcon field="quality" />
+            </th>
+            <th pSortableColumn="quantity" style="width:10%">
+                Actions 
+            </th>
+        </tr>
+    </ng-template>
+
+    <ng-template pTemplate="body" let-wine>
+        <tr>
+            <td>{{ wine.dateCreated }}</td>
+            <td>{{ wine.name }}</td>
+            <td><p-rating [(ngModel)]="wine.quality" [cancel]="false" [stars]="8" [disabled]="true"></p-rating></td>
+            <td class="actions">
+                <p-button label="Delete" [rounded]="true" severity="danger"  class="actions"/>
+                <p-button label="Edit" [rounded]="true" severity="secondary" />
+            </td>
+        </tr>
+    </ng-template>
+</p-table>
+</div>

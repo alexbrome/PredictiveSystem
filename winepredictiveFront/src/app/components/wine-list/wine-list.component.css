@@ -1,0 +1,26 @@
+
+
+.header {
+    display: flex;
+    justify-content: space-between; /* Distribuye el espacio entre los elementos */
+    align-items: center; /* Alinea verticalmente el contenido */
+    padding: 0 20px; /* Agrega algo de espacio alrededor del contenido */
+}
+
+.title-container {
+    flex: 1; /* Hace que el contenedor del título ocupe todo el espacio disponible */
+    text-align: center; /* Centra el texto dentro del contenedor */
+}
+
+p-button {
+    margin-left: auto;
+    margin-right: 9%; /* Empuja el botón hacia el margen derecho */
+}
+
+.table-container{
+    width: 75%;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    margin-left: 12%;
+}

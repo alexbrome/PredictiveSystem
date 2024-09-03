@@ -1,0 +1,57 @@
+/* Estilos para el contenedor principal */
+#container {
+  display: flex; 
+  height: 100vh; /* Hace que el contenedor ocupe toda la altura de la ventana del navegador */
+  margin-top: 2%;
+}
+
+#sectionLeft {
+  width: 13%; /* Ancho fijo del 10% de la pantalla */
+  background-color: #f0f0f0; /* Color de fondo para visualización (opcional) */
+}
+
+/* Estilos para la sección izquierda */
+#sectionRight {
+  flex: 1; /* Ocupa el resto del espacio disponible */
+  background-color: #e0e0e0; /* Color de fondo para visualización (opcional) */
+}
+
+#pListBox {
+  margin-top: 2%;
+}
+
+#wineName {
+  color: blue;
+  font-size: x-large;
+}
+
+.prediction-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.prediction-bar > div {
+  display: flex;
+  align-items: center;
+}
+
+.prediction-bar .left-content {
+  flex-grow: 1;
+  text-align: left; /* Asegura que el texto esté alineado a la izquierda */
+}
+
+.prediction-bar p-button {
+  margin-left: auto; /* Empuja el botón al margen derecho */
+}
+
+.prediction-bar p-button:hover{
+  background-color: rgb(158, 158, 158);
+  
+}
+
+.left-content{
+  display: flex;
+  flex-direction: column;
+}

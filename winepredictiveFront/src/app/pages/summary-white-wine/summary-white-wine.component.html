@@ -1,0 +1,78 @@
+<!--Left container(SELECT WINE)-->
+<div id="container">
+
+   <div id="sectionLeft">
+    <h2>Select Wine</h2>
+
+    <p-listbox
+    id="pListBox" 
+    [options]="wines" 
+    [(ngModel)]="selectedWine" 
+    optionLabel="name" 
+    
+    [style]="{ width: '15rem' }" 
+    [listStyle]="{'max-height': '220px'}"
+    (onChange)="onWineSelect($event.value)" />
+   </div> 
+
+<!----------------Section Right--------------------->
+   <div id="sectionRight">
+    <div class="card">
+        <p-table [value]="selectedPredictions" [tableStyle]="{'min-width': '60rem'}">
+            <ng-template pTemplate="caption" class="prediction-bar">
+                <!-- Contenedor principal con Flexbox -->
+                <div class="prediction-bar">
+                    <!-- Contenedor de textos alineado a la izquierda -->
+                    <div class="left-content">
+                        <span id="prediction">Predictions List</span><br><br>
+                        <span id="wineName">{{ selectedWine?.name }}</span>
+                    </div>
+        
+                    <p-button label="Clean Table" [outlined]="true" severity="contrast" (click)="deleteTable()"/>
+                </div>
+            </ng-template>
+            
+            <ng-template pTemplate="header">
+                <tr>
+                    <th>Date Created</th>
+                    <th>Fixed Acidity</th>
+                    <th>Free Sulfur Dioxide</th>
+                    <th>Residual Sugar</th>
+                    <th>Sulphates</th>
+                    <th>Total Sulfure Dioxide</th>
+                    <th>Ph </th>
+                    <th>Density</th>
+                    <th>Alcohol</th>
+                    <th>Volatile Acidity</th>                  
+                    <th>Quality</th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-prediction>
+                <tr>
+                    <td>{{ prediction.dateCreated | date:'shortDate'}}</td>
+                 
+                    <td>{{prediction.fixedAcidity}}</td>
+                    <td>{{prediction.freeSulfurDioxide}}</td>
+                    <td>{{prediction.residualSugar}}</td>                   
+                    <td>{{prediction.sulphates}}</td>
+                    <td>{{prediction.totalSulfureDioxide}}</td>                
+                    <td>{{prediction.ph}}</td>                
+                    <td>{{prediction.density}}</td>                
+                    <td>{{prediction.alcohol}}</td>                
+                    <td>{{prediction.volatileAcidity}}</td>                
+                    <td>{{prediction.quality}}</td>                
+                                  
+                </tr>
+            </ng-template>
+            
+            <ng-template pTemplate="emptymessage">
+                <tr>
+                   <td colspan="11" class="text-center">Must Select a Wine</td>
+                </tr>
+             </ng-template>
+        </p-table>
+        
+    </div>
+   </div>
+</div>
+

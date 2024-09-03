@@ -21,13 +21,13 @@
         <h2>Analysis Measures</h2>  
         <div class="select-wine">
         <form [formGroup]="selectWineFormGroup" >
-            <p-autoComplete 
-            formControlName="selectedWine"
-            [suggestions]="filteredWines" 
-            (completeMethod)="filterWines($event)" 
-            placeholder="Select or type wine"
-            field="name">
-        </p-autoComplete>
+       
+        <p-dropdown 
+    [options]="wines" 
+    [(ngModel)]="selectedWine" 
+    optionLabel="name" 
+    placeholder="Select Wine"
+    formControlName="selectedWine" />
         </form>
         </div>
     </div>
@@ -149,11 +149,17 @@
         [useGrouping]="false" /> 
     </div>
     </form>
-    <button id="submit-button" (click)="handleSubmit()"
+    <button id="submit-button" (click)="savePrediction()"
     pButton 
     pRipple 
-    label="Submit" 
-    class="p-button-success">
+    label="Save Prediction" 
+    class="p-button-secondary">
+</button>
+<button id="submit-button" (click)="handleSubmit()"
+pButton 
+pRipple 
+label="Go to Chart" 
+class="p-button-info">
 </button>
   </div>
 </div>

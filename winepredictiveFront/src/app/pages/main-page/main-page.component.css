@@ -1,16 +1,49 @@
 
-#colorVino{
+/*Image Wine glasses*/
+#colorVino {
     width: 80%;
     height: 68vh;
     align-items: center;
     justify-content: center;
     margin-left: 14%;
+    opacity: 0;
+    transform: translateX(-100%);
+    animation: slideIn 2s ease-out forwards;
 }
+
+/*Animation for image*/
+@keyframes slideIn {
+    0% {
+        opacity: 0;
+        transform: translateX(-100%);
+    }
+    100% {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+/*Botons*/
 #wines-buttons{
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    opacity: 0;
+    transform: translateY(100%);
+    animation: slideInFromBottom 2s ease-out  forwards;
+}
+
+/*Animation from bottom*/
+@keyframes slideInFromBottom {
+    0% {
+        opacity: 0;
+        transform: translateY(100%);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 #wines-buttons button {
