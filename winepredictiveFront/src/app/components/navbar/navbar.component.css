@@ -3,7 +3,8 @@ i{
     font-size:x-large;
 }
 .flex{
-   gap: 45px;
+   margin-right: auto;
+  
 }
 .userName{
     color:white;

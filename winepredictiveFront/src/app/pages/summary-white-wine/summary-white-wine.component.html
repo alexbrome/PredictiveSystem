@@ -1,78 +1,155 @@
 <!--Left container(SELECT WINE)-->
 <div id="container">
 
-   <div id="sectionLeft">
-    <h2>Select Wine</h2>
+    <div id="sectionLeft">
+        <h2>Select Wine</h2>
 
-    <p-listbox
-    id="pListBox" 
-    [options]="wines" 
-    [(ngModel)]="selectedWine" 
-    optionLabel="name" 
-    
-    [style]="{ width: '15rem' }" 
-    [listStyle]="{'max-height': '220px'}"
-    (onChange)="onWineSelect($event.value)" />
-   </div> 
-
-<!----------------Section Right--------------------->
-   <div id="sectionRight">
-    <div class="card">
-        <p-table [value]="selectedPredictions" [tableStyle]="{'min-width': '60rem'}">
-            <ng-template pTemplate="caption" class="prediction-bar">
-                <!-- Contenedor principal con Flexbox -->
-                <div class="prediction-bar">
-                    <!-- Contenedor de textos alineado a la izquierda -->
-                    <div class="left-content">
-                        <span id="prediction">Predictions List</span><br><br>
-                        <span id="wineName">{{ selectedWine?.name }}</span>
-                    </div>
-        
-                    <p-button label="Clean Table" [outlined]="true" severity="contrast" (click)="deleteTable()"/>
-                </div>
-            </ng-template>
-            
-            <ng-template pTemplate="header">
-                <tr>
-                    <th>Date Created</th>
-                    <th>Fixed Acidity</th>
-                    <th>Free Sulfur Dioxide</th>
-                    <th>Residual Sugar</th>
-                    <th>Sulphates</th>
-                    <th>Total Sulfure Dioxide</th>
-                    <th>Ph </th>
-                    <th>Density</th>
-                    <th>Alcohol</th>
-                    <th>Volatile Acidity</th>                  
-                    <th>Quality</th>
-                </tr>
-            </ng-template>
-            <ng-template pTemplate="body" let-prediction>
-                <tr>
-                    <td>{{ prediction.dateCreated | date:'shortDate'}}</td>
-                 
-                    <td>{{prediction.fixedAcidity}}</td>
-                    <td>{{prediction.freeSulfurDioxide}}</td>
-                    <td>{{prediction.residualSugar}}</td>                   
-                    <td>{{prediction.sulphates}}</td>
-                    <td>{{prediction.totalSulfureDioxide}}</td>                
-                    <td>{{prediction.ph}}</td>                
-                    <td>{{prediction.density}}</td>                
-                    <td>{{prediction.alcohol}}</td>                
-                    <td>{{prediction.volatileAcidity}}</td>                
-                    <td>{{prediction.quality}}</td>                
-                                  
-                </tr>
-            </ng-template>
-            
-            <ng-template pTemplate="emptymessage">
-                <tr>
-                   <td colspan="11" class="text-center">Must Select a Wine</td>
-                </tr>
-             </ng-template>
-        </p-table>
-        
+        <p-listbox id="pListBox" [options]="wines" [(ngModel)]="selectedWine" optionLabel="name"
+            [style]="{ width: '15rem' }" [listStyle]="{'max-height': '220px'}"
+            (onChange)="onWineSelect($event.value)" />
     </div>
-   </div>
-</div>
 
+    <!----------------Section Right--------------------->
+    <div id="sectionRight">
+        <div class="card">
+            <p-table [value]="selectedPredictions" [tableStyle]="{'min-width': '60rem'}">
+                <ng-template pTemplate="caption" class="prediction-bar">
+
+                    <!-------- Contenedor principal con Flexbox ----------->
+                    <div class="prediction-bar">
+                        <p-toggleButton [(ngModel)]="isChartVisible" onLabel="View-Table" offLabel="View-Chart"
+                            [onIcon]="'pi pi-chart-line'" [offIcon]="'pi pi-table'" styleClass="mr-2">
+                        </p-toggleButton>
+
+                        <!----------- Clean Table button-------->
+                        <div class="left-content">
+                            <span id="prediction">Predictions List</span>
+                            <span id="wineName">{{ selectedWine?.name }}</span>
+                        </div>
+                        @if(!isChartVisible){
+                        <p-button label="Clean Table" [outlined]="true" severity="contrast" (click)="deleteTable()" />
+                        }
+                    </div>
+                </ng-template>
+
+                <ng-template pTemplate="header">
+                    @if (!isChartVisible) {
+                    <tr>
+                        <th>Date Created </th>
+                        <th>Fixed Acidity</th>
+                        <th>Citric Acidity</th>
+                        <th>Free Sulfur Dioxide&nbsp;<i class="pi pi-info-circle"
+                                pTooltip="Values should be between 5 and 10" tooltipPosition="top"></i></th>
+                        <th>Residual Sugar&nbsp;<i class="pi pi-info-circle"></i></th>
+                        <th>Sulphates&nbsp;<i class="pi pi-info-circle"></i></th>
+                        <th>Total Sulfure Dioxide&nbsp;<i class="pi pi-info-circle"></i></th>
+                        <th>Ph&nbsp;<i class="pi pi-info-circle"></i></th>
+                        <th>Chlorides&nbsp;<i class="pi pi-info-circle"></i></th>
+                        <th>Density&nbsp;<i class="pi pi-info-circle"></i></th>
+                        <th>Alcohol&nbsp;<i class="pi pi-info-circle"></i></th>
+                        <th>Volatile Acidity&nbsp;<i class="pi pi-info-circle"></i></th>
+                        <th>Quality</th>
+                    </tr>
+                    }
+                </ng-template>
+
+                <ng-template pTemplate="body" let-prediction>
+                    @if (!isChartVisible) {
+                   <!--TODO
+                   <tr (click)="onRowClick(prediction)"></tr>-->
+                        <tr>
+                        <td>{{ prediction.dateCreated | date:'shortDate'}}</td>
+
+                        <td>{{prediction.fixedAcidity}}&nbsp;
+                            @if(prediction.fixedAcidity < 5 || prediction.fixedAcidity> 10){
+                                <i class="pi pi-info-circle" pTooltip="Warning!!Values usually are between 5 and 10"
+                                    tooltipPosition="top" style="color: orange;"></i>
+                                }
+                        </td>
+                        <td>{{prediction.citricAcid}}&nbsp;
+                            @if(prediction.citricAcid < 0 || prediction.citricAcid> 0.5){
+                                <i class="pi pi-info-circle" pTooltip="Warning!!Values usually are between 0 and 0.5"
+                                    tooltipPosition="top" style="color: orange;"></i>
+                                }
+                        </td>
+                        <td>{{prediction.freeSulfurDioxide}}&nbsp;
+                            @if(prediction.freeSulfurDioxide < 10 || prediction.freeSulfurDioxide> 80){
+                                <i class="pi pi-info-circle" pTooltip="Warning!!Values usually are between 0.1 and 0.7"
+                                    tooltipPosition="top" style="color: orange;"></i>
+                                }
+                        </td>
+                        <td>{{prediction.residualSugar}}&nbsp;
+                            @if(prediction.residualSugar < 1 || prediction.residualSugar> 25){
+                                <i class="pi pi-info-circle" pTooltip="Warning!!Values usually are between 1 and 25"
+                                    tooltipPosition="top" style="color: orange;"></i>
+                                }
+                        </td>
+                        <td>{{prediction.sulphates}}&nbsp;
+                            @if(prediction.sulphates < 0.1 || prediction.sulphates> 0.8){
+                                <i class="pi pi-info-circle" pTooltip="Warning!!Values usually are between 0.1 and 0.7"
+                                    tooltipPosition="top" style="color: orange;"></i>
+                                }
+                        </td>
+                        <td>{{prediction.totalSulfureDioxide}}&nbsp;
+                            @if(prediction.totalSulfureDioxide < 50 || prediction.totalSulfureDioxide> 270){
+                                <i class="pi pi-info-circle" pTooltip="Warning!!Values usually are between 50 and 270"
+                                    tooltipPosition="top" style="color: orange;"></i>
+                                }
+                        </td>
+                        <td>{{prediction.ph}}&nbsp;
+                            @if(prediction.ph < 3 || prediction.ph> 4){
+                                <i class="pi pi-info-circle" pTooltip="Warning!!Values usually are between 3 and 4"
+                                    tooltipPosition="top" style="color: orange;"></i>
+                                }
+                        </td>
+                        <td>{{prediction.chlorides}}&nbsp;
+                            @if(prediction.chlorides < 0 || prediction.chlorides> 0.1){
+                                <i class="pi pi-info-circle" pTooltip="Warning!!Values usually are between 3 and 4"
+                                    tooltipPosition="top" style="color: orange;"></i>
+                                }
+                        </td>
+                        <td>{{prediction.density}}&nbsp;
+                            @if(prediction.density < 0.9 || prediction.density> 1){
+                                <i class="pi pi-info-circle" pTooltip="Warning!!Values usually are between 0.9 and 1"
+                                    tooltipPosition="top" style="color: orange;"></i>
+                                }
+                        </td>
+                        <td>{{prediction.alcohol}}&nbsp;
+                            @if(prediction.alcohol < 8 || prediction.alcohol> 13){
+                                <i class="pi pi-info-circle" pTooltip="Warning!!Values usually are between 8 and 12"
+                                    tooltipPosition="top" style="color: orange;"></i>
+                                }
+                        </td>
+                        <td>{{prediction.volatileAcidity}}&nbsp;
+                            @if(prediction.volatileAcidity < 0.5 || prediction.volatileAcidity> 0.7){
+                                <i class="pi pi-info-circle" pTooltip="Warning!!Values usually are between 0.5 and 0.7"
+                                    tooltipPosition="top" style="color: orange;"></i>
+                                }
+                        </td>
+                        <td [ngClass]="{'red-class': prediction.quality < 6, 'blue-class': prediction.quality === 6, 
+                        'green-class': prediction.quality > 6}">
+                            {{prediction.quality}}</td>
+
+                    </tr>
+                    }
+                </ng-template>
+
+                <!------Empty message---------->
+                <ng-template pTemplate="emptymessage">
+                    @if(!isChartVisible){
+                    <tr>
+                        <td colspan="13" class="text-center">No Data&nbsp;&nbsp;&nbsp;
+                            <i class="pi pi-database " style="font-size: 2rem"></i>
+                        </td>
+                    </tr>
+                    }
+                </ng-template>
+            </p-table>
+
+            <!------Chart----------->
+            @if(isChartVisible){
+            <p-chart type="line" [data]="data" [options]="options" />
+            }
+        </div>
+    </div>
+</div>

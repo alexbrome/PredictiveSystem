@@ -8,12 +8,26 @@
     
 }
 
+/*Responsive*/
+@media (max-width: 1460px) {
+    #container {
+        display: grid;
+        grid-template-columns: auto; /* Cambia a columna en pantallas más pequeñas */
+    }
+}
+
+
 h2{
     margin-left: 24%;
 }
 
+h1{
+    animation: slideInFromTop 1s ease-out  forwards;
+}
+
 #container img{
     height:78%;
+    animation: slideInFromTop 1s ease-out  forwards;
 }
 
 
@@ -21,6 +35,7 @@ h2{
 #properties-form{
     margin-left: 14%;
     margin-right: 16%;
+    animation: slideInFromBottom 1s ease-out  forwards;
 }
 
 /*fields Form*/
@@ -40,3 +55,35 @@ h2{
     align-items: center;
     justify-content: space-between;
 }
+
+/*Loading Spinner*/
+#loading-spinner{
+    text-align: center;
+    justify-content: center;
+    align-items: center;  
+}
+
+
+
+
+/*Animation from bottom*/
+@keyframes slideInFromBottom {
+    0% {
+        opacity: 0;
+        transform: translateY(100%);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+@keyframes slideInFromTop {
+    0% {
+      transform: translateY(-100%); /* Comienza fuera de la pantalla arriba */
+      opacity: 0;
+    }
+    100% {
+      transform: translateY(0); /* Llega a su posición original */
+      opacity: 1;
+    }
+  }

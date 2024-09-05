@@ -6,13 +6,14 @@ import { HttpClient } from '@angular/common/http';
 import { WhiteWineServiceService } from '../../services/white-wine-service.service';
 import { Router } from '@angular/router';
 import { DataSharingService } from '../../services/data-sharing.service';
-import { AutoCompleteCompleteEvent, AutoCompleteModule } from 'primeng/autocomplete';
+import {  AutoCompleteModule } from 'primeng/autocomplete';
 import { Message, MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
 import { CommonModule } from '@angular/common';
 import { WineService } from '../../services/wine.service';
 import { StorageService } from '../../auth/services/storage.service';
 import { DropdownModule } from 'primeng/dropdown';
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
 
 
 
@@ -21,7 +22,7 @@ import { DropdownModule } from 'primeng/dropdown';
   standalone: true,
   imports: [
     ReactiveFormsModule, InputNumberModule, ButtonModule,AutoCompleteModule
-    ,CommonModule,ToastModule,DropdownModule
+    ,CommonModule,ToastModule,DropdownModule,ProgressSpinnerModule
   ],
   templateUrl: './white-wine-page.component.html',
   styleUrl: './white-wine-page.component.css',
@@ -31,10 +32,11 @@ import { DropdownModule } from 'primeng/dropdown';
 
 export class WhiteWinePageComponent implements OnInit{
 
+  loading:boolean = false;
   messages!: Message[] ;
   idUser:any = +StorageService.getUserId();
 
-  /*MOCK Wines available*/
+  /* Wines available*/
   wines: any[] = [];
 
   /*Wine name form*/
@@ -61,6 +63,8 @@ export class WhiteWinePageComponent implements OnInit{
   
   ngOnInit(): void {
     this.getWinesByUserId();
+    this.wineForm.reset();
+    this.selectedWine.reset();
 
    /*Wine name form*/
    this.selectWineFormGroup = new FormGroup({
@@ -97,127 +101,131 @@ export class WhiteWinePageComponent implements OnInit{
   }
   
   /*Submit form*/
-  handleSubmit() {
-    if(this.selectedWine.invalid){
-      this.messageService.add({ severity: 'error', summary: 'error', detail: 'Must fill out wine name field' });
-    }
-    else{
+ 
+handleSubmit() {
+  if(this.selectedWine.invalid){
+    this.messageService.add({ severity: 'error', summary: 'error', detail: 'Must fill out wine name field' });
+  } else {
     if (this.wineForm.invalid ) {
       this.messageService.add({ severity: 'error', summary: 'error', detail: 'Must fill out all fields' });
-    }
-  
-    else{
-   
-    const formData = this.wineForm.value;
+    } else {
+      this.loading = true; // Mostrar spinner
 
-    // Convert form data to the format expected by the backend
-    const dataToSend = [
-      parseFloat(formData.fixed_acidity || '0'),
-      parseFloat(formData.volatile_acidity || '0'),
-      parseFloat(formData.citric_acidity || '0'),
-      parseFloat(formData.residual_sugar || '0'),
-      parseFloat(formData.chlorides || '0'),
-      parseFloat(formData.free_sulfur_dioxide || '0'),
-      parseFloat(formData.total_sulfur_dioxide || '0'),
-      parseFloat(formData.density || '0'),
-      parseFloat(formData.ph || '0'),
-      parseFloat(formData.sulphates || '0'),
-      parseFloat(formData.alcohol || '0'),
+      const formData = this.wineForm.value;
 
-    ];
-    //Query to get quality prediction
-    
-    this.whiteWineQualityService.predictWineQuality(dataToSend).subscribe(
-      (response: { quality: Number; }) => {
-        this.quality = response.quality;
-       
+      const dataToSend = [
+        parseFloat(formData.fixed_acidity || '0'),
+        parseFloat(formData.volatile_acidity || '0'),
+        parseFloat(formData.citric_acidity || '0'),
+        parseFloat(formData.residual_sugar || '0'),
+        parseFloat(formData.chlorides || '0'),
+        parseFloat(formData.free_sulfur_dioxide || '0'),
+        parseFloat(formData.total_sulfur_dioxide || '0'),
+        parseFloat(formData.density || '0'),
+        parseFloat(formData.ph || '0'),
+        parseFloat(formData.sulphates || '0'),
+        parseFloat(formData.alcohol || '0'),
+      ];
 
-        /* Set name wine to service*/ 
-        this.dataSharingService.setNameWine(this.selectWineFormGroup.value);
+      this.whiteWineQualityService.predictWineQuality(dataToSend).subscribe(
+        (response: { quality: Number; }) => {
+          this.quality = response.quality;
 
-        //Send data to dataSharingService
-        this.dataSharingService.setWhiteWineData(dataToSend);
-        this.dataSharingService.setWhiteWineQualityPredicted(this.quality);
+          this.dataSharingService.setNameWine(this.selectWineFormGroup.value);
+          this.dataSharingService.setWhiteWineData(dataToSend);
+          this.dataSharingService.setWhiteWineQualityPredicted(this.quality);
 
-        /*Navigate to summary*/
-        this.router.navigate(['whiteWine-page/whiteWineCharts'])
-      },
-      (error: any) => {
-        console.error('Error al predecir la calidad del vino:', error);
-      }
-    );
-  }
+          setTimeout(() => { //5s waiting
+            this.loading = false; // hide spinner
+            this.router.navigate(['whiteWine-page/whiteWineCharts']);
+          }, 5000);
+        },
+        (error: any) => {
+          console.error('Error al predecir la calidad del vino:', error);
+          this.loading = false; // hide spinner in error case
+        }
+      );
     }
   }
+}
   
   //Save prediction to BBDD
   savePrediction() {
-    if (!this.selectedWine.value || this.selectedWine.invalid ) {
-      this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Debe seleccionar un vino' });
-      return;
-    }
+  // Verificar si un vino ha sido seleccionado correctamente
+  if (!this.selectedWine || this.selectedWine.value == undefined || this.selectedWine.invalid) {
 
-    if (this.wineForm.invalid ) {
-      this.messageService.add({ severity: 'error', summary: 'error', detail: 'Must fill out all fields' });
-    }else{
+    this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Debe seleccionar un vino' });
+    return;
+  }
 
-    //Data to send API IA
-    const formData = this.wineForm.value;
-    const dataToSend = [
-      parseFloat(formData.fixed_acidity || '0'),
-      parseFloat(formData.volatile_acidity || '0'),
-      parseFloat(formData.citric_acidity || '0'),
-      parseFloat(formData.residual_sugar || '0'),
-      parseFloat(formData.chlorides || '0'),
-      parseFloat(formData.free_sulfur_dioxide || '0'),
-      parseFloat(formData.total_sulfur_dioxide || '0'),
-      parseFloat(formData.density || '0'),
-      parseFloat(formData.ph || '0'),
-      parseFloat(formData.sulphates || '0'),
-      parseFloat(formData.alcohol || '0'),
+  // Verificar si el formulario es válido
+  if (this.wineForm.invalid) {
+    this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Debe completar todos los campos' });
+    return; // Añadir un return aquí para asegurarse de que no se ejecuta el resto del código
+  }
 
-    ];
+  // Datos para enviar a la API IA
+  const formData = this.wineForm.value;
+  const dataToSend = [
+    parseFloat(formData.fixed_acidity || '0'),
+    parseFloat(formData.volatile_acidity || '0'),
+    parseFloat(formData.citric_acidity || '0'),
+    parseFloat(formData.residual_sugar || '0'),
+    parseFloat(formData.chlorides || '0'),
+    parseFloat(formData.free_sulfur_dioxide || '0'),
+    parseFloat(formData.total_sulfur_dioxide || '0'),
+    parseFloat(formData.density || '0'),
+    parseFloat(formData.ph || '0'),
+    parseFloat(formData.sulphates || '0'),
+    parseFloat(formData.alcohol || '0'),
+  ];
 
-    //Data to send to backEnd
-    const predictionData = {
-      idWine: this.selectedWine.value.id,  // 
-      fixedAcidity: parseFloat(this.wineForm.value.fixed_acidity || '0'),
-      volatileAcidity: parseFloat(this.wineForm.value.volatile_acidity || '0'),
-      citricAcid: parseFloat(this.wineForm.value.citric_acidity || '0'),
-      residualSugar: parseFloat(this.wineForm.value.residual_sugar || '0'),
-      chlorides: parseFloat(this.wineForm.value.chlorides || '0'),
-      freeSulfurDioxide: parseFloat(this.wineForm.value.free_sulfur_dioxide || '0'),
-      totalSulfureDioxide: parseFloat(this.wineForm.value.total_sulfur_dioxide || '0'),
-      density: parseFloat(this.wineForm.value.density || '0'),
-      ph: parseFloat(this.wineForm.value.ph || '0'),
-      sulphates: parseFloat(this.wineForm.value.sulphates || '0'),
-      alcohol: parseFloat(this.wineForm.value.alcohol || '0'),
-      quality: 0  
-    };
-  
-    //Service to get quality from IA Servicio 
-    this.whiteWineQualityService.predictWineQuality(dataToSend).subscribe(
-      (response: { quality: Number; }) => {
-        this.quality = response.quality;
-        predictionData.quality = this.quality; // Update quality
-  
-        // Call service to save prediction
-        this.wineService.savePrediction(predictionData).subscribe(
-          (response) => {
-            this.messageService.add({ severity: 'success', summary: 'Éxito', detail: '¡Predicción guardada con éxito!' });
+  // Datos para enviar al back-end
+  const predictionData = {
+    idWine: this.selectedWine.value.id,
+    fixedAcidity: parseFloat(this.wineForm.value.fixed_acidity || '0'),
+    volatileAcidity: parseFloat(this.wineForm.value.volatile_acidity || '0'),
+    citricAcid: parseFloat(this.wineForm.value.citric_acidity || '0'),
+    residualSugar: parseFloat(this.wineForm.value.residual_sugar || '0'),
+    chlorides: parseFloat(this.wineForm.value.chlorides || '0'),
+    freeSulfurDioxide: parseFloat(this.wineForm.value.free_sulfur_dioxide || '0'),
+    totalSulfureDioxide: parseFloat(this.wineForm.value.total_sulfur_dioxide || '0'),
+    density: parseFloat(this.wineForm.value.density || '0'),
+    ph: parseFloat(this.wineForm.value.ph || '0'),
+    sulphates: parseFloat(this.wineForm.value.sulphates || '0'),
+    alcohol: parseFloat(this.wineForm.value.alcohol || '0'),
+    quality: 0
+  };
+
+  // Servicio para obtener la calidad del vino
+  this.whiteWineQualityService.predictWineQuality(dataToSend).subscribe(
+    (response: { quality: Number; }) => {
+      this.quality = response.quality;
+      predictionData.quality = this.quality;
+    
+      // Servicio para guardar la predicción
+      this.wineService.savePrediction(predictionData).subscribe(
+        (response) => { 
+            this.loading=true
+            setTimeout(() => {
+              this.loading = false;
+              // Mostrar el mensaje de éxito después de que el spinner se haya ocultado
+              this.messageService.add({ severity: 'success', summary: 'Éxito', detail: '¡Predicción guardada con éxito!' });
+            }, 5000);
+          
           },
-          (error) => {
-            console.error('Error al guardar la predicción:', error);
+          (error) => {    
             this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Error al guardar la predicción' });
           }
         );
       },
       (error: any) => {
-        console.error('Error al predecir la calidad del vino:', error);
         this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Error al predecir la calidad del vino' });
       }
-    );}
-  }
+    );
+    
+}
+
 
 //GetWineBsyID
 getWinesByUserId(){
@@ -233,7 +241,7 @@ getWinesByUserId(){
  }
 
 
-/*Filter wines from name select input*/
+
 
 
 }

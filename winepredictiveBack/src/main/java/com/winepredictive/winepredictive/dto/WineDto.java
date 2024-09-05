@@ -19,12 +19,15 @@ public class WineDto {
     
     private OffsetDateTime dateCreated;
 
-    public OffsetDateTime getDateCreated() {
-		return dateCreated;
-	}
 
     private Set<WinePrediction> winePredictions;
     
+
+    //Getters and setters
+    
+    public OffsetDateTime getDateCreated() {
+    	return dateCreated;
+    }
     
 	public Set<WinePrediction> getWinePredictions() {
 		return winePredictions;
@@ -64,13 +67,13 @@ public class WineDto {
 
 
 
-	public WineDto(Long id, @NotNull @Size(max = 255) String name, Long idUser, OffsetDateTime dateCreated,
-			Set<WinePrediction> winePredictions) {
+	public WineDto(Long id, @NotNull @Size(max = 255) String name, Long idUser, OffsetDateTime dateCreated
+			) {
 		this.id = id;
 		this.name = name;
 		this.idUser = idUser;
 		this.dateCreated = dateCreated;
-		this.winePredictions = winePredictions;
+	
 	}
 
 	public WineDto() {

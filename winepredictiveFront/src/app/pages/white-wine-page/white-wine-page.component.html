@@ -1,8 +1,7 @@
 
-
+@if(!loading){
 <div class="card flex justify-content-center">
-    <p-toast />
-    
+    <p-toast /> 
 </div>
 
 <!--Container-->
@@ -22,12 +21,13 @@
         <div class="select-wine">
         <form [formGroup]="selectWineFormGroup" >
        
-        <p-dropdown 
-    [options]="wines" 
-    [(ngModel)]="selectedWine" 
-    optionLabel="name" 
-    placeholder="Select Wine"
-    formControlName="selectedWine" />
+            <p-dropdown 
+            [options]="wines" 
+            formControlName="selectedWine"
+            optionLabel="name" 
+            placeholder="Seleccione un vino"
+            [showClear]="true">
+          </p-dropdown>
         </form>
         </div>
     </div>
@@ -53,6 +53,7 @@
     <div>
         <h4>Volatile Acidity</h4>
         <p-inputNumber 
+        placeholder="g/dm^3"
         formControlName="volatile_acidity"
         mode="decimal" 
         [minFractionDigits]="0"
@@ -63,6 +64,7 @@
     <div>
         <h4>Citric Acidity</h4>
         <p-inputNumber 
+        placeholder="g/dm^3"
         formControlName="citric_acidity"
         mode="decimal" 
         [minFractionDigits]="0"
@@ -73,6 +75,7 @@
     <div>
         <h4>Residual sugar Acidity</h4>
         <p-inputNumber 
+        placeholder="g/dm^3"
         formControlName="residual_sugar"
         mode="decimal" 
         [minFractionDigits]="0"
@@ -83,6 +86,7 @@
     <div>
         <h4>Chlorides</h4>
         <p-inputNumber 
+        placeholder="g/dm^3"
         formControlName="chlorides"
         mode="decimal" 
         [minFractionDigits]="0"
@@ -93,6 +97,7 @@
     <div>
         <h4>Free sulfur dioxide</h4>
         <p-inputNumber 
+        placeholder="g/dm^3"
         formControlName="free_sulfur_dioxide"
         mode="decimal" 
         [minFractionDigits]="0"
@@ -103,6 +108,7 @@
     <div>
         <h4>Total sulfur dioxide</h4>
         <p-inputNumber 
+        placeholder="g/dm^3"
         formControlName="total_sulfur_dioxide"
         mode="decimal" 
         [minFractionDigits]="0"
@@ -113,6 +119,7 @@
     <div>
         <h4>Density</h4>
         <p-inputNumber 
+        placeholder="g/dm^3"
         formControlName="density"
         mode="decimal" 
         [minFractionDigits]="0"
@@ -123,14 +130,18 @@
     <div>
         <h4>PH</h4>
         <p-inputNumber 
+        placeholder="g/dm^3"
         formControlName="ph"
         mode="decimal" 
-        inputId="locale-german" 
+        [minFractionDigits]="0"
+        [maxFractionDigits]="7"
+        inputId="decimalOnly" 
         [useGrouping]="false" /> 
     </div>
     <div>
         <h4>Sulphates</h4>
         <p-inputNumber 
+        placeholder="g/dm^3"
         formControlName="sulphates"
         mode="decimal" 
         [minFractionDigits]="0"
@@ -141,6 +152,7 @@
     <div>
         <h4>Alcohol</h4>
         <p-inputNumber 
+        placeholder="%100ml"
         formControlName="alcohol"
         mode="decimal" 
         [minFractionDigits]="0"
@@ -155,6 +167,7 @@
     label="Save Prediction" 
     class="p-button-secondary">
 </button>
+
 <button id="submit-button" (click)="handleSubmit()"
 pButton 
 pRipple 
@@ -163,4 +176,11 @@ class="p-button-info">
 </button>
   </div>
 </div>
-
+}
+@if (loading) {
+    <div id="loading-spinner">
+        <p-progressSpinner  [style]="{width: '150px', height: '150px'}"></p-progressSpinner>
+        <h1>Predicting wine quality....</h1>
+    </div>
+ 
+}

@@ -40,9 +40,8 @@ public class WinePredictionRestController {
 	//Predictions by idWine
 	    @GetMapping("/{idWine}")
 	    public ResponseEntity<List<WinePredictionDto>> getWinePredictionsByIdWine(@PathVariable Long idWine) {
-	    	System.out.println(idWine);
+	 
 	        try {
-	        	System.out.println("Entra en el try del metodo del controller");
 	            List<WinePredictionDto> predictions = wineService.getWinePredictionsByWineId(idWine);
 	            return ResponseEntity.ok(predictions);
 	        } catch (NotFoundException e) {
@@ -65,7 +64,6 @@ public class WinePredictionRestController {
 	    public ResponseEntity<Long> createWinePrediction(
 	            @RequestBody @Valid final WinePredictionDto winePredictionDTO) throws NotFoundException {
 	    	winePredictionDTO.setDateCreated(OffsetDateTime.now());
-	    	System.out.println("CitricAcid desde el controlador: "+ winePredictionDTO.getCitricAcid());
 	        final Long createdId = winePredictionServiceImpl.create(winePredictionDTO);
 	        
 	        return new ResponseEntity<>(createdId, HttpStatus.CREATED);

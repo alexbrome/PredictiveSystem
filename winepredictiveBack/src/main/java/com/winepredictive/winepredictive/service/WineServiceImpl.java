@@ -1,4 +1,5 @@
 package com.winepredictive.winepredictive.service;
+import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -13,6 +14,8 @@ import com.winepredictive.winepredictive.entity.WinePrediction;
 import com.winepredictive.winepredictive.repository.UserRepository;
 import com.winepredictive.winepredictive.repository.WinePredictionRepository;
 import com.winepredictive.winepredictive.repository.WineRepository;
+
+import jakarta.transaction.Transactional;
 
 
 @Service
@@ -101,7 +104,9 @@ public class WineServiceImpl implements WineService {
 	        wineRepository.save(wine);
 	    }
 
+	    @Transactional
 	    public void delete(final Long id) {
+	    	winePredictionRepository.deleteByIdWineId(id);
 	        wineRepository.deleteById(id);
 	    }
 
@@ -116,6 +121,8 @@ public class WineServiceImpl implements WineService {
 
 	    private Wine mapToEntity(final WineDto wineDTO, final Wine wine) throws NotFoundException {
 	        wine.setName(wineDTO.getName());
+	        wine.setDateCreated(OffsetDateTime.now());
+	        wine.setLastUpdated(OffsetDateTime.now());
 	        final Users idUser = wineDTO.getIdUser() == null ? null : usersRepository.findById(wineDTO.getIdUser())
 	                .orElseThrow(() -> new NotFoundException());
 	        wine.setIdUser(idUser);

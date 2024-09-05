@@ -48,11 +48,11 @@ public class Wine implements Serializable{
     private Set<WinePrediction> winePredictions;
 
     @CreatedDate
-    @Column(nullable = false, updatable = false)
+    @Column(updatable = false)
     private OffsetDateTime dateCreated;
 
     @LastModifiedDate
-    @Column(nullable = false)
+    @Column(nullable = true)
     private OffsetDateTime lastUpdated;
 
     public Long getId() {
@@ -104,14 +104,21 @@ public class Wine implements Serializable{
     }
 
 	public Wine(Long id, String name, Users idUser, Set<WinePrediction> winePredictions, OffsetDateTime dateCreated,
-			OffsetDateTime lastUpdated) {
-		
+			OffsetDateTime lastUpdated) {		
 		this.id = id;
 		this.name = name;
 		this.idUser = idUser;
 		this.winePredictions = winePredictions;
-		this.dateCreated = dateCreated;
+		this.dateCreated = OffsetDateTime.now();
 		this.lastUpdated = lastUpdated;
+	}
+
+	
+	
+	public Wine(String name, Users idUser) {
+		this.dateCreated = OffsetDateTime.now();
+		this.name = name;
+		this.idUser = idUser;
 	}
 
 	public Wine() {

@@ -12,6 +12,8 @@ import com.winepredictive.winepredictive.entity.WinePrediction;
 public interface WinePredictionRepository extends JpaRepository<WinePrediction, Long> {
 
 	List<WinePrediction> findByIdWine_Id(Long idWine);
+
+	void deleteByIdWineId(Long id);
 	
 	
 }

@@ -43,14 +43,22 @@ export class WineService {
     
     if (token) {
       headers = headers.set('Authorization', 'Bearer ' + token);  
-    }
-    
+    } 
     return headers;
   }
 
   savePrediction(predictionData: any): Observable<any> {
     return this.http.post(`${this.apiPredictions}`, predictionData);
   }
+
+
+  createWine(wine:any):Observable<any>{
+  return this.http.post(`${this.apiUrl}`,wine)
+  }
+
+delete(id:any):Observable<any>{
+return this.http.delete(`${this.apiUrl}/${id}`);
+}
 
 
   private handleError(error: any) {

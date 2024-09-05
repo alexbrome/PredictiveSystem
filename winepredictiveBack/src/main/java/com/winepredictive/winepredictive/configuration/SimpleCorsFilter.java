@@ -10,27 +10,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 public class SimpleCorsFilter implements Filter {
-/*
-	  @Override
-	   public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain)throws IOException, ServletException {
-		HttpServletResponse response = (HttpServletResponse) res;
-		HttpServletRequest request = (HttpServletRequest) req;
-		Map<String,String> map = new HashMap<>();
-		String originHeader = request.getHeader("origin");
-		response.setHeader("Access-Control-Allow-Origin", "*");
-		response.setHeader("Access-Control-Allow-Methods", "POST,GET,PUT,OPTIONS,DELETE");//Metodos HTTP permitidos
-		response.setHeader("Access-Control-Max-Age", "3600");//Tiempo maximo almacenado en cache
-		response.setHeader("Access-Control-Allow-Headers", "*");//Permite el encabezado CORS
-		
-		if("OPTIONS".equalsIgnoreCase(request.getMethod())) {
-			response.setStatus(HttpServletResponse.SC_OK);
-		}else {
-			chain.doFilter(req, res);
-		}
-		
-		
-	}
-*/
+
 	@Override
 	public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain) throws IOException, ServletException {
 	    HttpServletResponse response = (HttpServletResponse) res;
@@ -43,7 +23,7 @@ public class SimpleCorsFilter implements Filter {
 	    response.setHeader("Access-Control-Allow-Methods", "POST, GET, PUT, DELETE, OPTIONS");
 
 	    // Tiempo máximo que la respuesta puede ser cacheada por el cliente
-	    response.setHeader("Access-Control-Max-Age", "36000000000000");
+	    response.setHeader("Access-Control-Max-Age", "3600000000");//41 Days
 
 	    // Cabeceras permitidas en la solicitud
 	    response.setHeader("Access-Control-Allow-Headers", "Authorization, Content-Type, Accept, X-Requested-With, Origin");

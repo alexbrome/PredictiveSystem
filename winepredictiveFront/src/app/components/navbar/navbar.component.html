@@ -1,28 +1,33 @@
 <div class="card">
     <p-toolbar 
-        styleClass="bg-gray-900 shadow-2" 
-        [style]="{ 'border-radius': '3rem', 'background-image': 'linear-gradient(to right, var(--bluegray-500), var(--bluegray-800))' }">
-        <ng-template pTemplate="start">
-            <img src="https://primefaces.org/cdn/primeng/images/primeng.svg" />
-        </ng-template>
-        <ng-template pTemplate="center">
-            <div class="flex  gap-6">
-                <button routerLink="main" class="p-link inline-flex justify-content-center align-items-center text-white h-5rem w-3rem border-circle hover:bg-white-alpha-10 transition-all transition-duration-200">
-                    <i class="pi pi-home text-2xl">Home</i>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                </button>
-                <button routerLink="whiteWine-page" class="p-link inline-flex justify-content-center align-items-center text-white h-5rem w-3rem border-circle hover:bg-white-alpha-10 transition-all transition-duration-200">
-                    <i class="pi pi-clipboard text-2xl">Prediction</i>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                </button>
+    styleClass="bg-gray-900 shadow-2" 
+    [style]="{ 'border-radius': '3rem', 'background-image': 'linear-gradient(to right, var(--bluegray-500), var(--bluegray-800))' }">
+   
+    <ng-template pTemplate="start">
+        <img src="https://primefaces.org/cdn/primeng/images/primeng.svg" />
+    </ng-template>
+    
+    <ng-template pTemplate="center">
+        @if (isCustomerLoggedIn()) {
+        <div class="flex  gap-6">
+            <button routerLink="main" class="p-link inline-flex justify-content-center align-items-center text-white h-5rem w-3rem border-circle hover:bg-white-alpha-10 transition-all transition-duration-200">
+                <i class="pi pi-home text-2xl">Home</i>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            </button>
+            <button routerLink="whiteWine-page" class="p-link inline-flex justify-content-center align-items-center text-white h-5rem w-3rem border-circle hover:bg-white-alpha-10 transition-all transition-duration-200">
+                <i class="pi pi-clipboard text-2xl">Prediction</i>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            </button>
                 <button routerLink="summaryWhite" class="p-link inline-flex justify-content-center align-items-center text-white h-5rem w-3rem border-circle hover:bg-white-alpha-10 transition-all transition-duration-200">
-                    <i class="pi pi-chart-line text-2xl">Summary</i>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    <i class="pi pi-chart-line text-2xl"> Summary</i>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                 </button>
                 <button routerLink="wineList" class="p-link inline-flex justify-content-center align-items-center text-white h-5rem w-3rem border-circle hover:bg-white-alpha-10 transition-all transition-duration-200">
                     <i class="pi pi-bars text-2xl">Wine-List</i>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                   
                 </button>
             </div>
+        }
         </ng-template>
-        <ng-template pTemplate="end" class="">
+        <ng-template pTemplate="end">
+            @if (isCustomerLoggedIn()) {
             <div class="flex align-items-center gap-2 avatar">
                 <p-avatar 
                 icon="pi pi-user" 
@@ -30,9 +35,13 @@
                 size="large" 
                 [style]="{ 'background-color': '#ece9fc', color: '#2a1261' }" />
                 <span class="font-bold text-bluegray-50">
-                    <span class="userName">{{ user.name }}</span>
+                    <span class="userName">{{ user.name }}</span>                 
                 </span>
-            </div>
+                <span>
+                    <p-button label="LogOut" severity="secondary" (click) = logout()/>
+                </span>           
+            </div>}
         </ng-template>
+    
     </p-toolbar>
     </div>

@@ -1,23 +1,29 @@
-/* Estilos para el contenedor principal */
+/* main container styles */
 #container {
   display: flex; 
   height: 100vh; /* Hace que el contenedor ocupe toda la altura de la ventana del navegador */
   margin-top: 2%;
+  
 }
 
+/*left container styles*/
 #sectionLeft {
-  width: 13%; /* Ancho fijo del 10% de la pantalla */
-  background-color: #f0f0f0; /* Color de fondo para visualización (opcional) */
+  width: 11%; /* Ancho fijo del 10% de la pantalla */
+  background-color: #5c6977; /* Color de fondo para visualización (opcional) */
+  color:white;
+  animation: slideInFromTop 1s ease-out  backwards;
 }
 
-/* Estilos para la sección izquierda */
+/* right container styles */
 #sectionRight {
   flex: 1; /* Ocupa el resto del espacio disponible */
-  background-color: #e0e0e0; /* Color de fondo para visualización (opcional) */
+  background-color: #f5f2f2; /* Color de fondo para visualización (opcional) */
+  animation: slideInFromBottom 1s ease-out  forwards;
 }
 
 #pListBox {
   margin-top: 2%;
+
 }
 
 #wineName {
@@ -54,4 +60,72 @@
 .left-content{
   display: flex;
   flex-direction: column;
+}
+
+
+/*Charts*/
+.charts-container{
+  margin-top: 1%;
+  display:flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.charts-button{
+  margin-left: 2%;
+  display:flex;
+  gap:10%;
+}
+
+/*Colors of quality column*/
+.red-class {
+  background-color: rgb(222, 76, 76);
+  color: white;
+  font-weight: bold; /* Otras propiedades de estilo que desees */
+}
+
+.blue-class {
+  color: white;
+  background-color: rgb(84, 84, 210);
+  font-weight: bold;
+}
+
+.green-class {
+  color: white;
+ background-color: rgb(107, 208, 107);
+  font-weight: bold;
+}
+
+td{
+  text-align: center;
+}
+p-chart {
+  background-color: #121212; /* Fondo del gráfico */
+  border-radius: 8px;
+}
+
+
+
+/*Animation from bottom*/
+@keyframes slideInFromBottom {
+    0% {
+        opacity: 0;
+        transform: translateY(100%);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideInFromTop {
+  0% {
+    transform: translateY(-100%); /* Comienza fuera de la pantalla arriba */
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0); /* Llega a su posición original */
+    opacity: 1;
+  }
 }
