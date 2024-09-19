@@ -9,6 +9,7 @@
     opacity: 0;
     transform: translateX(-100%);
     animation: slideIn 2s ease-out forwards;
+ 
 }
 
 /*Animation for image*/
@@ -22,6 +23,9 @@
         transform: translateX(0);
     }
 }
+
+
+
 
 /*Botons*/
 #wines-buttons{

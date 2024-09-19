@@ -1,10 +1,12 @@
+
+
 <div class="card">
     <p-toolbar 
     styleClass="bg-gray-900 shadow-2" 
     [style]="{ 'border-radius': '3rem', 'background-image': 'linear-gradient(to right, var(--bluegray-500), var(--bluegray-800))' }">
    
-    <ng-template pTemplate="start">
-        <img src="https://primefaces.org/cdn/primeng/images/primeng.svg" />
+    <ng-template pTemplate="start" >
+       <span id="title-start">Wine Prediction System</span>
     </ng-template>
     
     <ng-template pTemplate="center">
@@ -38,10 +40,18 @@
                     <span class="userName">{{ user.name }}</span>                 
                 </span>
                 <span>
-                    <p-button label="LogOut" severity="secondary" (click) = logout()/>
+                    <p-button label="LogOut" severity="secondary" (click) = "logOut($event)"/>
+                    <div class="card flex justify-content-center gap-2">
+                        <div class="card flex justify-content-center gap-2">
+                            <p-toast />
+                            
+                           
+                        </div>     
+                    </div>
                 </span>           
             </div>}
         </ng-template>
     
     </p-toolbar>
     </div>
+    <p-confirmDialog />

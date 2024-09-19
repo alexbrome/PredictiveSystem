@@ -55,14 +55,15 @@ public class UserServiceImpl implements UserService{
 	
 	
 	 // Wines by userId
-    public Set<WineDto> findAllWinesByUserId(final Long idUser) {
-        return usersRepository.findById(idUser)
-                .orElseThrow(() -> new RuntimeException("User not found")) // Maneja el caso en que el usuario no se encuentre
-                .getWines()
-                .stream()
-                .map(this::wineServiceImpl.mapToDTO)) // Utiliza el método de mapeo para convertir cada Wine a WineDTO
-                .collect(Collectors.toSet());
-    }
+	public Set<WineDto> findAllWinesByUserId(final Long idUser) {
+	    return usersRepository.findById(idUser)
+	            .orElseThrow(() -> new RuntimeException("User not found")) // Maneja el caso en que el usuario no se encuentre
+	            .getWines()
+	            .stream()
+	            .map(wine -> wineServiceImpl.mapToDTO(wine, new WineDto())) // Usa una lambda en lugar de una referencia de método
+	            .collect(Collectors.toSet());
+	}
+	
 	
 	
 	 public List<UserDto> findAll() {

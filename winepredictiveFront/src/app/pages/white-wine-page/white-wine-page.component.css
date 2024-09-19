@@ -41,9 +41,9 @@ h1{
 /*fields Form*/
 #form{
     display:grid;
-    grid-template-columns: auto auto auto;
+    grid-template-columns: auto auto auto auto;
     gap:3%;
-    margin-left: 25%;
+    margin-left: 20%;
 }
 #submit-button{
     margin-top: 8%;

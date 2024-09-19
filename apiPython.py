@@ -45,4 +45,5 @@ if __name__ == '__main__':
     app.run(debug=True)
 
     #Ejecutar 
+    
     #Situarse en la carpeta PredictiveSystem y ejecutar python apiPython.py

@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Playwrite+CU:wght@100..400&family=Protest+Guerrilla&display=swap');
 i{
     color: white;
     font-size:x-large;
@@ -13,4 +14,27 @@ i{
     display: flex;
     gap: 10%;
     align-items: center;
+}
+
+#title-start{
+    color:rgb(247, 246, 246);
+    font-family: "Protest Guerrilla", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+    font-size: x-large;
+}
+p-toolbar{
+animation: slideInFromBottom 6s ease-out  forwards;
+}
+
+/*Animation from bottom*/
+@keyframes slideInFromBottom {
+    0% {
+        opacity: 0;
+        transform: translateY(100%);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }

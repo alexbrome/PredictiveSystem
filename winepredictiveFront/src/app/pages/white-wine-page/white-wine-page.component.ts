@@ -151,20 +151,20 @@ handleSubmit() {
   
   //Save prediction to BBDD
   savePrediction() {
-  // Verificar si un vino ha sido seleccionado correctamente
+  // Verify if a wine has been been selected
   if (!this.selectedWine || this.selectedWine.value == undefined || this.selectedWine.invalid) {
 
-    this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Debe seleccionar un vino' });
+    this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Selecting a wine is mandatory' });
     return;
   }
 
-  // Verificar si el formulario es válido
+  // Verify if form is valid
   if (this.wineForm.invalid) {
-    this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Debe completar todos los campos' });
-    return; // Añadir un return aquí para asegurarse de que no se ejecuta el resto del código
+    this.messageService.add({ severity: 'error', summary: 'Error', detail: 'You Must fill out all fields' });
+    return; //This way we stop the code here
   }
 
-  // Datos para enviar a la API IA
+  // Data to send IA API
   const formData = this.wineForm.value;
   const dataToSend = [
     parseFloat(formData.fixed_acidity || '0'),
@@ -180,7 +180,7 @@ handleSubmit() {
     parseFloat(formData.alcohol || '0'),
   ];
 
-  // Datos para enviar al back-end
+  //Data to send to back-end to save prediction
   const predictionData = {
     idWine: this.selectedWine.value.id,
     fixedAcidity: parseFloat(this.wineForm.value.fixed_acidity || '0'),
@@ -197,19 +197,19 @@ handleSubmit() {
     quality: 0
   };
 
-  // Servicio para obtener la calidad del vino
+  //Obtain wien quality
   this.whiteWineQualityService.predictWineQuality(dataToSend).subscribe(
     (response: { quality: Number; }) => {
       this.quality = response.quality;
       predictionData.quality = this.quality;
     
-      // Servicio para guardar la predicción
+      // Save prediction at back-end
       this.wineService.savePrediction(predictionData).subscribe(
         (response) => { 
             this.loading=true
             setTimeout(() => {
               this.loading = false;
-              // Mostrar el mensaje de éxito después de que el spinner se haya ocultado
+              // To show Succesfull messagge
               this.messageService.add({ severity: 'success', summary: 'Éxito', detail: '¡Predicción guardada con éxito!' });
             }, 5000);
           
@@ -220,7 +220,7 @@ handleSubmit() {
         );
       },
       (error: any) => {
-        this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Error al predecir la calidad del vino' });
+        this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Server was not able to predict wine quality' });
       }
     );
     
@@ -232,16 +232,11 @@ getWinesByUserId(){
   this.wineService.getAllWinesByUserId(this.idUser).subscribe(
     (data) => {
       this.wines = data;
-      console.log('Wines for user desde la clase recien llamado el servicio:', this.wines);
     },
     (error) => {
-      console.error('Error fetching wines:', error);
+      this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Server not working, pleasy try it out later on' })
     }
   );
  }
-
-
-
-
 
 }

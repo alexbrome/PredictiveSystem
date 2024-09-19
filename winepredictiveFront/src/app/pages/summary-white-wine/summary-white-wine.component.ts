@@ -11,6 +11,7 @@ import { ButtonModule } from 'primeng/button';
 import { TooltipModule } from 'primeng/tooltip';
 import { ToggleButtonModule } from 'primeng/togglebutton';
 import { ChartModule } from 'primeng/chart';
+import { SpeedDialModule } from 'primeng/speeddial';
 
 @Component({
   selector: 'app-summary-white-wine',
@@ -23,7 +24,8 @@ import { ChartModule } from 'primeng/chart';
     ButtonModule,
     TooltipModule,
     ToggleButtonModule,
-    ChartModule
+    ChartModule,
+    SpeedDialModule
   ],
   providers: [],
   templateUrl: './summary-white-wine.component.html',
@@ -37,6 +39,7 @@ export class SummaryWhiteWineComponent implements OnInit {
   selectedPredictions: any[] = [];
   isChartVisible: boolean = false;
   selectedPredictionDates: string[] = [];
+
 
   // Chart
   options: any;
