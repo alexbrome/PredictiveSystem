@@ -7,8 +7,8 @@ import { StorageService } from '../auth/services/storage.service';
   providedIn: 'root'
 })
 export class WineService {
-  private apiUrl = 'http://localhost:8080/api/wine';  
-  private apiPredictions = 'http://localhost:8080/api/winePredictions';  
+  private apiUrl = 'http://localhost:8081/api/wine';  
+  private apiPredictions = 'http://localhost:8081/api/winePredictions';  
 
   constructor(private http: HttpClient) { }
 

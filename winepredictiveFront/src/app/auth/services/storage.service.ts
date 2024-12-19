@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { BehaviorSubject } from 'rxjs';
 
 const TOKEN = "token";
 const USER = "user";
@@ -7,6 +8,8 @@ const USER = "user";
   providedIn: 'root'
 })
 export class StorageService {
+
+  private loggedInUser = new BehaviorSubject<any>(null);
 
   constructor() { }
 
@@ -70,6 +73,7 @@ export class StorageService {
     if (this.isBrowser()) {
       window.localStorage.removeItem(TOKEN);
       window.localStorage.removeItem(USER);
+      
     }
   }
 }

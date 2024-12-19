@@ -63,7 +63,7 @@ export class LoginComponent {
   
             // Delay 2seconds navigation in order to display succes message
             setTimeout(() => {
-              this.router.navigateByUrl("/main");
+              this.router.navigateByUrl("/homeAdmin");
             }, 2000);
   
           } else if (StorageService.isCustomerLoggedIn()) {

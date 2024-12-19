@@ -8,6 +8,7 @@ import { SignupComponent } from './auth/components/signup/signup.component';
 import { LoginComponent } from './auth/components/login/login.component';
 import { SummaryWhiteWineComponent } from './pages/summary-white-wine/summary-white-wine.component';
 import { WineListComponent } from './components/wine-list/wine-list.component';
+import { HomeAdminComponent } from './pages/home-admin/home-admin.component';
 
 export const routes: Routes = [
     { path: 'redWine-page', component: RedWinePageComponent },
@@ -18,5 +19,6 @@ export const routes: Routes = [
     { path: 'signup', component : SignupComponent },
     { path: 'summaryWhite', component : SummaryWhiteWineComponent },
     { path: 'wineList', component : WineListComponent },
+    { path: 'homeAdmin', component : HomeAdminComponent },
     { path: '', component: LoginComponent }
 ];

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, HostListener, OnInit } from '@angular/core';
 import { WinePredictionsService } from '../../services/wine-predictions.service';
 import { WinePrediction } from '../../models/winePrediction';
 import { WineService } from '../../services/wine.service';
@@ -32,6 +32,7 @@ import { SpeedDialModule } from 'primeng/speeddial';
   styleUrls: ['./summary-white-wine.component.css'] // Corregido styleUrls (plural)
 })
 export class SummaryWhiteWineComponent implements OnInit {
+  
   idUser: any = +StorageService.getUserId();
   winePrectionsList!: any[]; // Predictions Array
   wines!: any[]; // Wines Array
@@ -47,7 +48,12 @@ export class SummaryWhiteWineComponent implements OnInit {
   predictionsDatesChart: any[] = [];
   qualityWineChart: any[] = [];
 
-  constructor(private winePredictionService: WinePredictionsService, private wineService: WineService) {}
+  //Slider hidden or shown
+  isHidden: boolean = true;
+
+  constructor(private winePredictionService: WinePredictionsService, private wineService: WineService,
+    private eRef: ElementRef
+  ) {}
 
   ngOnInit(): void {
     this.getWinesByUerId();
@@ -131,34 +137,29 @@ export class SummaryWhiteWineComponent implements OnInit {
         (prediction) => prediction.idWine === this.selectedWine.id
       );
 
-      // Actualizar las fechas y calidades para la gráfica
+      // Update Dates and quality for charts
       this.predictionsDatesChart = this.selectedPredictions.map((prediction) => prediction.dateCreated);
       this.qualityWineChart = this.selectedPredictions.map((prediction) => prediction.quality);
 
-      // Actualizar el gráfico con los nuevos datos
       this.updateChartData();
-
-      console.log('Fechas seleccionadas para la gráfica:', this.predictionsDatesChart);
-      console.log('Calidades seleccionadas para la gráfica:', this.qualityWineChart);
     }
   }
 
   onWineSelect(selectedWine: any): void {
     this.selectedWine = selectedWine;
-    console.log(this.selectedWine);
-    this.updateSelectedPredictions(); // Actualiza las predicciones al seleccionar un vino
+    this.isHidden = true
+    this.updateSelectedPredictions();
   }
 
   deleteTable() {
-    this.selectedWine = null; // Deseleccionar el vino seleccionado
-    this.selectedPredictions = []; // Vaciar las predicciones seleccionadas
-    console.log('Tabla limpiada, vino deseleccionado y predicciones eliminadas.');
+    this.selectedWine = null; 
+    this.selectedPredictions = []; 
   }
 
   updateChartData(): void {
     const documentStyle = getComputedStyle(document.documentElement);
 
-    // Actualiza el objeto de datos del gráfico
+    //Upgrade data chart
     this.data = {
       labels: this.predictionsDatesChart,
       datasets: [
@@ -172,4 +173,23 @@ export class SummaryWhiteWineComponent implements OnInit {
       ]
     };
   }
+
+//Hide or show slider
+toggleVisibility(event:Event) {
+  event.stopPropagation();
+  this.isHidden = !this.isHidden;
+}
+
+//Event to close slider on click at any part of window
+@HostListener('document:click', ['$event'])
+onClickOutside(event: Event) {
+  const target = event.target as HTMLElement;
+  const toggleButton = document.querySelector('button'); 
+  if (!this.eRef.nativeElement.contains(target) && target !== toggleButton && !this.isHidden) {
+    this.isHidden = true;
+  }
+}
+
+
+
 }

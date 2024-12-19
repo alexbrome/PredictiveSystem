@@ -24,14 +24,12 @@ import com.winepredictive.winepredictive.repository.WineRepository;
 public class UserServiceImpl implements UserService{
 
 	 private final UserRepository usersRepository;
-	    private final WineRepository wineRepository;
 	    private final WineServiceImpl wineServiceImpl;
 
 	    public UserServiceImpl(final UserRepository usersRepository,
-	            final WineRepository wineRepository,
 	            WineServiceImpl wineServiceImpl) {
 	        this.usersRepository = usersRepository;
-	        this.wineRepository = wineRepository;
+	    
 	        this.wineServiceImpl = wineServiceImpl;
 	    }
 	

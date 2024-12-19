@@ -1,19 +1,39 @@
 /* main container styles */
 #container {
   display: flex; 
-  height: 100vh; /* Hace que el contenedor ocupe toda la altura de la ventana del navegador */
+  height: 100vh; /* Container fills all window */
   margin-top: 2%;
   
 }
 
 /*left container styles*/
 #sectionLeft {
-  width: 11%; /* Ancho fijo del 10% de la pantalla */
+  position: absolute;
+  left: 0;
+  transition: transform 0.7s ease;
+  width: 10%; 
   background-color: #5c6977; /* Color de fondo para visualización (opcional) */
   color:white;
-  animation: slideInFromTop 1s ease-out  backwards;
+  z-index: 20;
 }
 
+#sectionLeft > .p-listbox {
+  background-color: #007bff; 
+  color: white; 
+}
+
+#sectionLeft .p-listbox .p-listbox-item {
+  background-color: #007bff; /* Fondo azul para cada ítem */
+  color: white; /* Texto blanco para cada ítem */
+}
+
+#sectionLeft .p-listbox .p-listbox-item:hover {
+  background-color: #0056b3; /* Fondo azul oscuro al pasar el mouse */
+}
+
+.hidden{
+  transform: translateX(-160%);
+}
 /* right container styles */
 #sectionRight {
   flex: 1; /* Ocupa el resto del espacio disponible */
@@ -23,7 +43,8 @@
 
 #pListBox {
   margin-top: 2%;
-
+background-color: #4e4c4c;
+color: white;
 }
 
 #wineName {
@@ -36,6 +57,7 @@
   align-items: center;
   justify-content: space-between;
   width: 100%;
+  gap:1%;
 }
 
 .prediction-bar > div {
@@ -45,11 +67,11 @@
 
 .prediction-bar .left-content {
   flex-grow: 1;
-  text-align: left; /* Asegura que el texto esté alineado a la izquierda */
+  text-align: left; 
 }
 
 .prediction-bar p-button {
-  margin-left: auto; /* Empuja el botón al margen derecho */
+  margin-left: auto; 
 }
 
 .prediction-bar p-button:hover{
@@ -82,7 +104,7 @@
 .red-class {
   background-color: rgb(222, 76, 76);
   color: white;
-  font-weight: bold; /* Otras propiedades de estilo que desees */
+  font-weight: bold; 
 }
 
 .blue-class {
@@ -101,7 +123,7 @@ td{
   text-align: center;
 }
 p-chart {
-  background-color: #121212; /* Fondo del gráfico */
+  background-color: #121212; 
   border-radius: 8px;
 }
 
@@ -121,11 +143,11 @@ p-chart {
 
 @keyframes slideInFromTop {
   0% {
-    transform: translateY(-100%); /* Comienza fuera de la pantalla arriba */
+    transform: translateY(-100%); 
     opacity: 0;
   }
   100% {
-    transform: translateY(0); /* Llega a su posición original */
+    transform: translateY(0);
     opacity: 1;
   }
 }

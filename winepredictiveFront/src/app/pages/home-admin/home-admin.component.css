@@ -1,0 +1,126 @@
+
+.container {
+  display: flex;
+  height: 100vh;
+}
+
+.column {
+  padding: 20px;
+  overflow-y: auto;
+}
+
+.left {
+  background-color: #f4f1f1; /* Color rojo claro */
+  width: 15%;
+}
+
+.center {
+  background-color: #dfe1e2; /* Color azul claro */
+  width: 20%;
+}
+
+.right {
+  background-color: #d4d2d2; /* Color verde claro */
+  width: 65%;
+}
+
+h3 {
+  text-align: center;
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+}
+
+li {
+  padding: 10px;
+  cursor: pointer;
+  border: 1px solid #ccc;
+  margin-bottom: 5px;
+}
+
+li:hover {
+  background-color: #f4f2f271;
+}
+
+.prediction{
+  display: flex;
+  gap:4%
+}
+
+/*Change color of frames*/
+.selected-user {
+  background-color: rgb(85, 85, 185);
+  color: white;
+}
+
+.selected-wine {
+  background-color: rgb(85, 85, 185);
+  color: white;
+}
+
+li {
+  padding: 10px;
+  cursor: pointer;
+}
+
+li:hover {
+  opacity: 0.8;
+  color: black;
+  background-color: rgb(158, 160, 158);
+}
+
+/*Table of right column*/
+.table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.table td {
+  padding: 8px;
+  border: 1px solid #ddd;
+ 
+}
+
+.table td:first-child {
+  font-weight: bold;
+}
+
+/*Color button info-delete*/
+/* Añadir fuente Roboto desde Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
+
+/* Botón azul claro */
+.btn-info {
+  font-family: 'Roboto', sans-serif;  /* Fuente más bonita */
+  background-color: #568797;
+  color: white;
+  border: 1px solid #a9d1e5;
+  padding: 8px 16px;
+  font-size: 14px;
+  border-radius: 15px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.btn-info:hover {
+  background-color: #87cefa;
+}
+
+/* Botón rojo claro */
+.btn-delete {
+  font-family: 'Roboto', sans-serif;  /* Fuente más bonita */
+  background-color: #de6068;
+  color: black;
+  border: 1px solid #f5c6cb;
+  padding: 8px 16px;
+  font-size: 14px;
+  border-radius: 15px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.btn-delete:hover {
+  background-color: #f5b1b8;
+}

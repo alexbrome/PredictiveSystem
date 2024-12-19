@@ -10,7 +10,7 @@ import { response } from 'express';
 })
 export class WinePredictionsService {
 
-  private apiUrl = 'http://localhost:8080/api/winePredictions';
+  private apiUrl = 'http://localhost:8081/api/winePredictions';
   constructor(private http:HttpClient) { }
 
   getPredictionsByIdWine(idWine: number): Observable<any[]> {

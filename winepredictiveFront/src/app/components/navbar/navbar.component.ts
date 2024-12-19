@@ -51,6 +51,10 @@ isCustomerLoggedIn():Boolean{
 return StorageService.isCustomerLoggedIn();
 }
 
+isAdminLoggedIn():Boolean{
+  return StorageService.isAdminLoggedIn();
+}
+
 getUserById(){
   this.userService.getUserById(this.idUser).subscribe(
     (data: any) => {
@@ -62,12 +66,12 @@ getUserById(){
   );
 }
 
-logout(){
+/*logout(){
   StorageService.logout();
   this.messageService.add({ severity: 'error', summary: 'Error', detail: 'You Must fill out all fields' });
   
   this.router.navigateByUrl("/");
-}
+}*/
 
 
 //Logout confirm
@@ -82,10 +86,12 @@ logOut(event: Event) {
       rejectIcon:"none",
       rejectButtonStyleClass:"p-button-text",
       accept: () => {
-          this.messageService.add({ severity: 'info', summary: 'Success', detail: 'You have LoggedOut' });
-          StorageService.logout();
-          this.router.navigateByUrl("/");
-      },
+        StorageService.logout();
+        this.messageService.add({ severity: 'info', summary: 'Success', detail: 'You have LoggedOut' });
+        this.router.navigateByUrl("/", { skipLocationChange: true }).then(() => {
+            this.router.navigate([this.router.url]); // Forzar actualización del componente
+        });
+    },
       reject: () => {
      
       }

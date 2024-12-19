@@ -98,12 +98,9 @@ public class WinePredictionServiceImpl implements WinePredictionService{
 	        return winePrediction;
 	    }
 	    
-	    
-	    
-	    
-	    
-	    
-	    public List<WinePrediction> winePredictionsByIdWine(Long idWine) throws NotFoundException {  
+   
+	    @SuppressWarnings("unchecked")
+		public List<WinePrediction> winePredictionsByIdWine(Long idWine) throws NotFoundException {  
 	        // Buscar el vino por su ID
 	        Optional<Wine> wineOptional = wineRepository.findById(idWine);
 	        

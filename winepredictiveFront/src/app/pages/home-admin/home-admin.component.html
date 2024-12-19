@@ -1,0 +1,60 @@
+<div class="container">
+  <!-- Left column -->
+  <div class="column left">
+    <h3>Users</h3>
+    <hr>
+    <ul>
+      <li *ngFor="let user of users" (click)="selectUser(user)" [ngClass]="{'selected-user': selectedUser === user}">
+        {{ user.name }}
+      </li>
+    </ul>
+  </div>
+
+  <!--  central Column-->
+  <div class="column center">
+    <h3>Wines</h3>
+    <hr>
+    <ul>
+      <li *ngFor="let wine of wines" (click)="selectWine(wine)" [ngClass]="{'selected-wine': selectedWine === wine}">
+        {{ wine.name }}
+      </li>
+    </ul>
+
+  </div>
+
+  <!-- Right column -->
+  <div class="column right">
+    <h3>Wine Predictions</h3>
+    <hr>
+    <div *ngFor="let prediction of predictions">
+
+      @if(predictionsIsEmpty == false){
+        <div class="prediction">
+          <table class="table">
+            <tr>
+            
+              <td><b>Date :</b></td>
+              <td><b>{{ prediction.dateCreated }}</b></td>
+            </tr>
+            <tr>
+              <td><b>Quality</b>:</td>
+              <td><b>{{ prediction.quality }}</b>
+                <p-rating [(ngModel)]= "prediction.quality" [readonly]="true" [stars]="9"/>
+              </td>
+            </tr>
+            <tr>
+              <td colspan="2">
+                <button class="btn-info"   (onClick)="deleteItem(prediction.id)">Info</button>&nbsp;&nbsp;
+                <button class="btn-delete" (onClick)="deleteItem(prediction.id)">Delete</button>            
+              </td>
+            </tr>
+          </table>
+        </div>
+        
+      }@else{
+      <b>No predictions so far</b>
+      }
+      <hr>
+    </div>
+  </div>
+</div>

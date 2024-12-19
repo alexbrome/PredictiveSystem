@@ -11,9 +11,12 @@
 }
 /* Form */
 form {
+    height: 50%;
     max-width: 600px;
     width: 100%; /* Se ajusta a 100% del contenedor para mayor responsividad */
     padding: 0 15px; /* Añade padding para mejorar el espaciado en pantallas pequeñas */
+    display: grid;
+    grid-template-columns: auto auto;
 }
 
 
@@ -28,14 +31,14 @@ form {
     padding: 50px;
     position: absolute;
     width: 90%; /* Usa un porcentaje para la anchura */
-    max-width: 380px; /* Limita la anchura máxima en pantallas grandes */
+    max-width: 50%; /* Limita la anchura máxima en pantallas grandes */
     background-color: white;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
     box-shadow: 1px 1px 15px -7px rgba(0, 0, 0, 1);
     border-radius: 5px;
-    margin-bottom: 22px;
+    margin-bottom: 40px;
 }
 
 /* Control del formulario */
@@ -59,5 +62,10 @@ form-control {
 }
 
 h1{
-    margin-left: 80px;
+    margin-left: 35%;
+}
+
+
+button{
+    width: 60%;
 }

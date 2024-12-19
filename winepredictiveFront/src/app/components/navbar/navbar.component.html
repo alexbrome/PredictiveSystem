@@ -9,6 +9,7 @@
        <span id="title-start">Wine Prediction System</span>
     </ng-template>
     
+    <!--Nav bar buttons-->
     <ng-template pTemplate="center">
         @if (isCustomerLoggedIn()) {
         <div class="flex  gap-6">
@@ -27,31 +28,51 @@
                 </button>
             </div>
         }
+        @if (isAdminLoggedIn()) {
+            <div class="flex  gap-6">
+                <button routerLink="homeAdmin" class="p-link inline-flex justify-content-center align-items-center text-white h-5rem w-3rem border-circle hover:bg-white-alpha-10 transition-all transition-duration-200">
+                    <i class="pi pi-home text-2xl">Home</i>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                </button>
+                <button routerLink="signup" class="p-link inline-flex justify-content-center align-items-center text-white h-5rem w-3rem border-circle hover:bg-white-alpha-10 transition-all transition-duration-200">
+                    <i class="pi pi-clipboard text-2xl">New Customer</i>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                </button>
+                    <button routerLink="summaryWhite" class="p-link inline-flex justify-content-center align-items-center text-white h-5rem w-3rem border-circle hover:bg-white-alpha-10 transition-all transition-duration-200">
+                        <i class="pi pi-chart-line text-2xl"> Por definir</i>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    </button>
+                    <button routerLink="wineList" class="p-link inline-flex justify-content-center align-items-center text-white h-5rem w-3rem border-circle hover:bg-white-alpha-10 transition-all transition-duration-200">
+                        <i class="pi pi-bars text-2xl">Customers-List</i>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                      
+                    </button>
+                </div>
+            }
         </ng-template>
+
+        <!--Right DIV-->
         <ng-template pTemplate="end">
-            @if (isCustomerLoggedIn()) {
             <div class="flex align-items-center gap-2 avatar">
+                @if (isCustomerLoggedIn()) {
                 <p-avatar 
-                icon="pi pi-user" 
-                styleClass="mr-2"
+                    icon="pi pi-user" 
+                    styleClass="mr-2"
                 size="large" 
                 [style]="{ 'background-color': '#ece9fc', color: '#2a1261' }" />
+            }
+            @if(isCustomerLoggedIn() || isAdminLoggedIn()){
                 <span class="font-bold text-bluegray-50">
                     <span class="userName">{{ user.name }}</span>                 
-                </span>
+                </span>}
+                @if(isAdminLoggedIn() || isCustomerLoggedIn()){
+             
                 <span>
                     <p-button label="LogOut" severity="secondary" (click) = "logOut($event)"/>
                     <div class="card flex justify-content-center gap-2">
                         <div class="card flex justify-content-center gap-2">
-                            <p-toast />
-                            
-                           
+                            <p-toast />                
                         </div>     
                     </div>
-                </span>           
-            </div>}
+                </span>        }
+            </div>
         </ng-template>
-    
     </p-toolbar>
     </div>
     <p-confirmDialog />

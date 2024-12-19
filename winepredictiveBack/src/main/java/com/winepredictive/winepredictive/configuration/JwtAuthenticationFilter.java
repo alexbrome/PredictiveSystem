@@ -1,7 +1,6 @@
 package com.winepredictive.winepredictive.configuration;
 
 import java.io.IOException;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContext;
@@ -10,10 +9,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
-
 import com.winepredictive.winepredictive.service.UserService;
 import com.winepredictive.winepredictive.utils.JWTUtil;
-
 import com.mysql.cj.util.StringUtils;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -27,7 +24,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter{
 	private  JWTUtil jwtUtil;
 	
 	@Autowired
-	private UserService userService;
+	private  UserService userService;
 	
 	
 	
@@ -42,9 +39,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter{
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
 			throws ServletException, IOException {
-		
-		   System.out.println("Request received: " + request.getRequestURI());
-		
+				
 		final String authHeader=request.getHeader("Authorization");
 		System.out.println("Authorization Header: " + authHeader);
 		final String jwt;

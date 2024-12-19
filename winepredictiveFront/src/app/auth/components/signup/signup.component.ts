@@ -3,15 +3,19 @@ import { AuthServiceService } from '../../services/auth-service.service';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ReactiveFormsModule } from '@angular/forms';
+import { MessageService } from 'primeng/api';
+import { ToastModule } from 'primeng/toast';
 
 @Component({
   selector: 'app-signup',
   standalone: true,
   imports: [
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    ToastModule
   ],
   templateUrl: './signup.component.html',
-  styleUrl: './signup.component.css'
+  styleUrl: './signup.component.css',
+  providers: [MessageService,ToastModule]
 })
 export class SignupComponent {
 
@@ -20,7 +24,7 @@ export class SignupComponent {
 
   constructor(private fb:FormBuilder,
     private authService:AuthServiceService,
-    
+    private messageService:MessageService,
     private router:Router) { }
    
    
@@ -44,21 +48,22 @@ export class SignupComponent {
    
   
   //Create user
-  register(){
-    console.log(this.signupForm.value);
-   this.authService.register(this.signupForm.value).subscribe((res)=>{
-     console.log(res);
-     if (res.id !=null){
-      
-      this.router.navigateByUrl("/");
-     } else {
-         
-     }
-     
-  },
-  (error: any)=>{})
-  
+  register() {
+    this.authService.register(this.signupForm.value).subscribe((res) => {  
+      if (res.id != null) {
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Congratulations!',
+          detail: 'User has been registered',
+        });
+        // Delay navigation to give time to show the message
+        setTimeout(() => {
+          this.router.navigateByUrl("/homeAdmin");
+        }, 2000);
+      }
+    }, (error: any) => {});
   }
-
+  
+  
 
 }

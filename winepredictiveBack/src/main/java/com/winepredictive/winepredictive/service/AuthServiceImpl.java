@@ -2,6 +2,7 @@ package com.winepredictive.winepredictive.service;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+
 import com.winepredictive.winepredictive.dto.SignupRequest;
 import com.winepredictive.winepredictive.dto.UserDto;
 import com.winepredictive.winepredictive.entity.Users;

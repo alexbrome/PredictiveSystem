@@ -1,6 +1,7 @@
 package com.winepredictive.winepredictive.controllers;
 
 import java.time.OffsetDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException;
 import org.springframework.http.HttpStatus;
@@ -40,12 +41,11 @@ public class WinePredictionRestController {
 	//Predictions by idWine
 	    @GetMapping("/{idWine}")
 	    public ResponseEntity<List<WinePredictionDto>> getWinePredictionsByIdWine(@PathVariable Long idWine) {
-	 
 	        try {
 	            List<WinePredictionDto> predictions = wineService.getWinePredictionsByWineId(idWine);
 	            return ResponseEntity.ok(predictions);
 	        } catch (NotFoundException e) {
-	            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+	            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ArrayList<WinePredictionDto>());
 	        }
 	    }
 	

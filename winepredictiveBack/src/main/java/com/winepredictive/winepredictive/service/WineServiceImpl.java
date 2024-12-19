@@ -5,6 +5,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.access.method.P;
 import org.springframework.stereotype.Service;
 import com.winepredictive.winepredictive.dto.WineDto;
 import com.winepredictive.winepredictive.dto.WinePredictionDto;
@@ -45,6 +46,13 @@ public class WineServiceImpl implements WineService {
     public List<WinePredictionDto> getWinePredictionsByWineId(final Long idWine) throws NotFoundException {
         // Utilizamos el repositorio para encontrar todas las WinePredictions asociadas con un idWine
         List<WinePrediction> predictions = winePredictionRepository.findByIdWine_Id(idWine);
+
+        for (WinePrediction prediction : predictions) {
+            System.out.println("Prediction dateCreated desde el servicio: " + prediction.getDateCreated());       
+            // Agrega aquí los campos adicionales que necesites imprimir.
+            System.out.println("--------------------------------");
+        }
+        
         if (predictions.isEmpty()) {
             throw new NotFoundException();
         }
@@ -149,6 +157,7 @@ public class WineServiceImpl implements WineService {
 	        dto.setSulphates(winePrediction.getSulphates());
 	        dto.setAlcohol(winePrediction.getAlcohol());
 	        dto.setQuality(winePrediction.getQuality());
+	        dto.setDateCreated(winePrediction.getDateCreated());
 	        
 	        // Suponiendo que idWine es una referencia a Wine dentro de WinePrediction
 	        if (winePrediction.getIdWine() != null) {
