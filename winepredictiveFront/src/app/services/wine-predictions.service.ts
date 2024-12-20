@@ -36,5 +36,9 @@ export class WinePredictionsService {
     );
   }
 
-  
+  deleteWinePredictionById(id:number){
+    return this.http.delete<void>(`${this.apiUrl}/${id}`,{
+      headers:this.createAthorizationHeader()
+    })
+  }
 }

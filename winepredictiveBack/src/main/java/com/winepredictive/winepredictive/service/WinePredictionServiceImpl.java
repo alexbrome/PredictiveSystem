@@ -94,7 +94,7 @@ public class WinePredictionServiceImpl implements WinePredictionService{
 	                .orElseThrow(() -> new NotFoundException());
 	        winePrediction.setIdWine(idWine);
 	        winePrediction.setDateCreated(winePredictionDTO.getDateCreated());
-	        winePrediction.setLastUpdated(OffsetDateTime.now());
+	       // winePrediction.setLastUpdated(OffsetDateTime.now());
 	        return winePrediction;
 	    }
 	    

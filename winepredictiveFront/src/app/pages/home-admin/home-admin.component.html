@@ -1,7 +1,9 @@
 <div class="container">
   <!-- Left column -->
   <div class="column left">
-    <h3>Users</h3>
+    <div>
+      <h3>Users</h3>
+    </div>
     <hr>
     <ul>
       <li *ngFor="let user of users" (click)="selectUser(user)" [ngClass]="{'selected-user': selectedUser === user}">
@@ -34,18 +36,84 @@
             <tr>
             
               <td><b>Date :</b></td>
-              <td><b>{{ prediction.dateCreated }}</b></td>
+              <td><b>{{ prediction.dateCreated | date:'dd/MM/yyyy HH:mm' }}</b></td>
             </tr>
             <tr>
               <td><b>Quality</b>:</td>
-              <td><b>{{ prediction.quality }}</b>
-                <p-rating [(ngModel)]= "prediction.quality" [readonly]="true" [stars]="9"/>
+              <td><b>{{ prediction.quality }}</b>&nbsp;&nbsp;
+                <p-rating [(ngModel)]= "prediction.quality" [readonly]="true" [stars]="9" [cancel]="false" />
               </td>
             </tr>
             <tr>
               <td colspan="2">
-                <button class="btn-info"   (onClick)="deleteItem(prediction.id)">Info</button>&nbsp;&nbsp;
-                <button class="btn-delete" (onClick)="deleteItem(prediction.id)">Delete</button>            
+                <button class="btn-info"   (click)="showDialogInfo(prediction)">Info</button>&nbsp;&nbsp;
+                <button class="btn-info" (click)="deleteWinePredictionById(prediction.id)">Delete</button>    
+                       <!--Dialog info Wine Prediction--> 
+                       <p-dialog header="Wine Prediction Info" [modal]="true" [(visible)]="dialogIsVisible" [style]="{ width: '25rem' }">
+                        <table border="1" style="width: 100%; border-collapse: collapse;">
+                          <thead>
+                            <tr>
+                              <th>Property</th>
+                              <th>Value</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr>
+                              <td>Fixed Acidity</td>
+                              <td>{{ selectedPrediction.fixedAcidity }}</td>
+                            </tr>
+                            <tr>
+                              <td>Volatile Acidity</td>
+                              <td>{{ selectedPrediction.volatileAcidity }}</td>
+                            </tr>
+                            <tr>
+                              <td>Citric Acid</td>
+                              <td>{{ selectedPrediction.citricAcid }}</td>
+                            </tr>
+                            <tr>
+                              <td>Residual Sugar</td>
+                              <td>{{ selectedPrediction.residualSugar }}</td>
+                            </tr>
+                            <tr>
+                              <td>Chlorides</td>
+                              <td>{{ selectedPrediction.chlorides }}</td>
+                            </tr>
+                            <tr>
+                              <td>Free Sulfur Dioxide</td>
+                              <td>{{ selectedPrediction.freeSulfurDioxide }}</td>
+                            </tr>
+                            <tr>
+                              <td>Total Sulfur Dioxide</td>
+                              <td>{{ selectedPrediction.totalSulfureDioxide }}</td>
+                            </tr>
+                            <tr>
+                              <td>Density</td>
+                              <td>{{ selectedPrediction.density }}</td>
+                            </tr>
+                            <tr>
+                              <td>pH</td>
+                              <td>{{ selectedPrediction.ph }}</td>
+                            </tr>
+                            <tr>
+                              <td>Sulphates</td>
+                              <td>{{ selectedPrediction.sulphates }}</td>
+                            </tr>
+                            <tr>
+                              <td>Alcohol</td>
+                              <td>{{ selectedPrediction.alcohol }}</td>
+                            </tr>
+                            <tr>
+                              <td>Quality</td>
+                              <td>{{ selectedPrediction.quality }}</td>
+                            </tr>
+                            <tr>
+                              <td>Date Created</td>
+                              <td>{{ selectedPrediction.dateCreated | date:'dd/MM/yyyy HH:mm' }}</td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </p-dialog>
+                      
               </td>
             </tr>
           </table>

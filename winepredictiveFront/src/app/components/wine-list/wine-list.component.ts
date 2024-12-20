@@ -13,6 +13,7 @@ import { CalendarModule } from 'primeng/calendar';
 import { Wine } from '../../models/Wine';
 import { MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
+import { CommonModule } from '@angular/common';
 
 
 
@@ -29,7 +30,7 @@ import { ToastModule } from 'primeng/toast';
     FloatLabelModule,
     CalendarModule,
     ToastModule,
-    
+    CommonModule
   ],
   templateUrl: './wine-list.component.html',
   styleUrls: ['./wine-list.component.css'],

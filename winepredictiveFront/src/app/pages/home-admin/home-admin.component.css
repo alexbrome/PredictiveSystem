@@ -124,3 +124,11 @@ li:hover {
 .btn-delete:hover {
   background-color: #f5b1b8;
 }
+
+::ng-deep .p-dialog-mask {
+  background-color: transparent !important;
+}
+
+.bt-info{
+  color: white;
+}

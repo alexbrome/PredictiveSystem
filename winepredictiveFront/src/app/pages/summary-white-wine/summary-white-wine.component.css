@@ -125,8 +125,12 @@ td{
 p-chart {
   background-color: #121212; 
   border-radius: 8px;
+  
 }
-
+.chart{
+  width: 50%;
+  height: 30%;
+}
 
 
 /*Animation from bottom*/

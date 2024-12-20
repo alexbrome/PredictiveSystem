@@ -7,13 +7,14 @@ import { CurrencyPipe, DatePipe, TitleCasePipe } from '@angular/common';
 import { Rating, RatingModule } from 'primeng/rating';
 import { ButtonModule } from 'primeng/button';
 import { FormsModule } from '@angular/forms';
+import { Dialog, DialogModule } from 'primeng/dialog';
 
 @Component({
   selector: 'app-home-admin',
   standalone: true,
   imports: [
     NgFor,CommonModule,
-    ButtonModule,RatingModule,FormsModule
+    ButtonModule,RatingModule,FormsModule,DialogModule
   ],
   providers:[DatePipe],
   templateUrl: './home-admin.component.html',
@@ -28,11 +29,14 @@ export class HomeAdminComponent implements OnInit {
   predictions: any[] = [];
   selectedWine: any = null;
   selectedUser: any = null;
-  predictionsIsEmpty:Boolean = false
+  predictionsIsEmpty:Boolean = false;
+  dialogIsVisible:boolean = false;
+  selectedPrediction :any = {};
 
   //Constructor
   constructor(private userService: UserService,private wineService:WineService
-   ,private predictionService:WinePredictionsService,private datePipe: DatePipe
+   ,private predictionService:WinePredictionsService,private datePipe: DatePipe,
+   private winePredictionService:WinePredictionsService
   ) {
 
   }
@@ -98,7 +102,23 @@ export class HomeAdminComponent implements OnInit {
     this.loadPredictionsByWineId(wine.id);
   }
 
- deleteItem(id:number){}
+  deleteWinePredictionById(id: number): void {
+    this.winePredictionService.deleteWinePredictionById(id).subscribe({
+      next: () => {
+        // Eliminar la predicción de la lista localmente
+        this.predictions = this.predictions.filter(prediction => prediction.id !== id);
+        alert('Prediction deleted successfully!');
+      },
+      error: (err) => {
+        console.error('Error deleting prediction', err);
+        alert('Error deleting prediction');
+      }
+    });
+  }
 
-
+  showDialogInfo(prediction: any): void {
+    this.selectedPrediction = prediction;
+    this.dialogIsVisible = true;
+  }
 }
+

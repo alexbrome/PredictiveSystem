@@ -74,11 +74,11 @@ public class WinePrediction {
     @CreatedDate
     @Column(nullable = false, updatable = false)
     private OffsetDateTime dateCreated;
-
+/*
     @LastModifiedDate
     @Column(nullable = false)
     private OffsetDateTime lastUpdated;
-
+*/
     public Long getId() {
         return id;
     }
@@ -198,7 +198,7 @@ public class WinePrediction {
     public void setDateCreated(final OffsetDateTime dateCreated) {
         this.dateCreated = dateCreated;
     }
-
+/*
     public OffsetDateTime getLastUpdated() {
         return lastUpdated;
     }
@@ -206,7 +206,7 @@ public class WinePrediction {
     public void setLastUpdated(final OffsetDateTime lastUpdated) {
         this.lastUpdated = lastUpdated;
     }
-
+*/
 	public WinePrediction(Long id, Double fixedAcidity, Double volatileAcidity, Double citricAcid, Double residualSugar,
 			Double chlorides, Double freeSulfurDioxide, Double totalSulfureDioxide, Double density, Double pH,
 			Double sulphates, Double alcohol, Double quality, Wine idWine, OffsetDateTime dateCreated,
@@ -226,7 +226,7 @@ public class WinePrediction {
 		this.quality = quality;
 		this.idWine = idWine;
 		this.dateCreated = dateCreated;
-		this.lastUpdated = lastUpdated;
+		//this.lastUpdated = lastUpdated;
 	}
 
 	public WinePrediction() {

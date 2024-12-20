@@ -37,7 +37,7 @@
     <!-------Table Columns-------->
     <ng-template pTemplate="body" let-wine>
         <tr>
-            <td>{{ wine.dateCreated }}</td>
+            <td>{{ wine.dateCreated | date:'dd/MM/yyyy HH:mm'}}</td>
             <td>{{ wine.name }}</td>
             <td>
                 @if(wine.quality){
