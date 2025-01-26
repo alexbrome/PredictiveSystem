@@ -1,9 +1,6 @@
 package com.winepredictive.winepredictive.service;
-
-import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;

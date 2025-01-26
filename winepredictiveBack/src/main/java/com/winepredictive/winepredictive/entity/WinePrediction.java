@@ -77,8 +77,8 @@ public class WinePrediction {
 /*
     @LastModifiedDate
     @Column(nullable = false)
-    private OffsetDateTime lastUpdated;
-*/
+    private OffsetDateTime lastUpdated;*/
+
     public Long getId() {
         return id;
     }

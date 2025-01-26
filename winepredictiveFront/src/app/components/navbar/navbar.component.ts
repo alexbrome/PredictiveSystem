@@ -1,5 +1,4 @@
-import { Component, OnInit } from '@angular/core';
-
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ConfirmationService, MenuItem, MessageService } from 'primeng/api';
 import { MenubarModule } from 'primeng/menubar';
 import { BadgeModule } from 'primeng/badge';
@@ -14,91 +13,89 @@ import { UserService } from '../../services/user.service';
 import { ButtonModule } from 'primeng/button';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ToastModule } from 'primeng/toast';
+import { Subscription } from 'rxjs';
+
 @Component({
   selector: 'app-navbar',
   standalone: true,
   imports: [
-MenubarModule, BadgeModule, AvatarModule, InputTextModule,
- RippleModule, CommonModule,ToolbarModule,
- ButtonModule,ConfirmDialogModule,ToastModule
+    MenubarModule, BadgeModule, AvatarModule, InputTextModule,
+    RippleModule, CommonModule, ToolbarModule,
+    ButtonModule, ConfirmDialogModule, ToastModule
   ],
   templateUrl: './navbar.component.html',
   styleUrl: './navbar.component.css',
-  providers: [MessageService,ConfirmationService]
+  providers: [MessageService, ConfirmationService]
 })
-export class NavbarComponent implements OnInit{
-
-
-idUser: any = (StorageService.getUserId());
-
-user:any;
+export class NavbarComponent implements OnInit, OnDestroy {
+  idUser: any = StorageService.getUserId();
+  user: any;
   items: MenuItem[] | undefined;
+  private userSubscription!: Subscription;
 
-constructor(private router:Router,private userService:UserService,
-  private messageService:MessageService,private confirmationService: ConfirmationService,
-){
-  
-}
-
+  constructor(
+    private router: Router,
+    private userService: UserService,
+    private messageService: MessageService,
+    private confirmationService: ConfirmationService,
+    private storageService: StorageService
+  ) {}
 
   ngOnInit(): void {
+    // Inicializar con el usuario actual
+    this.user = StorageService.getUser();
     this.getUserById();
-    this.isCustomerLoggedIn();
+
+    // Suscribirse a los cambios del usuario
+    this.userSubscription = this.storageService.getUserObservable().subscribe(user => {
+      this.user = user;
+    });
   }
 
-
-isCustomerLoggedIn():Boolean{
-return StorageService.isCustomerLoggedIn();
-}
-
-isAdminLoggedIn():Boolean{
-  return StorageService.isAdminLoggedIn();
-}
-
-getUserById(){
-  this.userService.getUserById(this.idUser).subscribe(
-    (data: any) => {
-      this.user = data;
-    },
-    (error) => {
-      console.error('Error fetching user:', error);
+  ngOnDestroy(): void {
+    // Desuscribirse al destruir el componente
+    if (this.userSubscription) {
+      this.userSubscription.unsubscribe();
     }
-  );
-}
+  }
 
-/*logout(){
-  StorageService.logout();
-  this.messageService.add({ severity: 'error', summary: 'Error', detail: 'You Must fill out all fields' });
-  
-  this.router.navigateByUrl("/");
-}*/
+  isCustomerLoggedIn(): Boolean {
+    return StorageService.isCustomerLoggedIn();
+  }
 
+  isAdminLoggedIn(): Boolean {
+    return StorageService.isAdminLoggedIn();
+  }
 
-//Logout confirm
-logOut(event: Event) {
+  getUserById() {
+    this.userService.getUserById(this.idUser).subscribe(
+      (data: any) => {
+        this.user = data;
+      },
+      (error) => {
+        console.error('Error fetching user:', error);
+      }
+    );
+  }
 
-  this.confirmationService.confirm({
+  logOut(event: Event) {
+    this.confirmationService.confirm({
       target: event.target as EventTarget,
       message: 'Are you sure that you want to LogOut?',
       header: 'Confirmation',
       icon: 'pi pi-exclamation-triangle',
-      acceptIcon:"none",
-      rejectIcon:"none",
-      rejectButtonStyleClass:"p-button-text",
+      acceptIcon: "none",
+      rejectIcon: "none",
+      rejectButtonStyleClass: "p-button-text",
       accept: () => {
         StorageService.logout();
         this.messageService.add({ severity: 'info', summary: 'Success', detail: 'You have LoggedOut' });
         this.router.navigateByUrl("/", { skipLocationChange: true }).then(() => {
-            this.router.navigate([this.router.url]); // Forzar actualización del componente
+          this.router.navigate([this.router.url]); // Forzar actualización del componente
         });
-    },
-      reject: () => {
-     
-      }
-  });
+        this.getUserById();
+      },
+      reject: () => {}
+    });
+  }
 }
-
-
-}
-
-

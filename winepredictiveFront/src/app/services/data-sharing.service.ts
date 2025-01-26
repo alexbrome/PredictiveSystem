@@ -20,8 +20,10 @@ export class DataSharingService {
   //setters and getters wineData
   setWhiteWineData(data: any) {
     this.whiteWineData = data;
+   
+    
   }
-
+  
   getwhiteWineData() {
     return this.whiteWineData;
   }
@@ -51,6 +53,8 @@ export class DataSharingService {
     return this.redWineQualityPredicted;
   }
 
+
+   //Wine names
   setNameWine(name:any){
    this.wineName = name;
   }

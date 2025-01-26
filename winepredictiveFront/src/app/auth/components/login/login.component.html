@@ -14,7 +14,8 @@
                         <label for="email">Email</label>
                         <span class="p-input-icon-left">
                             <i class="pi pi-user"></i>
-                            <input id="email" type="text" pInputText  formControlName="email" class="p-inputtext p-component" />
+                            <input id="email" type="text" pInputText  formControlName="email" 
+                            class="p-inputtext p-component" autocomplete="Email" />
                         </span>
                         @if(loginForm.get('email')?.invalid && loginForm.get('email')?.touched){
                             <div  class="p-error">
@@ -30,7 +31,9 @@
                         <label for="password">Password</label>
                         <span class="p-input-icon-left">
                             <i class="pi pi-lock"></i>
-                            <input id="password" type="password" pInputText  formControlName="password" class="p-inputtext p-component" />
+                            <input id="password" type="password" pInputText  formControlName="password"
+                             class="p-inputtext p-component" 
+                             autocomplete="Password"/>
                         </span>
                         @if(loginForm.get('password')?.invalid && loginForm.get('password')?.touched){
                             <div class="p-error">

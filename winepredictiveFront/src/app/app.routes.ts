@@ -9,6 +9,7 @@ import { LoginComponent } from './auth/components/login/login.component';
 import { SummaryWhiteWineComponent } from './pages/summary-white-wine/summary-white-wine.component';
 import { WineListComponent } from './components/wine-list/wine-list.component';
 import { HomeAdminComponent } from './pages/home-admin/home-admin.component';
+import { ChatAIComponent } from './components/chat-ai/chat-ai.component';
 
 export const routes: Routes = [
     { path: 'redWine-page', component: RedWinePageComponent },
@@ -20,5 +21,6 @@ export const routes: Routes = [
     { path: 'summaryWhite', component : SummaryWhiteWineComponent },
     { path: 'wineList', component : WineListComponent },
     { path: 'homeAdmin', component : HomeAdminComponent },
-    { path: '', component: LoginComponent }
+    { path: '', component: LoginComponent },
+    { path:'chat/:predictionId',component:ChatAIComponent}
 ];

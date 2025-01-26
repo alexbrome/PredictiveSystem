@@ -33,6 +33,7 @@ export class LoginComponent {
       email:["",[Validators.email,Validators.required]],
       password:["",[Validators.required,Validators.minLength(8)]]
     })
+    StorageService.saveUser(null);
   }
 
 
@@ -53,6 +54,7 @@ export class LoginComponent {
           
           StorageService.saveUser(user);
           StorageService.saveToken(res.jwt);
+          
   
           if (StorageService.isAdminLoggedIn()) {
             this.messageService.add({
@@ -75,7 +77,7 @@ export class LoginComponent {
   
             // Delay 2 seconds navigation in order to display succes message
             setTimeout(() => {
-              this.router.navigateByUrl("/main");
+              this.router.navigateByUrl("/summaryWhite");
             }, 2000); 
           }
         } 

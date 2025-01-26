@@ -133,6 +133,20 @@ p-chart {
 }
 
 
+/*Action buttons*/
+.icon-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  color: inherit; /* Heredar el color del icono */
+}
+
+.icon-button:focus {
+  outline: none; /* Quitar el borde de enfoque */
+}
+
+
 /*Animation from bottom*/
 @keyframes slideInFromBottom {
     0% {
@@ -179,4 +193,8 @@ p-chart {
           top: calc(50% - 2rem);
       }
   }
+}
+
+.ia-column{
+  background-color: rgb(113, 196, 154);
 }

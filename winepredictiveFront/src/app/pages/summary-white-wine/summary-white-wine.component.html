@@ -1,3 +1,5 @@
+<p-confirmDialog></p-confirmDialog>
+<p-toast></p-toast>
 <!--Left container(SELECT WINE)-->
 <div id="container">
     <div id="sectionLeft" [ngClass]="{'hidden': isHidden}" class="slider-container">  
@@ -63,7 +65,11 @@
                             pTooltip="Values should be between 5 and 10" tooltipPosition="top"></i></th>
                         <th>Volatile Acidity&nbsp;<i class="pi pi-info-circle"
                             pTooltip="Values should be between 5 and 10" tooltipPosition="top"></i></th>
+                         
                         <th>Quality</th>
+                        <th>Actions</th>
+                        <th>AI</th>
+                        
                     </tr>
                     }
                 </ng-template>
@@ -73,7 +79,7 @@
                    <!--TODO
                    <tr (click)="onRowClick(prediction)"></tr>-->
                         <tr>
-                        <td>{{ prediction.dateCreated | date:'shortDate'}}</td>
+                        <td>{{ prediction.dateCreated | date:'dd/MM/YYYY HH:mm'}}</td>
 
                         <td>{{prediction.fixedAcidity}}&nbsp;
                             @if(prediction.fixedAcidity < 5 || prediction.fixedAcidity> 10){
@@ -141,10 +147,30 @@
                                     tooltipPosition="top" style="color: orange;"></i>
                                 }
                         </td>
+                        
                         <td [ngClass]="{'red-class': prediction.quality < 6, 'blue-class': prediction.quality === 6, 
                         'green-class': prediction.quality > 6}">
                             {{prediction.quality}}</td>
-
+                            <td>
+                                <button class="icon-button" pTooltip="Delete this prediction" tooltipPosition="left"
+                                (click)="deletePrediction(prediction.id)">
+                                <i class="pi pi-trash"></i> &nbsp;&nbsp;
+                            </button>
+                            
+                            <button class="icon-button" pTooltip="Go to this prediction Charts" tooltipPosition="left"
+                            (click)="goToPredictionChart(prediction.id)" >
+                            <i class="pi pi-chart-bar"></i>
+                        </button>                            
+                    </td>
+                    <td>
+                        <button class="icon-button" pTooltip="Improve measurements with AI solutions" tooltipPosition="left"
+                        (click)="goToIAChat(prediction.id)" >
+                        <img src="../../images/chat-gpt.png" alt="">
+                    </button>  
+                         
+                           
+                    </td>
+                             
                     </tr>
                     }
                 </ng-template>

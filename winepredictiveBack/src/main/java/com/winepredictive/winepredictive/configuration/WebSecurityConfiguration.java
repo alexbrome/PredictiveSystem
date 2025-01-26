@@ -25,7 +25,7 @@ import com.winepredictive.winepredictive.service.UserService;
 @EnableMethodSecurity
 public class WebSecurityConfiguration {
 
-    
+ 
 
     public WebSecurityConfiguration(JwtAuthenticationFilter jwtauthenticationFilter, UserService userService) {
         this.jwtauthenticationFilter = jwtauthenticationFilter;
@@ -44,6 +44,7 @@ private final JwtAuthenticationFilter jwtauthenticationFilter;
 				//.requestMatchers("/api/auth/**").permitAll()
 				//.requestMatchers("/api/customer/**").permitAll()
 				.requestMatchers("/api/**").permitAll()
+				.requestMatchers("/chat-socket/**").permitAll()
 				//.requestMatchers("/api/member").permitAll()//.hasAnyAuthority(UserRole.CUSTOMER.name())
 				.anyRequest().authenticated())
 		.sessionManagement(manager->

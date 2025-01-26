@@ -11,6 +11,7 @@ import { response } from 'express';
 export class WinePredictionsService {
 
   private apiUrl = 'http://localhost:8081/api/winePredictions';
+  private apiUrlWinePredictionById = 'http://localhost:8081/api/winePredictions/getWinePrediction';
   constructor(private http:HttpClient) { }
 
   getPredictionsByIdWine(idWine: number): Observable<any[]> {
@@ -26,7 +27,11 @@ export class WinePredictionsService {
      }); 
  }
 
-
+getPredictionByIdPrediction(id:number):Observable<any>{
+  return this.http.get<any>(`${this.apiUrlWinePredictionById}/${id}`,{
+    headers:this.createAthorizationHeader()
+  });
+}
 
   createAthorizationHeader():HttpHeaders{
     let authHeaders : HttpHeaders = new HttpHeaders();

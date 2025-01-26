@@ -24,9 +24,10 @@ p-button {
     animation: slideInFromBottom 1s ease-in forwards;
 }
 
-.actions{
-    display: flex;
 
+
+td {
+    justify-content: start;
 }
 
 /*Animation*/

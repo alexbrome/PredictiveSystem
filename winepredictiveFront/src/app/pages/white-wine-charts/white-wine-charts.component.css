@@ -92,6 +92,13 @@ h1, h3 {
     margin-left: 90%;
 }
 
+
+.wineName{
+    color: #347cbb;
+}
+
+
+
 /* Diseño responsivo */
 @media (max-width: 1200px) {
     .chart-item {

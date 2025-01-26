@@ -3,6 +3,8 @@ import { DataSharingService } from '../../services/data-sharing.service';
 import { ButtonModule } from 'primeng/button';
 import { Router, RouterLink } from '@angular/router';
 import { ChartModule } from 'primeng/chart';
+import { ChangeDetectorRef } from '@angular/core';
+
 
 
 
@@ -10,14 +12,14 @@ import { ChartModule } from 'primeng/chart';
     selector: 'app-white-wine-charts',
     standalone: true,
     imports: [
-        ButtonModule, RouterLink, ChartModule
+        ButtonModule,ChartModule
     ],
     templateUrl: './white-wine-charts.component.html',
     styleUrl: './white-wine-charts.component.css'
 })
 export class WhiteWineChartsComponent implements OnInit {
 
-    //Charts
+    //For Charts properties
     fixed_acidityChart: any;
     volatile_acidityChart: any
     citric_acidChart: any;
@@ -45,7 +47,7 @@ export class WhiteWineChartsComponent implements OnInit {
 
     /*charts*/
     qualityPredicted: Number = 0
-    dataSharing: Number[] = []
+    dataSharing: Number[] = []  //Data from sharingService
 
     //Mean of 30 best wines
     fixed_acidityMean30: Number = 7.23;
@@ -63,19 +65,21 @@ export class WhiteWineChartsComponent implements OnInit {
     wineName: any;
 
     constructor(private dataSharingService: DataSharingService,
-        private router: Router
+        private router: Router,private cdRef: ChangeDetectorRef
     ) {
     }
 
     ngOnInit(): void {
-        this.wineName = this.dataSharingService.getNameWine().selectedWine;
-        this.qualityPredicted = this.dataSharingService.getWhiteWineQualityPredicted();
+        this.wineName = this.dataSharingService.getNameWine().name;
         this.dataSharing = this.dataSharingService.getwhiteWineData();
-
+        this.qualityPredicted = this.dataSharingService.getWhiteWineQualityPredicted();
+      
+      
+        
 
         //fixed Acidity
         this.fixed_acidityChart = {
-            labels: [this.wineName.name, '30 Best Mean'],
+            labels: [this.wineName, '30 Best Mean'],
             datasets: [
                 {
                     label: 'Fixed Acidity',
@@ -120,7 +124,7 @@ export class WhiteWineChartsComponent implements OnInit {
 
         //Volatile acidity
         this.volatile_acidityChart = {
-            labels: [this.wineName.name, '30 Best Mean'],
+            labels: [this.wineName, '30 Best Mean'],
             datasets: [
                 {
                     label: 'Volatile Acidity',
@@ -166,7 +170,7 @@ export class WhiteWineChartsComponent implements OnInit {
 
         //Citric acid
         this.citric_acidChart = {
-            labels: [this.wineName.name, '30 Best Mean'],
+            labels: [this.wineName, '30 Best Mean'],
             datasets: [
                 {
                     label: 'Citric Acidity',
@@ -211,7 +215,7 @@ export class WhiteWineChartsComponent implements OnInit {
 
         //Residual Sugar
         this.residual_sugarChart = {
-            labels: [this.wineName.name, '30 Best Mean'],
+            labels: [this.wineName, '30 Best Mean'],
             datasets: [
                 {
                     label: 'Residual Sugar',
@@ -256,7 +260,7 @@ export class WhiteWineChartsComponent implements OnInit {
 
         //Chlorides
         this.chloridesChart = {
-            labels: [this.wineName.name, '30 Best Mean'],
+            labels: [this.wineName, '30 Best Mean'],
             datasets: [
                 {
                     label: 'Chlorides',
@@ -303,7 +307,7 @@ export class WhiteWineChartsComponent implements OnInit {
         //Free sulfur dioxide
 
         this.free_sulfur_dioxideChart = {
-            labels: [this.wineName.name, '30 Best Mean'],
+            labels: [this.wineName, '30 Best Mean'],
             datasets: [
                 {
                     label: 'Free sulfure dioxide',
@@ -350,7 +354,7 @@ export class WhiteWineChartsComponent implements OnInit {
         //total sulfure dioxide
 
         this.total_sulfure_dioxideChart = {
-            labels: [this.wineName.name, '30 Best Mean'],
+            labels: [this.wineName, '30 Best Mean'],
             datasets: [
                 {
                     label: 'Total sulfure dioxide',
@@ -395,7 +399,7 @@ export class WhiteWineChartsComponent implements OnInit {
 
         //Density
         this.densityChart = {
-            labels: [this.wineName.name, '30 Best Mean'],
+            labels: [this.wineName, '30 Best Mean'],
             datasets: [
                 {
                     label: 'Density',
@@ -442,7 +446,7 @@ export class WhiteWineChartsComponent implements OnInit {
         //PH
 
         this.pHChart = {
-            labels: [this.wineName.name, '30 Best Mean'],
+            labels: [this.wineName, '30 Best Mean'],
             datasets: [
                 {
                     label: 'PH',
@@ -489,7 +493,7 @@ export class WhiteWineChartsComponent implements OnInit {
 
         //Sulphates
         this.sulphatesChart = {
-            labels: [this.wineName.name, '30 Best Mean'],
+            labels: [this.wineName, '30 Best Mean'],
             datasets: [
                 {
                     label: 'Sulphates',
@@ -538,7 +542,7 @@ export class WhiteWineChartsComponent implements OnInit {
         //Alcohol
 
         this.alcoholChart = {
-            labels: [this.wineName.name, '30 Best Mean'],
+            labels: [this.wineName, '30 Best Mean'],
             datasets: [
                 {
                     label: 'Alcohol',

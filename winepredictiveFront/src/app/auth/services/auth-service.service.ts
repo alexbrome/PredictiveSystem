@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
 
-const BASE_URL = ["http://localhost:8081"];
+const BASE_URL = "http://localhost:8081";
 
 @Injectable({
   providedIn: 'root'
@@ -24,6 +24,11 @@ export class AuthServiceService {
   }
 
 login(loginRequest:any):Observable<any>{
-  return this.http.post(BASE_URL+"/api/auth/login",loginRequest )
+  return this.http.post(BASE_URL+"/api/auth/login",loginRequest, {
+    headers: {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json'
+    }
+  } )
 }
 }

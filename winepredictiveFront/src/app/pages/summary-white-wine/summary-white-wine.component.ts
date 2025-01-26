@@ -12,6 +12,13 @@ import { TooltipModule } from 'primeng/tooltip';
 import { ToggleButtonModule } from 'primeng/togglebutton';
 import { ChartModule } from 'primeng/chart';
 import { SpeedDialModule } from 'primeng/speeddial';
+import { ConfirmationService, MessageService } from 'primeng/api';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { ToastModule } from 'primeng/toast';
+import { DataSharingService } from '../../services/data-sharing.service';
+import { Router } from '@angular/router';
+import { ChatServiceService } from '../../services/chat-service.service';
+
 
 @Component({
   selector: 'app-summary-white-wine',
@@ -25,9 +32,11 @@ import { SpeedDialModule } from 'primeng/speeddial';
     TooltipModule,
     ToggleButtonModule,
     ChartModule,
-    SpeedDialModule
+    SpeedDialModule,
+    ConfirmDialogModule,
+    ToastModule
   ],
-  providers: [],
+  providers: [ConfirmationService,MessageService],
   templateUrl: './summary-white-wine.component.html',
   styleUrls: ['./summary-white-wine.component.css'] // Corregido styleUrls (plural)
 })
@@ -40,7 +49,10 @@ export class SummaryWhiteWineComponent implements OnInit {
   selectedPredictions: any[] = [];
   isChartVisible: boolean = false;
   selectedPredictionDates: string[] = [];
+  wineName:any = null;
 
+//ChatLlama
+response: any | null = null;
 
   // Chart
   options: any;
@@ -52,12 +64,17 @@ export class SummaryWhiteWineComponent implements OnInit {
   isHidden: boolean = true;
 
   constructor(private winePredictionService: WinePredictionsService, private wineService: WineService,
-    private eRef: ElementRef
+    private eRef: ElementRef,private confirmationService: ConfirmationService, private messageService:MessageService,
+    private dataSharingService: DataSharingService,private router:Router,
+    private chatService:ChatServiceService
   ) {}
 
   ngOnInit(): void {
     this.getWinesByUerId();
     this.getAllPredictions();
+    //this.sendQuery();
+   
+    
     const documentStyle = getComputedStyle(document.documentElement);
 
     // Inicialización del gráfico vacío
@@ -189,6 +206,81 @@ onClickOutside(event: Event) {
     this.isHidden = true;
   }
 }
+
+deletePrediction(id:number){
+  this.confirmationService.confirm({
+    message: '¿Are you sure to delete this prediction?',
+    header: 'Confirm',
+    icon: 'pi pi-exclamation-triangle',
+    accept: () => {
+      // Acción al confirmar
+      this.winePredictionService.deleteWinePredictionById(id).subscribe({
+        next: () => {
+         this.messageService.add({ severity: 'success', summary: 'Success', detail: 'You have deleted the item' });
+         // Eliminar la predicción de la lista local
+         this.winePrectionsList = this.winePrectionsList.filter(prediction => prediction.id !== id);
+
+         // Actualizar las predicciones seleccionadas si es necesario
+         this.updateSelectedPredictions();
+        },
+        error: (err) => {
+          this.messageService.add({ severity: 'danger', summary: 'danger', detail: 'Error deleting this item' });
+        }
+      });
+    },
+    reject: () => {
+    }
+  });
+ 
+}
+
+goToPredictionChart(id: number): void {
+  // Get wineselected by ID
+  const selectedPrediction = this.winePrectionsList.find(prediction => prediction.id === id);
+
+
+  if (selectedPrediction) {
+    // Data to send to Service
+    const dataToSend = [
+      parseFloat(selectedPrediction.fixedAcidity),
+      parseFloat(selectedPrediction.volatileAcidity),//237
+      parseFloat(selectedPrediction.citricAcid),//
+      parseFloat(selectedPrediction.residualSugar),
+      parseFloat(selectedPrediction.chlorides),
+      parseFloat(selectedPrediction.freeSulfurDioxide),
+      parseFloat(selectedPrediction.totalSulfureDioxide),//
+      parseFloat(selectedPrediction.density),
+      parseFloat(selectedPrediction.ph),
+      parseFloat(selectedPrediction.sulphates),
+      parseFloat(selectedPrediction.alcohol),
+    ];
+
+    // Enviar los datos al servicio
+    this.dataSharingService.setWhiteWineData(dataToSend);
+    this.dataSharingService.setWhiteWineQualityPredicted(selectedPrediction.quality);
+   this.dataSharingService.setNameWine(this.selectedWine);
+  
+  
+   
+    // Navegar a la página de gráficos (asegúrate de configurar la ruta correctamente)
+    this.router.navigate(['whiteWine-page/whiteWineCharts']);
+  } else {
+    console.error('Prediction not found');
+  }
+}
+
+goToIAChat(predictionId:number){
+  this.router.navigate(['/chat',predictionId]);
+}
+
+
+
+
+
+
+
+
+
 
 
 

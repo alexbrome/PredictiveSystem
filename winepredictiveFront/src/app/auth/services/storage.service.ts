@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { EventEmitter, Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 
 const TOKEN = "token";
@@ -10,12 +10,20 @@ const USER = "user";
 export class StorageService {
 
   private loggedInUser = new BehaviorSubject<any>(null);
+  userChanged: EventEmitter<any> = new EventEmitter();
 
-  constructor() { }
+  constructor() { 
+      // Inicializar con el usuario de localStorage si existe
+      const user = StorageService.getUser();
+      if (user) {
+        this.loggedInUser.next(user);
+      }
+  }
 
   // Método para verificar si estamos en el navegador (cliente)
   static isBrowser(): boolean {
     return typeof window !== 'undefined';
+    
   }
 
   static saveToken(token: string): void {
@@ -57,6 +65,12 @@ export class StorageService {
     return user ? user.id : '';
   }
 
+   // Método para actualizar el usuario y emitir cambios
+   updateUser(user: any): void {
+    StorageService.saveUser(user);
+    this.loggedInUser.next(user);
+  }
+
   static isAdminLoggedIn(): boolean {
     if (!this.isBrowser() || this.getToken() == null) return false;
     const role: string = this.getUserRole();
@@ -68,6 +82,10 @@ export class StorageService {
     const role: string = this.getUserRole();
     return role === 'CUSTOMER';
   }
+    // Observable para el usuario
+    getUserObservable() {
+      return this.loggedInUser.asObservable();
+    }
 
   static logout(): void {
     if (this.isBrowser()) {
@@ -75,5 +93,10 @@ export class StorageService {
       window.localStorage.removeItem(USER);
       
     }
+  }
+   // Método para emitir null en logout
+   logOutUser(): void {
+    StorageService.logout();
+    this.userChanged.emit(null); // Emitir evento de logout
   }
 }

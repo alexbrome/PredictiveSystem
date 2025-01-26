@@ -40,12 +40,7 @@ public class UsersResource {
         return ResponseEntity.ok(usersService.get(id));
     }
 
-    //Useless, make it at signup endpoint(AuthController)
-//    @PostMapping 
-//    public ResponseEntity<Long> createUsers(@RequestBody @Valid final UserDto usersDTO) {
-//        final Long createdId = usersService.create(usersDTO);
-//        return new ResponseEntity<>(createdId, HttpStatus.CREATED);
-//    }
+ 
 
     @PutMapping("/{id}")
     public ResponseEntity<Long> updateUsers(@PathVariable final Long id,
@@ -55,7 +50,7 @@ public class UsersResource {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteUsers(@PathVariable(name = "id") final Long id) {
+    public ResponseEntity<Void> deleteUsers(@PathVariable final Long id) {
         usersService.delete(id);
         return ResponseEntity.noContent().build();
     }

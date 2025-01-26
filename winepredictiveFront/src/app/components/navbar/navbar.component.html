@@ -33,16 +33,6 @@
                 <button routerLink="homeAdmin" class="p-link inline-flex justify-content-center align-items-center text-white h-5rem w-3rem border-circle hover:bg-white-alpha-10 transition-all transition-duration-200">
                     <i class="pi pi-home text-2xl">Home</i>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                 </button>
-                <button routerLink="signup" class="p-link inline-flex justify-content-center align-items-center text-white h-5rem w-3rem border-circle hover:bg-white-alpha-10 transition-all transition-duration-200">
-                    <i class="pi pi-clipboard text-2xl">New Customer</i>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                </button>
-                    <button routerLink="summaryWhite" class="p-link inline-flex justify-content-center align-items-center text-white h-5rem w-3rem border-circle hover:bg-white-alpha-10 transition-all transition-duration-200">
-                        <i class="pi pi-chart-line text-2xl"> Por definir</i>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    </button>
-                    <button routerLink="wineList" class="p-link inline-flex justify-content-center align-items-center text-white h-5rem w-3rem border-circle hover:bg-white-alpha-10 transition-all transition-duration-200">
-                        <i class="pi pi-bars text-2xl">Customers-List</i>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                      
-                    </button>
                 </div>
             }
         </ng-template>
@@ -50,7 +40,7 @@
         <!--Right DIV-->
         <ng-template pTemplate="end">
             <div class="flex align-items-center gap-2 avatar">
-                @if (isCustomerLoggedIn()) {
+               @if (isCustomerLoggedIn()) {
                 <p-avatar 
                     icon="pi pi-user" 
                     styleClass="mr-2"

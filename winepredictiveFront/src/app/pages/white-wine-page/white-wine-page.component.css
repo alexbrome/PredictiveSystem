@@ -63,7 +63,11 @@ h1{
     align-items: center;  
 }
 
-
+#submit-button{
+    height: 62%;
+    width: 64%;
+    margin-top: 17%;
+}
 
 
 /*Animation from bottom*/

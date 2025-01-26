@@ -71,7 +71,7 @@ public class AuthController {
 	@PostMapping("/login")
 	public AuthenticationResponse createAuthenticationToken(@RequestBody AuthenticationRequest authenticationRequest)
 			throws BadCredentialsException, DisabledException, UsernameNotFoundException {
-		System.out.println("Ha lleagdo al back la peticion de login");
+		System.out.println("Ha lleagdo al back la peticion de login"+authenticationRequest.getEmail()+""+ authenticationRequest.getPassword());
 		
 		
 		try {

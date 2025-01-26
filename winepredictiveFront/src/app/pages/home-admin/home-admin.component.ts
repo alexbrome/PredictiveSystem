@@ -1,27 +1,41 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, CUSTOM_ELEMENTS_SCHEMA, OnInit } from '@angular/core';
 import { UserService } from '../../services/user.service';
 import { WineService } from '../../services/wine.service';
 import { CommonModule, NgFor } from '@angular/common';
 import { WinePredictionsService } from '../../services/wine-predictions.service';
-import { CurrencyPipe, DatePipe, TitleCasePipe } from '@angular/common';
-import { Rating, RatingModule } from 'primeng/rating';
+import {  DatePipe } from '@angular/common';
+import {  RatingModule } from 'primeng/rating';
 import { ButtonModule } from 'primeng/button';
 import { FormsModule } from '@angular/forms';
-import { Dialog, DialogModule } from 'primeng/dialog';
+import {  DialogModule } from 'primeng/dialog';
+import { ConfirmationService, MenuItem, MessageService } from 'primeng/api';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { ToastModule } from 'primeng/toast';
+import {  RouterModule } from '@angular/router';
+
+
 
 @Component({
   selector: 'app-home-admin',
   standalone: true,
   imports: [
     NgFor,CommonModule,
-    ButtonModule,RatingModule,FormsModule,DialogModule
+    ButtonModule,RatingModule,FormsModule,DialogModule,
+    ConfirmDialogModule,
+    ToastModule,RouterModule
   ],
-  providers:[DatePipe],
+ 
+  providers:[DatePipe,ConfirmationService,MessageService],
   templateUrl: './home-admin.component.html',
   styleUrl: './home-admin.component.css'
 })
 
 export class HomeAdminComponent implements OnInit {
+items: any;
+save() {
+console.log(34);
+
+}
 
   //Variables
   users: any[] = [];
@@ -32,17 +46,23 @@ export class HomeAdminComponent implements OnInit {
   predictionsIsEmpty:Boolean = false;
   dialogIsVisible:boolean = false;
   selectedPrediction :any = {};
+  /*For SpeedDial*/
+ 
+
 
   //Constructor
   constructor(private userService: UserService,private wineService:WineService
    ,private predictionService:WinePredictionsService,private datePipe: DatePipe,
-   private winePredictionService:WinePredictionsService
+   private winePredictionService:WinePredictionsService,private confirmationService: ConfirmationService,
+   private messageService: MessageService,
   ) {
 
   }
 
 
   ngOnInit(): void {
+   
+  /*Methods to load onInit*/ 
     this.loadAllUsers();
     this.predictions = this.predictions.map(prediction => {
       prediction.dateCreated = new Date(prediction.dateCreated);
@@ -103,15 +123,24 @@ export class HomeAdminComponent implements OnInit {
   }
 
   deleteWinePredictionById(id: number): void {
-    this.winePredictionService.deleteWinePredictionById(id).subscribe({
-      next: () => {
-        // Eliminar la predicción de la lista localmente
-        this.predictions = this.predictions.filter(prediction => prediction.id !== id);
-        alert('Prediction deleted successfully!');
+    this.confirmationService.confirm({
+      message: 'Are you sure you want to delete this prediction?',
+      header: 'Confirmation',
+      icon: 'pi pi-exclamation-triangle',
+      accept: () => {
+        this.winePredictionService.deleteWinePredictionById(id).subscribe({
+          next: () => {
+            this.predictions = this.predictions.filter(prediction => prediction.id !== id);
+            this.messageService.add({ severity: 'success', summary: 'Deleted', detail: 'Prediction deleted successfully!' });
+          },
+          error: (err) => {
+            console.error('Error deleting prediction', err);
+            this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Failed to delete prediction.' });
+          }
+        });
       },
-      error: (err) => {
-        console.error('Error deleting prediction', err);
-        alert('Error deleting prediction');
+      reject: () => {
+        this.messageService.add({ severity: 'info', summary: 'Cancelled', detail: 'Deletion cancelled.' });
       }
     });
   }
@@ -120,5 +149,45 @@ export class HomeAdminComponent implements OnInit {
     this.selectedPrediction = prediction;
     this.dialogIsVisible = true;
   }
+
+  deleteUser(userId: any): void {
+    this.confirmationService.confirm({
+      message: 'Are you sure you want to delete this user?',
+      header: 'Delete Confirmation',
+      icon: 'pi pi-exclamation-triangle',
+      accept: () => {
+        this.userService.deleteUserById(userId).subscribe({
+          next: () => {
+            // Eliminar el usuario de la lista en el frontend
+            this.users = this.users.filter(user => user.id !== userId);
+            // Mostrar mensaje de éxito
+            this.messageService.add({
+              severity: 'success',
+              summary: 'Success',
+              detail: 'User deleted successfully!'
+            });
+          },
+          error: (err) => {
+            console.error('Error deleting user:', err);
+            // Mostrar mensaje de error
+            this.messageService.add({
+              severity: 'error',
+              summary: 'Error',
+              detail: 'Failed to delete user. Please try again.'
+            });
+          }
+        });
+      },
+      reject: () => {
+        // Mensaje si el usuario cancela la acción
+        this.messageService.add({
+          severity: 'info',
+          summary: 'Cancelled',
+          detail: 'User deletion cancelled.'
+        });
+      }
+    });
+  }
+  
 }
 

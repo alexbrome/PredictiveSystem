@@ -104,6 +104,8 @@ export class WhiteWinePageComponent implements OnInit{
  
 handleSubmit() {
   if(this.selectedWine.invalid){
+    
+    //Valid Form
     this.messageService.add({ severity: 'error', summary: 'error', detail: 'Must fill out wine name field' });
   } else {
     if (this.wineForm.invalid ) {
@@ -135,7 +137,7 @@ handleSubmit() {
           this.dataSharingService.setWhiteWineData(dataToSend);
           this.dataSharingService.setWhiteWineQualityPredicted(this.quality);
 
-          setTimeout(() => { //5s waiting
+          setTimeout(() => { 
             this.loading = false; // hide spinner
             this.router.navigate(['whiteWine-page/whiteWineCharts']);
           }, 5000);
@@ -208,14 +210,12 @@ handleSubmit() {
         (response) => { 
             this.loading=true
             setTimeout(() => {
-              this.loading = false;
-              // To show Succesfull messagge
+              this.loading = false;  // Desactiva el spinner después de 5 segundos
+              
+              // Redirige después de que el spinner haya desaparecido
+              this.router.navigate(['/summaryWhite']);
               this.messageService.add({ severity: 'success', summary: 'Éxito', detail: '¡Predicción guardada con éxito!' });
             }, 5000);
-          
-          },
-          (error) => {    
-            this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Error al guardar la predicción' });
           }
         );
       },

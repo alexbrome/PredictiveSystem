@@ -22,5 +22,8 @@ export class UserService {
   return this.http.get<any>(url);
  }
 
-
+deleteUserById(userId:any){
+  const url = `${this.apiUrl}/${userId}`;
+  return this.http.delete(url)
+}
 }

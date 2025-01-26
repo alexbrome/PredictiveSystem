@@ -1,13 +1,17 @@
+<p-confirmDialog></p-confirmDialog>
+<p-toast></p-toast>
 <div class="container">
   <!-- Left column -->
   <div class="column left">
-    <div>
+    <div class="usersDiv">
       <h3>Users</h3>
+     <p-button label="New"  routerLink="/signup"  icon="pi pi-user" size="small" class="create-button" />
     </div>
     <hr>
     <ul>
-      <li *ngFor="let user of users" (click)="selectUser(user)" [ngClass]="{'selected-user': selectedUser === user}">
-        {{ user.name }}
+      <li *ngFor="let user of users" (click)="selectUser(user)" [ngClass]="{'selected-user': selectedUser === user}" class="userList">
+        <span>{{ user.name }}</span>&nbsp;&nbsp;
+        <p-button  icon="pi pi-trash" severity="danger" (click)="deleteUser(user.id)"/>
       </li>
     </ul>
   </div>
