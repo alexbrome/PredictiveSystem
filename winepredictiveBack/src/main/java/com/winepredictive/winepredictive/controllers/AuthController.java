@@ -70,10 +70,7 @@ public class AuthController {
 	// Method to manage login
 	@PostMapping("/login")
 	public AuthenticationResponse createAuthenticationToken(@RequestBody AuthenticationRequest authenticationRequest)
-			throws BadCredentialsException, DisabledException, UsernameNotFoundException {
-		System.out.println("Ha lleagdo al back la peticion de login"+authenticationRequest.getEmail()+""+ authenticationRequest.getPassword());
-		
-		
+			throws BadCredentialsException, DisabledException, UsernameNotFoundException {		
 		try {
 			
 			authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authenticationRequest.getEmail(),

@@ -106,9 +106,7 @@ listenerMessage() {
   });
 }
 
-filterItems($event:any){
 
-}
 
 getPredictionByIdPrediction(idPrediction: number) {
   this.winePredictionService.getPredictionByIdPrediction(idPrediction).subscribe({

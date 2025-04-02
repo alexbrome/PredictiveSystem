@@ -44,6 +44,5 @@ def predict_red():
 if __name__ == '__main__':
     app.run(debug=True)
 
-    #Ejecutar 
-    
-    #Situarse en la carpeta PredictiveSystem y ejecutar python apiPython.py
+    #Ejecutar ---->
+    #Situarse en la carpeta C:\Users\a930960\Desktop\PredictiveWineSystem\PredictiveSystem>, y ejecutar python apiPython.py

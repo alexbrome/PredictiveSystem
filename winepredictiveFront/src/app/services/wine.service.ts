@@ -24,7 +24,7 @@ export class WineService {
     );
   }
 
-  
+  //Esta da eror aunque no afecta al funcionamiento de la aplicación
   getAllWinesByUserId(idUser: number): Observable<any[]> {
     const headers = this.createAuthorizationHeader();
     const url = `${this.apiUrl}/user/${idUser}`; 

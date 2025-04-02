@@ -28,7 +28,7 @@ public class LLMRestController {
 				.user(query)
 				.call()
 				.content();
-System.out.println(response);
+             System.out.println(response);
 		
 	    try {
 	    

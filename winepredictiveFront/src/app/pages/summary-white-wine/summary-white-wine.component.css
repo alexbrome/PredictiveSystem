@@ -198,3 +198,72 @@ p-chart {
 .ia-column{
   background-color: rgb(113, 196, 154);
 }
+
+
+.options {
+  display: flex;
+
+  align-items: flex-start; /* Alinea el dropdown arriba */
+
+  min-height: 50px; /* Altura mínima */
+}
+
+
+/*Charts with checkboxes options*/
+
+.container-chart {
+  display: flex;
+  align-items: flex-start; /* Alinea los checkboxes arriba */
+  gap: 2%;
+  padding: 20px;
+  
+}
+
+/* Estilo de la columna izquierda (Checkboxes) */
+.checkboxes-container {
+  width: 250px; /* Ancho fijo */
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start; /* Checkboxes alineados a la izquierda */
+  background: #f6f2f2;
+  border: 2px solid #7b8da1;
+  border-radius: 12px;
+  padding: 20px;
+  transition: box-shadow 0.3s ease; /* Transición suave para el efecto de sombra */
+  box-shadow: 6px 6px 15px rgba(0, 0, 0, 0.7);
+}
+
+/* Espaciado entre checkboxes */
+.checkboxes {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+/* Fijo para evitar que se desplace con el scroll */
+}
+
+.checkboxes-container p-checkbox {
+  transform: scale(1.1);
+}
+
+.checkboxes-container:hover {
+  box-shadow: 6px 6px 15px rgba(0, 0, 0, 0.7);
+}
+
+/* Contenedor de las gráficas (derecha) */
+.chartOption-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); /* Ajusta el número de columnas según el espacio disponible */
+  /* Asegura que las gráficas se muestren en vertical */
+  gap: 20px; /* Espaciado entre las gráficas */
+  width: calc(80% - 180px); /* Ajuste dinámico */
+}
+
+/* Estilos individuales de cada gráfica */
+.chartOption {
+  width: 100%;
+  padding: 15px;
+  background: #ffffff;
+  border-radius: 10px;
+  box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.7);
+  text-align: center;
+}

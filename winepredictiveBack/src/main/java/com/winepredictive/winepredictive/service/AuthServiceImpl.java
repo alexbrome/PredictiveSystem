@@ -28,7 +28,7 @@ private final UserRepository userRepository;
 			Users newAdminAccount = new Users();
 			newAdminAccount.setName("Admin");
 			newAdminAccount.setEmail("admin@gmail.com");
-			newAdminAccount.setPassword(new BCryptPasswordEncoder().encode("admin"));
+			newAdminAccount.setPassword(new BCryptPasswordEncoder().encode("aurora10"));
 			newAdminAccount.setUserRole(UserRole.ADMIN);
 			userRepository.save(newAdminAccount);
 		}

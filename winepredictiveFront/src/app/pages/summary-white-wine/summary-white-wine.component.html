@@ -23,7 +23,12 @@
 
                         <!----------- Clean Table button-------->
                         <div class="left-content">
+                            @if(!isChartVisible){
                             <span id="prediction">Predictions List</span>
+                        }
+                            @else{
+                            <span id="prediction">Chart</span>
+                            }
                             <span id="wineName">{{ selectedWine?.name }}</span>
                         </div>
                         @if(!isChartVisible){
@@ -63,8 +68,7 @@
                             pTooltip="Values should be between 5 and 10" tooltipPosition="top"></i></th>
                         <th>Alcohol&nbsp;<i class="pi pi-info-circle"
                             pTooltip="Values should be between 5 and 10" tooltipPosition="top"></i></th>
-                        <th>Volatile Acidity&nbsp;<i class="pi pi-info-circle"
-                            pTooltip="Values should be between 5 and 10" tooltipPosition="top"></i></th>
+                       
                          
                         <th>Quality</th>
                         <th>Actions</th>
@@ -141,12 +145,7 @@
                                     tooltipPosition="top" style="color: orange;"></i>
                                 }
                         </td>
-                        <td>{{prediction.volatileAcidity}}&nbsp;
-                            @if(prediction.volatileAcidity < 0.5 || prediction.volatileAcidity> 0.7){
-                                <i class="pi pi-info-circle" pTooltip="Warning!!Values usually are between 0.5 and 0.7"
-                                    tooltipPosition="top" style="color: orange;"></i>
-                                }
-                        </td>
+                      
                         
                         <td [ngClass]="{'red-class': prediction.quality < 6, 'blue-class': prediction.quality === 6, 
                         'green-class': prediction.quality > 6}">
@@ -155,12 +154,7 @@
                                 <button class="icon-button" pTooltip="Delete this prediction" tooltipPosition="left"
                                 (click)="deletePrediction(prediction.id)">
                                 <i class="pi pi-trash"></i> &nbsp;&nbsp;
-                            </button>
-                            
-                            <button class="icon-button" pTooltip="Go to this prediction Charts" tooltipPosition="left"
-                            (click)="goToPredictionChart(prediction.id)" >
-                            <i class="pi pi-chart-bar"></i>
-                        </button>                            
+                            </button>                          
                     </td>
                     <td>
                         <button class="icon-button" pTooltip="Improve measurements with AI solutions" tooltipPosition="left"
@@ -187,13 +181,42 @@
                 </ng-template>
             </p-table>
 
-            <!------Chart----------->
-            @if(isChartVisible){
-                <div class="chart">
-                    <p-chart type="line" [data]="data" [options]="options" />
-                </div>
-           
-            }
         </div>
+        <!------Chart----------->
+        @if(isChartVisible) {
+            <div class="container-chart">
+                <!-- Checkboxes alineados a la izquierda -->
+                <div class="checkboxes-container">
+                    <div>
+                        <p-checkbox [binary]="true" (onChange)="onClickSelectAll($event)" [(ngModel)]="isAllSelected"/>
+                        Select All
+                    </div>
+                    <br>
+                    <div *ngFor="let property of wineProperties" class="checkboxes">
+                        <p-checkbox  
+                            [binary]="true"
+                            [name]="property.label"
+                            [value]="property.label"
+                            (onChange)="onCheckboxChange($event, property.label)"
+                            [ngModel]="selectedProperties.includes(property.label)" 
+                        />
+                        &nbsp; {{property.label}}
+                    </div>
+                </div>
+            
+                <!-- Gráficas organizadas en columna -->
+                <div class="chartOption-container">
+                    <div class="chartOption" *ngFor="let property of selectedProperties">
+                        <p-chart type="line" [data]="chartData[property]" [options]="options" 
+                            style="width: 50%; max-width: 5%; height: 1%;" class="h-[30rem]" >
+                        </p-chart>
+                    </div>
+                </div>
+                
+            </div>
+            
+        }
     </div>
+
+    
 </div>
