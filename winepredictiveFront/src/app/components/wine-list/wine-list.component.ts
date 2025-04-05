@@ -11,9 +11,10 @@ import { InputTextModule } from 'primeng/inputtext';
 import { FloatLabelModule } from 'primeng/floatlabel';
 import { CalendarModule } from 'primeng/calendar';
 import { Wine } from '../../models/Wine';
-import { MessageService } from 'primeng/api';
+import { ConfirmationService, MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
 import { CommonModule } from '@angular/common';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
 
 
 
@@ -30,11 +31,12 @@ import { CommonModule } from '@angular/common';
     FloatLabelModule,
     CalendarModule,
     ToastModule,
-    CommonModule
+    CommonModule,
+    ConfirmDialogModule
   ],
   templateUrl: './wine-list.component.html',
   styleUrls: ['./wine-list.component.css'],
-  providers: [MessageService]
+  providers: [MessageService,ConfirmationService]
 })
 export class WineListComponent implements OnInit {
 
@@ -52,7 +54,8 @@ export class WineListComponent implements OnInit {
   //Constructor
   constructor(private userService: UserService,
     private wineService: WineService,
-    private messageService: MessageService) { }
+    private messageService: MessageService,
+  private confirmationService: ConfirmationService) { }
 
 
   ngOnInit(): void {
@@ -136,29 +139,40 @@ export class WineListComponent implements OnInit {
   }
 
   deleteWine(id: any) {
-    console.log("El id del wine al intentar borrar id" + id);
+ console.log("Delete wine, id del vino a eliminar: ", id);
+ 
+    this.confirmationService.confirm({
+      message: '¿Are you sure to delete this prediction?',
+      header: 'Confirm',
+      icon: 'pi pi-exclamation-triangle',
+      accept: () => {
+        // Acción al confirmar
+        this.wineService.delete(id).subscribe(
+          (resp) => {
+            // Succes messagge
+            this.messageService.add({
+              severity: 'success',
+              summary: 'Success',
+              detail: 'Wine deleted successfully!'
+            });
 
-    this.wineService.delete(id).subscribe(
-      (resp) => {
-        // Succes messagge
-        this.messageService.add({
-          severity: 'success',
-          summary: 'Success',
-          detail: 'Wine deleted successfully!'
-        });
-
-        //Update wineList
-        this.getWinesByUserId();
+            //Update wineList
+            this.getWinesByUserId();
+          },
+          (error) => {
+            // Error messagge
+            this.messageService.add({
+              severity: 'error',
+              summary: 'Error',
+              detail: 'Error deleting wine'
+            });
+          }
+        );
       },
-      (error) => {
-        // Error messagge
-        this.messageService.add({
-          severity: 'error',
-          summary: 'Error',
-          detail: 'Error deleting wine'
-        });
+      reject: () => {
       }
-    );
+    });
+
   }
 
   //Make CreateWine Dialog turn into visible

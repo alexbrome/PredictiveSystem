@@ -1,9 +1,7 @@
 import { Routes } from '@angular/router';
-import { RedWinePageComponent } from './pages/red-wine-page/red-wine-page.component';
 import { MainPageComponent } from './pages/main-page/main-page.component';
 import { WhiteWinePageComponent } from './pages/white-wine-page/white-wine-page.component';
-import { RedWineChartsComponent } from './pages/red-wine-charts/red-wine-charts.component';
-import { WhiteWineChartsComponent } from './pages/white-wine-charts/white-wine-charts.component';
+
 import { SignupComponent } from './auth/components/signup/signup.component';
 import { LoginComponent } from './auth/components/login/login.component';
 import { SummaryWhiteWineComponent } from './pages/summary-white-wine/summary-white-wine.component';
@@ -12,15 +10,14 @@ import { HomeAdminComponent } from './pages/home-admin/home-admin.component';
 import { ChatAIComponent } from './components/chat-ai/chat-ai.component';
 
 export const routes: Routes = [
-    { path: 'redWine-page', component: RedWinePageComponent },
+ 
     { path: 'whiteWine-page', component: WhiteWinePageComponent },
-    { path: 'redWine-page/redWineCharts', component: RedWineChartsComponent },
-    { path: 'whiteWine-page/whiteWineCharts', component: WhiteWineChartsComponent },
     { path: 'main' ,component:MainPageComponent },
     { path: 'signup', component : SignupComponent },
-    { path: 'summaryWhite', component : SummaryWhiteWineComponent },
+    { path: 'summaryWhite/:wineId', component : SummaryWhiteWineComponent },
     { path: 'wineList', component : WineListComponent },
     { path: 'homeAdmin', component : HomeAdminComponent },
     { path: '', component: LoginComponent },
-    { path:'chat/:predictionId',component:ChatAIComponent}
+    { path:'chat/:predictionId',component:ChatAIComponent},
+   
 ];

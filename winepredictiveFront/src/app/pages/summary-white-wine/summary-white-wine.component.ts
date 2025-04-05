@@ -16,7 +16,7 @@ import { ConfirmationService, MessageService } from 'primeng/api';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ToastModule } from 'primeng/toast';
 import { DataSharingService } from '../../services/data-sharing.service';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ChatServiceService } from '../../services/chat-service.service';
 import { DropdownModule } from 'primeng/dropdown';
 import { CheckboxModule } from 'primeng/checkbox';
@@ -99,6 +99,7 @@ export class SummaryWhiteWineComponent implements OnInit {
   isHidden: boolean = true;
 
   constructor(private winePredictionService: WinePredictionsService, private wineService: WineService,
+     private route:ActivatedRoute,
     private eRef: ElementRef, private confirmationService: ConfirmationService, private messageService: MessageService,
     private dataSharingService: DataSharingService, private router: Router,
     private chatService: ChatServiceService, private datePipe: DatePipe
@@ -108,20 +109,35 @@ export class SummaryWhiteWineComponent implements OnInit {
     this.getWinesByUserId();
     this.getAllPredictions();
     const documentStyle = getComputedStyle(document.documentElement);
-
+    let wineIdParam  = this.route.snapshot.paramMap.get('wineId');
+    const wineId = wineIdParam ? +wineIdParam : null;
+    this.getWinesByUserId(wineId ?? undefined);
+  
   }
 
 //Getters Functions from Services
-  getWinesByUserId() {
-    this.wineService.getAllWinesByUserId(this.idUser).subscribe(
-      (data) => {
-        this.wines = data;
-      },
-      (error) => {
-        console.error('Error fetching wines:', error);
+getWinesByUserId(wineId?: number) {
+  this.wineService.getAllWinesByUserId(this.idUser).subscribe(
+    (data) => {
+      this.wines = data;
+      // Si se ha recibido un wineId, selecciona el vino correspondiente
+      if (wineId != null) {
+        const wine = this.wines.find(w => w.id === wineId);
+        if (wine) {
+          this.selectedWine = wine;
+          console.log('Selected Wine:', this.selectedWine);
+          // Actualiza las predicciones del vino seleccionado
+          this.onWineSelect(wine);
+        } else {
+          console.error(`No se encontró un vino con id ${wineId}`);
+        }
       }
-    );
-  }
+    },
+    (error) => {
+      console.error('Error fetching wines:', error);
+    }
+  );
+}
 
   getAllPredictions() {
     this.winePredictionService.getAllPredictions().subscribe(
@@ -165,7 +181,7 @@ export class SummaryWhiteWineComponent implements OnInit {
 
     // Si hay propiedades seleccionadas, actualiza los gráficos con la primera de la lista
     if (this.selectedProperties.length > 0) {
-      this.selectedProperties.forEach(property => this.updateChartData(property));//Aqui esta el problema
+      this.selectedProperties.forEach(property => this.updateChartData(property));
     } else {
       this.chartData = {}; // Limpiar datos si no hay propiedades seleccionadas
     }
@@ -294,7 +310,7 @@ export class SummaryWhiteWineComponent implements OnInit {
     this.selectedProperties.forEach(prop => this.updateChartData(prop));
   }
 
-
+  //Update charts if checkbox change
   updateChartData(property: string): void {
     // Limpiar datos del gráfico antes de actualizar
     const documentStyle = getComputedStyle(document.documentElement);
@@ -302,7 +318,7 @@ export class SummaryWhiteWineComponent implements OnInit {
    
 
 
-    // Mapeo correcto de nombres visibles a nombres de clave en JSON
+    //Proper Map of porpety names to JSON 
     const propertyMap: { [key: string]: { keyForStats: string; keyForPrediction: string } } = {
       "Fixed Acidity": { keyForStats: "Fixed Acidity", keyForPrediction: "fixedAcidity" },
       "Volatile Acidity": { keyForStats: "Volatile Acidity", keyForPrediction: "volatileAcidity" },
@@ -310,17 +326,18 @@ export class SummaryWhiteWineComponent implements OnInit {
       "Residual Sugar": { keyForStats: "Residual Sugar", keyForPrediction: "residualSugar" },
       "Chlorides": { keyForStats: "Chlorides", keyForPrediction: "chlorides" },
       "Free Sulfur Dioxide": { keyForStats: "Free Sulfur Dioxide", keyForPrediction: "freeSulfurDioxide" },
-      "Total Sulfur Dioxide": { keyForStats: "Total Sulfur Dioxide", keyForPrediction: "totalSulfurDioxide" },
+      "Total Sulfur Dioxide": { keyForStats: "Total Sulfur Dioxide", keyForPrediction: "totalSulfureDioxide" },
       "Density": { keyForStats: "Density", keyForPrediction: "density" },
       "pH": { keyForStats: "pH", keyForPrediction: "ph" },
       "Sulphates": { keyForStats: "Sulphates", keyForPrediction: "sulphates" },
       "Alcohol": { keyForStats: "Alcohol", keyForPrediction: "alcohol" },
       "Quality": { keyForStats: "Quality", keyForPrediction: "quality" }
     };
-    
 
-    const propertyKey = propertyMap[property]; // Obtener el nombre correcto
+
+    // Mapping for selected property
     const mapping = propertyMap[property];
+
     // Si la propiedad es válida, actualiza el gráfico correspondiente
     if (mapping) {
       const referenceValue = wineQualityStats[mapping.keyForStats];
@@ -346,7 +363,7 @@ export class SummaryWhiteWineComponent implements OnInit {
             borderColor: documentStyle.getPropertyValue('--blue-500')
           },
           {
-            label: "Average Best 30",
+            label: "Proper Value",
             data: Array(formattedDates.length).fill(referenceValue),
             fill: false,
             tension: 0.4,

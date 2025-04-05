@@ -213,7 +213,8 @@ handleSubmit() {
               this.loading = false;  // Desactiva el spinner después de 5 segundos
               
               // Redirige después de que el spinner haya desaparecido
-              this.router.navigate(['/summaryWhite']);
+              this.router.navigate(['/summaryWhite', this.selectedWine.value.id]);
+           //   this.router.navigate(['/chat', predictionId]);
               this.messageService.add({ severity: 'success', summary: 'Éxito', detail: '¡Predicción guardada con éxito!' });
             }, 5000);
           }

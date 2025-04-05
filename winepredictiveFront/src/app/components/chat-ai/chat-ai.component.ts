@@ -11,6 +11,8 @@ import { TableModule } from 'primeng/table';
 import { TooltipModule } from 'primeng/tooltip';
 import { DropdownModule } from 'primeng/dropdown';
 import { ListboxModule } from 'primeng/listbox';
+import { MessageService } from 'primeng/api';
+import { ToastModule } from 'primeng/toast';
 
 
 interface AutoCompleteCompleteEvent {
@@ -24,8 +26,9 @@ interface AutoCompleteCompleteEvent {
   imports: [FormsModule,CommonModule,
     ButtonModule,AutoCompleteModule,TableModule,
     TooltipModule,DropdownModule,
-    ListboxModule
+    ListboxModule,ToastModule
   ],
+  providers: [MessageService],
   templateUrl: './chat-ai.component.html',
   styleUrl: './chat-ai.component.css',
   
@@ -47,6 +50,7 @@ filteredItems:any[] = [];
 constructor(private chatService:ChatService,
   private route:ActivatedRoute,
   private winePredictionService: WinePredictionsService,
+  private messageService:MessageService
 ){
 
 }
@@ -55,13 +59,15 @@ ngOnInit(): void {
   /*Properties for properties list*/
  this.filteredItems = ["FixedAcidity", "VolatileAcidity", "CitricAcid", "ResidualSugar", "Chlorides", "FreeSulfurDioxide", "TotalSulfurDioxide", "Density", "pH", "Sulphates", "Alcohol"];
  
-  this.chatService.joinRoom("ABC"); // se une a una sala llamada ABC
+  this.chatService.joinRoom("ABC"); 
+  
   this.userId = this.route.snapshot.params["userId"];
   // Primero, esperamos que el cliente se haya conectado para suscribirnos
   this.chatService.stompClient.onConnect = () => {
     this.listenerMessage();  // Después de la conexión, escuchamos los mensajes
     this.chatService.subscribeToRoom("ABC");
   };
+  //Route paramMap to get the predictionId from the URL
   this.route.paramMap.subscribe(params => {
     this.predictionId = params.get('predictionId') || '';
   });
@@ -91,20 +97,29 @@ listenerMessage() {
   this.chatService.getMessageSubject().subscribe((messages: any[]) => {
     console.log("Mensajes recibidos del backend: ", messages);
 
-    // Obtenemos el último mensaje del array recibido
+    // Obtener el último mensaje recibido
     const lastMessage = messages[messages.length - 1];
     if (lastMessage) {
       const formattedMessage = {
         message: lastMessage.message,
-        user: "IA", // Indica que este mensaje es de la IA
+        user: "IA"
       };
 
-      // Añadimos el último mensaje de la IA a la lista combinada
+      // Remover el mensaje temporal si existe
+      const tempIndex = this.messageListAllMessages.findIndex(
+        msg => msg.user === "IA" && msg.message === "I am working on your response..."
+      );
+      if (tempIndex !== -1) {
+        this.messageListAllMessages.splice(tempIndex, 1);
+      }
+
+      // Añadir el mensaje real de la IA a la lista
       this.messageListAllMessages.push(formattedMessage);
-      console.log('Lista de mensajes combinada actualizada:', this.messageListAllMessages);
+      console.log('Mensaje recibido de la IA:', formattedMessage.message);
     }
   });
 }
+
 
 
 
@@ -121,30 +136,47 @@ getPredictionByIdPrediction(idPrediction: number) {
     }
   });
 }
+
+
 askAI(selectedProperty: string) {
-  // Construir el mensaje dinámicamente con las características del vino, excluyendo 'id', 'idWine' y 'dateCreated.idWine'
+  // If not selected property, show error message
+  if (!selectedProperty || selectedProperty.length === 0) {
+    this.messageService.add({
+      severity: 'warn',
+      summary: 'Error',
+      detail: 'Selecting a property is mandatory'
+    });
+    return;
+  }
+
+  // Construir el mensaje dinámicamente con las características del vino, excluyendo algunas claves
   const wineDetails = this.predictionList.length > 0
     ? Object.entries(this.predictionList[0])
-        .filter(([key, _]) => !['id', 'idWine', 'dateCreated'].includes(key)) // Excluir claves específicas
+        .filter(([key, _]) => !['id', 'idWine', 'dateCreated'].includes(key))
         .map(([key, value]) => `${key}: ${value}`)
         .join(', ')
     : 'No wine details available';
 
   const chatMessage = {
     message: `How could I improve the ${selectedProperty} of a wine with the following values? ${wineDetails}`,
-    user: "user", // Indica que este mensaje es del usuario
+    user: "user"
   } as ChatMessage;
 
   // Enviar el mensaje al backend
   this.chatService.sendMessage("ABC", chatMessage);
 
-  // Añadir el mensaje a la lista de mensajes
+  // Añadir el mensaje del usuario a la lista
   this.messageListAllMessages.push(chatMessage);
   console.log('Mensaje enviado a la IA:', chatMessage.message);
 
-  // Escuchar la respuesta de la IA
-  
+  // Agregar mensaje temporal de la IA mientras se espera la respuesta
+  const tempMessage: ChatMessage = {
+    message: "I am working on your response...",
+    user: "IA"
+  };
+  this.messageListAllMessages.push(tempMessage);
 }
+
 
 
 
