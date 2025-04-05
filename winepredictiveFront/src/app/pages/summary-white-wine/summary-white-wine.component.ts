@@ -20,7 +20,7 @@ import { Router } from '@angular/router';
 import { ChatServiceService } from '../../services/chat-service.service';
 import { DropdownModule } from 'primeng/dropdown';
 import { CheckboxModule } from 'primeng/checkbox';
-
+import  wineQualityStats  from '../../models/wineQualityStats';
 
 
 @Component({
@@ -40,10 +40,10 @@ import { CheckboxModule } from 'primeng/checkbox';
     ToastModule,
     DropdownModule,
     CheckboxModule,
-
+    
 
   ],
-  providers: [ConfirmationService, MessageService,DatePipe],
+  providers: [ConfirmationService, MessageService, DatePipe],
   templateUrl: './summary-white-wine.component.html',
   styleUrls: ['./summary-white-wine.component.css'] // Corregido styleUrls (plural)
 })
@@ -101,17 +101,17 @@ export class SummaryWhiteWineComponent implements OnInit {
   constructor(private winePredictionService: WinePredictionsService, private wineService: WineService,
     private eRef: ElementRef, private confirmationService: ConfirmationService, private messageService: MessageService,
     private dataSharingService: DataSharingService, private router: Router,
-    private chatService: ChatServiceService,private datePipe: DatePipe 
+    private chatService: ChatServiceService, private datePipe: DatePipe
   ) { }
 
   ngOnInit(): void {
     this.getWinesByUserId();
     this.getAllPredictions();
     const documentStyle = getComputedStyle(document.documentElement);
-  
+
   }
 
-
+//Getters Functions from Services
   getWinesByUserId() {
     this.wineService.getAllWinesByUserId(this.idUser).subscribe(
       (data) => {
@@ -137,6 +137,8 @@ export class SummaryWhiteWineComponent implements OnInit {
     );
   }
 
+
+  //Update selected predictions based on selected wine
   updateSelectedPredictions(): void {
     if (this.selectedWine && this.winePrectionsList.length > 0) {
       this.selectedPredictions = this.winePrectionsList.filter(
@@ -147,21 +149,33 @@ export class SummaryWhiteWineComponent implements OnInit {
       this.predictionsDatesChart = this.selectedPredictions.map((prediction) => prediction.dateCreated);
       this.qualityWineChart = this.selectedPredictions.map((prediction) => prediction.quality);
 
-      
+
     }
   }
 
+  //Get selected wine 
   onWineSelect(selectedWine: any): void {
+    if (!selectedWine) return;
+
     this.selectedWine = selectedWine;
-    this.isHidden = true
+    this.isHidden = true;
+
+    // Actualiza las predicciones filtrando por el vino seleccionado
     this.updateSelectedPredictions();
+
+    // Si hay propiedades seleccionadas, actualiza los gráficos con la primera de la lista
+    if (this.selectedProperties.length > 0) {
+      this.selectedProperties.forEach(property => this.updateChartData(property));//Aqui esta el problema
+    } else {
+      this.chartData = {}; // Limpiar datos si no hay propiedades seleccionadas
+    }
   }
 
+//Clean table
   deleteTable() {
     this.selectedWine = null;
     this.selectedPredictions = [];
   }
-
 
 
   //Hide or show slider
@@ -228,7 +242,7 @@ export class SummaryWhiteWineComponent implements OnInit {
         parseFloat(selectedPrediction.alcohol),
       ];
 
-      // Enviar los datos al servicio
+      // Send Data to DataSharingService
       this.dataSharingService.setWhiteWineData(dataToSend);
       this.dataSharingService.setWhiteWineQualityPredicted(selectedPrediction.quality);
       this.dataSharingService.setNameWine(this.selectedWine);
@@ -247,92 +261,101 @@ export class SummaryWhiteWineComponent implements OnInit {
   }
 
 
-
-
   //Checkboxes functions 
 
   onCheckboxChange(event: any, label: string): void {
     if (event.checked) {
-        if (!this.selectedProperties.includes(label)) {
-            this.selectedProperties.push(label);
-            this.updateChartData(label); // Actualizar solo el gráfico correspondiente
-        }
+      if (!this.selectedProperties.includes(label)) {
+        this.selectedProperties.push(label);
+        this.updateChartData(label); // Actualizar solo el gráfico correspondiente
+      }
     } else {
-        this.selectedProperties = this.selectedProperties.filter(item => item !== label);
-        delete this.chartData[label]; // Eliminar los datos de la propiedad desmarcada
+      this.selectedProperties = this.selectedProperties.filter(item => item !== label);
+      delete this.chartData[label]; // Eliminar los datos de la propiedad desmarcada
     }
-
+    this.updateSelectedPredictions();
     console.log('Selected Properties:', this.selectedProperties);
-}
-
-  
-  
-  
-
-onClickSelectAll(event: any): void {
-  this.isAllSelected = event.checked; // Actualiza el estado de "Select All"
-  if (event.checked) {
-    this.selectedProperties = [...this.wineProperties.map(property => property.label)];
-  } else {
-    this.selectedProperties = [];
   }
-  console.log('Selected Properties:', this.selectedProperties);
- // Actualiza el gráfico con las propiedades seleccionadas
-  this.updateChartData(this.selectedProperties[event.checked]); // Muestra el primer gráfico por defecto
-}
 
 
+  //Select All CheckBoxes
+  onClickSelectAllCheckBoxes(event: any): void {
+    this.isAllSelected = event.checked; // Actualiza el estado de "Select All"
+    if (event.checked) {
+      this.selectedProperties = this.wineProperties.map(property => property.label);
+      this.selectedProperty = this.wineProperties.map(property => property.value);
+    } else {
+      this.selectedProperties = [];
+      this.selectedProperty = [];
+    }
+    console.log('Selected Properties:', this.selectedProperties);
 
-updateChartData(property: string): void {
-  console.log(this.predictionsDatesChart);
-  const documentStyle = getComputedStyle(document.documentElement);
-  
-  // Mapeo correcto de nombres visibles a nombres de clave en JSON
-  const propertyMap: { [key: string]: string } = {
-      "Fixed Acidity": "fixedAcidity",
-      "Volatile Acidity": "volatileAcidity",
-      "Citric Acid": "citricAcid",
-      "Residual Sugar": "residualSugar",
-      "Chlorides": "chlorides",
-      "Free Sulfur Dioxide": "freeSulfurDioxide",
-      "Total Sulfur Dioxide": "totalSulfureDioxide",
-      "Density": "density",
-      "pH": "ph",
-      "Sulphates": "sulphates",
-      "Alcohol": "alcohol",
-      "Quality": "quality"
-  };
+    // Actualiza cada gráfico para las propiedades seleccionadas
+    this.selectedProperties.forEach(prop => this.updateChartData(prop));
+  }
 
-  const propertyKey = propertyMap[property]; // Obtener el nombre correcto
 
-  // Si la propiedad es válida, actualiza el gráfico correspondiente
-  if (propertyKey) {
-    //format dates
-    const formattedDates = this.predictionsDatesChart.map(date => 
-      this.datePipe.transform(date, 'HH/dd/MM/yyyy') // Formato de 24 horas (hh) y con día antes del mes
-  );
-  //ChartOptions
+  updateChartData(property: string): void {
+    // Limpiar datos del gráfico antes de actualizar
+    const documentStyle = getComputedStyle(document.documentElement);
+
+   
+
+
+    // Mapeo correcto de nombres visibles a nombres de clave en JSON
+    const propertyMap: { [key: string]: { keyForStats: string; keyForPrediction: string } } = {
+      "Fixed Acidity": { keyForStats: "Fixed Acidity", keyForPrediction: "fixedAcidity" },
+      "Volatile Acidity": { keyForStats: "Volatile Acidity", keyForPrediction: "volatileAcidity" },
+      "Citric Acid": { keyForStats: "Citric Acid", keyForPrediction: "citricAcid" },
+      "Residual Sugar": { keyForStats: "Residual Sugar", keyForPrediction: "residualSugar" },
+      "Chlorides": { keyForStats: "Chlorides", keyForPrediction: "chlorides" },
+      "Free Sulfur Dioxide": { keyForStats: "Free Sulfur Dioxide", keyForPrediction: "freeSulfurDioxide" },
+      "Total Sulfur Dioxide": { keyForStats: "Total Sulfur Dioxide", keyForPrediction: "totalSulfurDioxide" },
+      "Density": { keyForStats: "Density", keyForPrediction: "density" },
+      "pH": { keyForStats: "pH", keyForPrediction: "ph" },
+      "Sulphates": { keyForStats: "Sulphates", keyForPrediction: "sulphates" },
+      "Alcohol": { keyForStats: "Alcohol", keyForPrediction: "alcohol" },
+      "Quality": { keyForStats: "Quality", keyForPrediction: "quality" }
+    };
+    
+
+    const propertyKey = propertyMap[property]; // Obtener el nombre correcto
+    const mapping = propertyMap[property];
+    // Si la propiedad es válida, actualiza el gráfico correspondiente
+    if (mapping) {
+      const referenceValue = wineQualityStats[mapping.keyForStats];
+      const propertyKeyForPrediction = mapping.keyForPrediction;
+    
+      const formattedDates = this.predictionsDatesChart.map(date =>
+        this.datePipe.transform(date, 'dd/MM/yyyy')
+      );
+    
       this.chartData[property] = {
-          labels: formattedDates, // Fechas en el eje X
-          datasets: [
-              {
-                  label: property,
-                  data: this.selectedPredictions.map(prediction => prediction[propertyKey] || 0),
-                  fill: false,
-                  tension: 0.4,
-                  borderColor: documentStyle.getPropertyValue('--blue-500')
-              },
-              {
-                label: "Average Best 30",
-                data: [4,4,4],
-                fill: false,
-                tension: 0.4,
-                borderColor: documentStyle.getPropertyValue('--pink-500')
-            }
-          ]
+        labels: formattedDates,
+        datasets: [
+          {
+            label: property,
+            data: this.selectedPredictions.map(prediction => {
+              const value = prediction[propertyKeyForPrediction];
+              console.log(`Prediction:`, prediction);
+              console.log(`Value for ${propertyKeyForPrediction}:`, value);
+              return value ?? 0;
+            }),
+            fill: false,
+            tension: 0.4,
+            borderColor: documentStyle.getPropertyValue('--blue-500')
+          },
+          {
+            label: "Average Best 30",
+            data: Array(formattedDates.length).fill(referenceValue),
+            fill: false,
+            tension: 0.4,
+            borderColor: documentStyle.getPropertyValue('--pink-500')
+          }
+        ]
       };
+    }
   }
-}
 
 
 

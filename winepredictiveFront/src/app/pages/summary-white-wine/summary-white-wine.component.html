@@ -188,7 +188,7 @@
                 <!-- Checkboxes alineados a la izquierda -->
                 <div class="checkboxes-container">
                     <div>
-                        <p-checkbox [binary]="true" (onChange)="onClickSelectAll($event)" [(ngModel)]="isAllSelected"/>
+                        <p-checkbox [binary]="true" (onChange)="onClickSelectAllCheckBoxes($event)" [(ngModel)]="isAllSelected"/>
                         Select All
                     </div>
                     <br>
@@ -208,7 +208,7 @@
                 <div class="chartOption-container">
                     <div class="chartOption" *ngFor="let property of selectedProperties">
                         <p-chart type="line" [data]="chartData[property]" [options]="options" 
-                            style="width: 50%; max-width: 5%; height: 1%;" class="h-[30rem]" >
+                            style="width: 50%; max-width: 15%; height: 1%;" class="h-[30rem]" >
                         </p-chart>
                     </div>
                 </div>
