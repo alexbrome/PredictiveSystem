@@ -7,11 +7,15 @@ import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.access.method.P;
 import org.springframework.stereotype.Service;
+
+import com.winepredictive.winepredictive.dto.MeasureDto;
 import com.winepredictive.winepredictive.dto.WineDto;
 import com.winepredictive.winepredictive.dto.WinePredictionDto;
+import com.winepredictive.winepredictive.entity.Measure;
 import com.winepredictive.winepredictive.entity.Users;
 import com.winepredictive.winepredictive.entity.Wine;
 import com.winepredictive.winepredictive.entity.WinePrediction;
+import com.winepredictive.winepredictive.repository.MeasureRepository;
 import com.winepredictive.winepredictive.repository.UserRepository;
 import com.winepredictive.winepredictive.repository.WinePredictionRepository;
 import com.winepredictive.winepredictive.repository.WineRepository;
@@ -23,17 +27,19 @@ import jakarta.transaction.Transactional;
 public class WineServiceImpl implements WineService {
 
 	
+	private final MeasureRepository measureRepository;
 	private final WineRepository wineRepository;
 	private final UserRepository usersRepository;
 	private final WinePredictionRepository winePredictionRepository;
 
 	//Constructor
 	 public WineServiceImpl(final WineRepository wineRepository, final UserRepository usersRepository,
-			 final WinePredictionRepository winePredictionRepository
+			 final WinePredictionRepository winePredictionRepository,MeasureRepository measurerepository
 	            ) {
 	        this.wineRepository = wineRepository;
 	        this.usersRepository = usersRepository;
 	        this.winePredictionRepository = winePredictionRepository;
+	        this.measureRepository = measurerepository;
 	    }
 
 	@Override
@@ -46,13 +52,13 @@ public class WineServiceImpl implements WineService {
     public List<WinePredictionDto> getWinePredictionsByWineId(final Long idWine) throws NotFoundException {
         // Utilizamos el repositorio para encontrar todas las WinePredictions asociadas con un idWine
         List<WinePrediction> predictions = winePredictionRepository.findByIdWine_Id(idWine);
-
+/*
         for (WinePrediction prediction : predictions) {
             System.out.println("Prediction dateCreated desde el servicio: " + prediction.getDateCreated());       
             // Agrega aquí los campos adicionales que necesites imprimir.
             System.out.println("--------------------------------");
         }
-        
+        */
         if (predictions.isEmpty()) {
             throw new NotFoundException();
         }
@@ -61,7 +67,22 @@ public class WineServiceImpl implements WineService {
                 .collect(Collectors.toList());
     }
 	  
-    
+    public List<MeasureDto> getMeasuresByWineId(final Long idWine) throws NotFoundException {
+        // Utilizamos el repositorio para encontrar todas las WinePredictions asociadas con un idWine
+        List<Measure> measures = measureRepository.findByIdWineId(idWine);
+/*
+        for (Measure measure : measures) {
+            // Agrega aquí los campos adicionales que necesites imprimir.
+            System.out.println("--------------------------------");
+        }
+        */
+        if (measures.isEmpty()) {
+            throw new NotFoundException();
+        }
+        return measures.stream()
+                .map(this::mapToMeasureDTO)
+                .collect(Collectors.toList());
+    }
     
 	    public List<WinePredictionDto> getWinePredictionsByidWine(final Long idWine) throws NotFoundException {
 	        // Buscamos el vino por su ID y manejamos el caso en que no exista
@@ -165,6 +186,15 @@ public class WineServiceImpl implements WineService {
 	        }
 
 	        return dto;
+	    }
+	    
+		private MeasureDto mapToMeasureDTO(final Measure measure) {
+			MeasureDto measureDto = new MeasureDto();
+			measureDto.setId(measure.getId());
+			measureDto.setCreated(measure.getCreated());
+			measureDto.setDescription(measure.getDescription());
+			measureDto.setIdWine(measure.getIdWine() == null ? null : measure.getIdWine().getId());
+	        return measureDto;
 	    }
 
 	

@@ -15,6 +15,9 @@ import { ConfirmationService, MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
 import { CommonModule } from '@angular/common';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { Router } from '@angular/router';
+import { Measure } from '../../models/Measure';
+import { MeasureService } from '../../services/measure.service';
 
 
 
@@ -40,22 +43,33 @@ import { ConfirmDialogModule } from 'primeng/confirmdialog';
 })
 export class WineListComponent implements OnInit {
 
+
   //Variables to create new wine
   date: Date = new Date();
   idUser: any = StorageService.getUserId();
   user: any = {};
   wineToSave: Wine = new Wine();
+ 
 
   //Variables to list wines
   lista: any[] = [];
   wines: any[] = [];
   createWineDialogVisible: boolean = false;
 
+  //Creating Measure
+  createMeasureDialogVisible: boolean = false;
+  measureDate:any = new Date();
+  measureDescription: string = '';
+  selectedWineId: number = 0;
+  measureToSave: Measure = new Measure(this.measureDescription, this.measureDate, this.selectedWineId);
+
   //Constructor
   constructor(private userService: UserService,
     private wineService: WineService,
     private messageService: MessageService,
-  private confirmationService: ConfirmationService) { }
+  private confirmationService: ConfirmationService,
+  private router: Router,
+private measureService:MeasureService) { }
 
 
   ngOnInit(): void {
@@ -180,8 +194,48 @@ export class WineListComponent implements OnInit {
     this.createWineDialogVisible = true;
   }
 
+  showDialogMeasure(wineId:number) {
+    this.selectedWineId = wineId;
+    this.createMeasureDialogVisible = true;
 
+    }
 
+   goToSummary(id: any) {
+      this.router.navigate(['/summaryWhite',id]);
 
+}
 
+createMeasure() {       
+  this.measureToSave.created = this.measureDate;
+  this.measureToSave.idWine = this.selectedWineId;
+  this.measureToSave.description = this.measureDescription;
+  console.log(this.measureToSave);
+  
+  this.measureService.createMeasure(this.measureToSave).subscribe(
+    
+    
+    (resp) => {
+      console.log(resp);
+
+      // close modal
+      this.createMeasureDialogVisible = false;
+
+      //Sucess message
+      this.messageService.add({
+        severity: 'success',
+        summary: 'Succes',
+        detail: '¡Measure saved successfully!'
+      });
+      this.getWinesByUserId();
+    },
+    //Error message
+    (error) => {
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Error',
+        detail: 'Error saving measure'
+      });
+    }
+  );
+}
 }

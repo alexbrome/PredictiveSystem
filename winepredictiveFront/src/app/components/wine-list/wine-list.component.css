@@ -16,18 +16,33 @@ p-button {
 }
 
 .table-container{
-    width: 75%;
+    width: 80%;
     justify-content: center;
     align-items: center;
     text-align: center;
-    margin-left: 12%;
+    margin-left: 8%;
     animation: slideInFromBottom 1s ease-in forwards;
 }
 
 
 
 td {
-    justify-content: start;
+ 
+   
+    flex: 1;
+}
+.th{
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    flex: 1;
+}
+
+.actions{
+    display: flex;
+    flex-direction: row;
+    justify-content: center; /* Centra el contenido horizontalmente */
+    align-items: center; /* Centra el contenido verticalmente */
 }
 
 /*Animation*/

@@ -106,7 +106,12 @@ export class SummaryWhiteWineComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.getWinesByUserId();
+/*
+     const wineIdParam = this.route.snapshot.paramMap.get('wineId');
+  const wineId = wineIdParam ? +wineIdParam : undefined;
+  this.getWinesByUserId(wineId);
+  this.getAllPredictions();*/
+   
     this.getAllPredictions();
     const documentStyle = getComputedStyle(document.documentElement);
     let wineIdParam  = this.route.snapshot.paramMap.get('wineId');

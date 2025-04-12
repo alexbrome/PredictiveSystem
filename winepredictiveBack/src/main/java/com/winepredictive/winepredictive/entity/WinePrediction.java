@@ -70,7 +70,7 @@ public class WinePrediction {
     @JoinColumn(name = "id_wine_id")
     @JsonIgnore
     private Wine idWine;
-
+    
     @CreatedDate
     @Column(nullable = false, updatable = false)
     private OffsetDateTime dateCreated;

@@ -1,0 +1,24 @@
+version: '3.8'
+services:
+  angular-app:
+    build: 
+      context: ./winepredictiveFront # Ruta a la carpeta del proyecto Angular
+      dockerfile: Dockerfile
+    ports:
+      - "4200:80"   # El contenedor expone el puerto 80 y lo mapea al 4200 local
+    networks:
+      - app-network
+
+
+  spring-backend:
+    build:
+      context: ./winepredictiveBack  # Ruta a la carpeta de tu proyecto Spring
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge

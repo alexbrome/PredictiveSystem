@@ -54,6 +54,9 @@ public class Wine implements Serializable{
     @LastModifiedDate
     @Column(nullable = true)
     private OffsetDateTime lastUpdated;
+    
+    @OneToMany(mappedBy = "idWine")
+    private Set<Measure> measures;
 
     public Long getId() {
         return id;
@@ -98,8 +101,18 @@ public class Wine implements Serializable{
     public OffsetDateTime getLastUpdated() {
         return lastUpdated;
     }
+    
+    
 
-    public void setLastUpdated(final OffsetDateTime lastUpdated) {
+    public Set<Measure> getMeasures() {
+		return measures;
+	}
+
+	public void setMeasures(Set<Measure> measures) {
+		this.measures = measures;
+	}
+
+	public void setLastUpdated(final OffsetDateTime lastUpdated) {
         this.lastUpdated = lastUpdated;
     }
 
