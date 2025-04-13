@@ -254,10 +254,10 @@ p-chart {
 /* Contenedor de las gráficas (derecha) */
 .chartOption-container {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); /* Ajusta el número de columnas según el espacio disponible */
+  grid-template-columns: repeat(auto-fill, minmax(45%, 1fr)); /* Ajusta el número de columnas según el espacio disponible */
   /* Asegura que las gráficas se muestren en vertical */
   gap: 20px; /* Espaciado entre las gráficas */
-  width: calc(80% - 180px); /* Ajuste dinámico */
+  width: calc(80%); /* Ajuste dinámico */
 }
 
 /* Estilos individuales de cada gráfica */

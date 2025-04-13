@@ -18,6 +18,9 @@ export class MeasureService {
     return this.http.post<Measure>(this.apiUrl, measure);
   }
 
-
+  getMeasuresByWineId(wineId: number): Observable<Measure[]> {
+    const url = `${this.apiUrl}/${wineId}`;
+    return this.http.get<Measure[]>(url);
+  }
 
 }

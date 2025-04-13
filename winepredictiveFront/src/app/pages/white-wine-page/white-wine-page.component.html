@@ -18,17 +18,18 @@
     <div id="properties-form">
         <div class="analysis-header">
             <h2>Analysis Measures</h2>
+            <b>*All fields are mandatory</b>
             <div class="select-wine">
                 <form [formGroup]="selectWineFormGroup">
 
                     <p-dropdown [options]="wines" formControlName="selectedWine" optionLabel="name"
-                        placeholder="Seleccione un vino" [showClear]="true">
+                        placeholder="Select wine" [showClear]="true">
                     </p-dropdown>
                 </form>
             </div>
         </div>
         <br>
-
+        
         <br>
         <form [formGroup]="wineForm" class="flex flex-column align-items-center gap-3" id="form"
             (submit)="savePrediction()">
@@ -91,10 +92,9 @@
                     [maxFractionDigits]="7" inputId="decimalOnly" [useGrouping]="false" />
             </div>
             <button id="submit-button" [raised]="true"  pButton pRipple label="Save Prediction" severity="secondary"
-                class="p-button-success">
+                class="p-button-info">
             </button>
         </form>
-
     </div>
 </div>
 }

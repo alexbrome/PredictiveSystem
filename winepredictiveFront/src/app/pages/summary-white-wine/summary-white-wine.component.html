@@ -207,8 +207,8 @@
                 <!-- Gráficas organizadas en columna -->
                 <div class="chartOption-container">
                     <div class="chartOption" *ngFor="let property of selectedProperties">
-                        <p-chart type="line" [data]="chartData[property]" [options]="options" 
-                            style="width: 50%; max-width: 15%; height: 1%;" class="h-[30rem]" >
+                        <p-chart type="line" [data]="chartData[property]" [options]="chartOptions" 
+                            style="width: 70%; max-width: 50%; height: 100%;" class="h-[40rem]" >
                         </p-chart>
                     </div>
                 </div>

@@ -4,7 +4,7 @@
     flex-direction: row;
     width: 80%;
     margin-top: 2vh;
-    margin-left: 4%;
+    /*margin-left: 1%;*/
     
 }
 
@@ -43,7 +43,7 @@ h1{
     display:grid;
     grid-template-columns: auto auto auto auto;
     gap:3%;
-    margin-left: 20%;
+    margin-left: 4%;
 }
 #submit-button{
     margin-top: 8%;
@@ -90,4 +90,8 @@ h1{
       transform: translateY(0); /* Llega a su posición original */
       opacity: 1;
     }
+  }
+
+  b{
+    color: red;
   }
