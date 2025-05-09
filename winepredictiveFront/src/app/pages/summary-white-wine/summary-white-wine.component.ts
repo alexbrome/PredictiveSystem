@@ -1,4 +1,5 @@
 import { Component, ElementRef, HostListener, OnInit } from '@angular/core';
+import { CalendarModule } from 'primeng/calendar';
 import { WinePredictionsService } from '../../services/wine-predictions.service';
 import { WinePrediction } from '../../models/winePrediction';
 import { WineService } from '../../services/wine.service';
@@ -20,12 +21,15 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ChatServiceService } from '../../services/chat-service.service';
 import { DropdownModule } from 'primeng/dropdown';
 import { CheckboxModule } from 'primeng/checkbox';
-import  wineQualityStats  from '../../models/wineQualityStats';
+import wineQualityStats from '../../models/wineQualityStats';
 import { MeasureService } from '../../services/measure.service';
 import { Measure } from '../../models/Measure';
 import { Chart, ChartData, ChartOptions, TooltipItem } from 'chart.js';
 import annotationPlugin from 'chartjs-plugin-annotation';
-import { PrimeIcons } from 'primeng/api';
+import { FullCalendarModule } from '@fullcalendar/angular';
+import { CalendarOptions } from '@fullcalendar/core'; // useful for typechecking
+import dayGridPlugin from '@fullcalendar/daygrid';
+import interactionPlugin, { DateClickArg } from '@fullcalendar/interaction';
 
 
 
@@ -47,8 +51,7 @@ import { PrimeIcons } from 'primeng/api';
     ToastModule,
     DropdownModule,
     CheckboxModule,
-    
-
+    FullCalendarModule
   ],
   providers: [ConfirmationService, MessageService, DatePipe],
   templateUrl: './summary-white-wine.component.html',
@@ -58,7 +61,6 @@ import { PrimeIcons } from 'primeng/api';
 
 export class SummaryWhiteWineComponent implements OnInit {
 
-  idUser: any = +StorageService.getUserId();
   winePrectionsList!: any[]; // Predictions Array
   wines!: any[]; // Wines Array
   selectedWine: any = [];
@@ -66,6 +68,7 @@ export class SummaryWhiteWineComponent implements OnInit {
   isChartVisible: boolean = false;
   selectedPredictionDates: string[] = [];
   wineName: any = null;
+  idUser: any;
 
   /*Dropodown values*/
   wineProperties = [
@@ -86,7 +89,7 @@ export class SummaryWhiteWineComponent implements OnInit {
   /*Chart Visibles*/
   selectedChartOption: string = "";
   selectedProperties: string[] = [];
-  isAllSelected: boolean = false; // 🔹 Nueva variable para controlar "Select All"
+  isAllSelected: boolean = true; // 🔹 Nueva variable para controlar "Select All"
 
   //Checkboxes selected
   selectedProperty: string[] = [];
@@ -105,63 +108,89 @@ export class SummaryWhiteWineComponent implements OnInit {
   //Measures
   measures: Measure[] = [];
 
+  //Calendar
+  isCalendarVisible: boolean = false;
+  calendarEvents: any[]= [];
+
   //Slider hidden or shown
   isHidden: boolean = true;
   dates: any;
 
+    //Calendar Options
+    calendarOptions: CalendarOptions = {
+      initialView: 'dayGridMonth',
+      plugins: [dayGridPlugin, interactionPlugin],
+      dateClick: (arg) => this.handleDateClick(arg),
+      events: [
+       this.calendarEvents
+      ]
+    };
+  
+    handleDateClick(arg: DateClickArg) {
+      alert('date click! ' + arg.dateStr)
+    }
+
+
+
   constructor(private winePredictionService: WinePredictionsService, private wineService: WineService,
-     private route:ActivatedRoute,
+    private route: ActivatedRoute,
     private eRef: ElementRef, private confirmationService: ConfirmationService, private messageService: MessageService,
     private dataSharingService: DataSharingService, private router: Router,
     private chatService: ChatServiceService, private datePipe: DatePipe,
-    private measureService: MeasureService
+    private measureService: MeasureService,
   ) { }
 
   ngOnInit(): void {
-/*
-     const wineIdParam = this.route.snapshot.paramMap.get('wineId');
-  const wineId = wineIdParam ? +wineIdParam : undefined;
-  this.getWinesByUserId(wineId);
-  this.getAllPredictions();*/
-   
-    this.getAllPredictions();
-    const documentStyle = getComputedStyle(document.documentElement);
-    let wineIdParam  = this.route.snapshot.paramMap.get('wineId');
+    // Initialize chart options
+    this.selectedProperties = this.wineProperties.map(property => property.label);
+    this.selectedProperty = this.wineProperties.map(property => property.value);
 
+    //get userId from StorageService
+    this.idUser = +StorageService.getUserId();
+
+    this.getAllPredictions();
+    //hide wine selected box
+    const documentStyle = getComputedStyle(document.documentElement);
+    //Params on URL
+    let wineIdParam = this.route.snapshot.paramMap.get('wineId');
     const wineId = wineIdParam ? +wineIdParam : null;
 
+    //Get wineId from URL and set it to selectedWine
     this.getWinesByUserId(wineId ?? undefined);
 
     //Load Measures by idwine
     this.fetchMeasures(wineId ?? 0);
-    //
-   Chart.register(annotationPlugin);
-  
+    
+    //Calendar options view
+    Chart.register(annotationPlugin);
+
+ 
+
   }
 
-//Getters Functions from Services
-getWinesByUserId(wineId?: number) {
-  this.wineService.getAllWinesByUserId(this.idUser).subscribe(
-    (data) => {
-      this.wines = data;
-      // Si se ha recibido un wineId, selecciona el vino correspondiente
-      if (wineId != null) {
-        const wine = this.wines.find(w => w.id === wineId);
-        if (wine) {
-          this.selectedWine = wine;
-          console.log('Selected Wine:', this.selectedWine);
-          // Actualiza las predicciones del vino seleccionado
-          this.onWineSelect(wine);
-        } else {
-          console.error(`No se encontró un vino con id ${wineId}`);
+  //Getters Functions from Services
+  getWinesByUserId(wineId?: number) {
+    this.wineService.getAllWinesByUserId(this.idUser).subscribe(
+      (data) => {
+        this.wines = data;
+        // Si se ha recibido un wineId, selecciona el vino correspondiente
+        if (wineId != null) {
+          const wine = this.wines.find(w => w.id === wineId);
+          if (wine) {
+            this.selectedWine = wine;
+            console.log('Selected Wine:', this.selectedWine);
+            // Actualiza las predicciones del vino seleccionado
+            this.onWineSelect(wine);
+          } else {
+            console.error(`No se encontró un vino con id ${wineId}`);
+          }
         }
+      },
+      (error) => {
+        console.error('Error fetching wines:', error);
       }
-    },
-    (error) => {
-      console.error('Error fetching wines:', error);
-    }
-  );
-}
+    );
+  }
 
   getAllPredictions() {
     this.winePredictionService.getAllPredictions().subscribe(
@@ -204,19 +233,22 @@ getWinesByUserId(wineId?: number) {
     // Actualiza las predicciones filtrando por el vino seleccionado
     this.updateSelectedPredictions();
 
+    // 1. Cargar medidas filtradas
+    this.fetchMeasures(this.selectedWine.id);
+
     // Si hay propiedades seleccionadas, actualiza los gráficos con la primera de la lista
     if (this.selectedProperties.length > 0) {
       this.selectedProperties.forEach(property => this.updateChartData(property));
     } else {
       this.chartData = {}; // Limpiar datos si no hay propiedades seleccionadas
     }
-    console.log('Selected Wine:', this.selectedWine);
-    console.log("Measures cuando cambia elvino:", this.measures);
-    
-    
+    this.updateCalendarEventsFromMeasures();
+
+  
+
   }
 
-//Clean table
+  //Clean table
   deleteTable() {
     this.selectedWine = null;
     this.selectedPredictions = [];
@@ -339,11 +371,9 @@ getWinesByUserId(wineId?: number) {
   }
 
   //Update charts if checkbox change
-
-
   updateChartData(property: string): void {
     const documentStyle = getComputedStyle(document.documentElement);
-  
+
     const propertyMap: { [key: string]: { keyForStats: string; keyForPrediction: string } } = {
       "Fixed Acidity": { keyForStats: "Fixed Acidity", keyForPrediction: "fixedAcidity" },
       "Volatile Acidity": { keyForStats: "Volatile Acidity", keyForPrediction: "volatileAcidity" },
@@ -358,37 +388,37 @@ getWinesByUserId(wineId?: number) {
       "Alcohol": { keyForStats: "Alcohol", keyForPrediction: "alcohol" },
       "Quality": { keyForStats: "Quality", keyForPrediction: "quality" }
     };
-  
+
     const mapping = propertyMap[property];
-  
+
     if (mapping) {
       const referenceValue = wineQualityStats[mapping.keyForStats];
       const propertyKeyForPrediction = mapping.keyForPrediction;
-  
+
       const formattedDates = this.predictionsDatesChart.map(date =>
         this.datePipe.transform(date, 'dd/MM')
       );
-  
+
       const measureDates = this.measures.map(measure => {
         const date = new Date(measure.created);
         date.setMinutes(date.getMinutes() + date.getTimezoneOffset()); // Ajustar la zona horaria
         return this.datePipe.transform(date, 'dd/MM');
       });
-  
+
       // Combinar y ordenar las fechas
-    
-const combinedDates = [...formattedDates, ...measureDates].filter(date => date !== null).sort((a, b) => {
-        const dateA = a ? new Date(a.split('/').reverse().join('-')) : new Date();
-        const dateB = b ? new Date(b.split('/').reverse().join('-')) : new Date();
-        return dateA.getTime() - dateB.getTime();
-      });
-  
-  
+
+      const combinedDates = [...formattedDates, ...measureDates].filter(date => date !== null).sort((a, b) => {
+        const dateA = a ? new Date(a.split('/').reverse().join('-')) : new Date();
+        const dateB = b ? new Date(b.split('/').reverse().join('-')) : new Date();
+        return dateA.getTime() - dateB.getTime();
+      });
+
+
       // Crear un array de ceros con la misma longitud que combinedDates
       const measureValues = Array(combinedDates.length).fill(0);
-  
+
       this.chartData[property] = {
-        labels: combinedDates,
+        labels: formattedDates,//combinedDates,
         datasets: [
           {
             label: property,
@@ -407,19 +437,9 @@ const combinedDates = [...formattedDates, ...measureDates].filter(date => date !
             tension: 0.4,
             borderColor: documentStyle.getPropertyValue('--pink-500')
           },
-          {
-            label: "Measures",
-            type: 'line',
-            data: measureValues, // Asignar el array de ceros
-            fill: false,
-            tension: 0.4,
-            borderColor: documentStyle.getPropertyValue('--p-cyan-500'),
-            pointStyle: this.measures.map(() => PrimeIcons.ARROW_DOWN), // Agregar icono
-            pointRadius: 5
-          },
         ]
       };
-  
+
       // Configuración de tooltips personalizados
       this.chartOptions = {
         plugins: {
@@ -440,20 +460,47 @@ const combinedDates = [...formattedDates, ...measureDates].filter(date => date !
       } as ChartOptions;
     }
   }
-  
-  
-  
+
 
   fetchMeasures(wineId: number): void {
     this.measureService.getMeasuresByWineId(wineId).subscribe(
       (data: Measure[]) => {
         this.measures = data;
+        this.updateCalendarEventsFromMeasures();
         console.log('Fetched measures:', this.measures);
+        
       },
       (error) => {
         console.error('Error fetching measures:', error);
       }
     );
+  }
+
+
+  //View of Calendar-Chart
+  toggleCalendar(): void {
+    this.isCalendarVisible = !this.isCalendarVisible;
+    console.log("ischart " + this.isChartVisible);
+
+  }
+
+  private updateCalendarEventsFromMeasures(): void {
+    this.calendarEvents = this.measures.map(measure => ({
+      title: measure.description,
+      date: this.datePipe.transform(measure.created, 'yyyy-MM-dd'), // Asegúrate que `measure.date` sea tipo Date o ISO string
+     // allDay: true
+    }));
+/*
+    this.calendarOptions = {
+      ...this.calendarOptions,
+      events: this.calendarEvents
+    };*/
+   
+    this.calendarOptions.events = this.calendarEvents;
+    console.log("Calendar Events: ", this.calendarEvents);
+   
+    
+    
   }
 
 }

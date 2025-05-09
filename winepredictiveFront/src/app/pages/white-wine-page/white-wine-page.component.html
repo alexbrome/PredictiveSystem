@@ -18,7 +18,9 @@
     <div id="properties-form">
         <div class="analysis-header">
             <h2>Analysis Measures</h2>
+           @if (isFormIncomplete()) {
             <b>*All fields are mandatory</b>
+           }
             <div class="select-wine">
                 <form [formGroup]="selectWineFormGroup">
 

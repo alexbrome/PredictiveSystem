@@ -25,7 +25,8 @@ export class LoginComponent {
 
 //constructor
   constructor(private fb:FormBuilder,private authService:AuthServiceService,
-    private router:Router, private messageService:MessageService) { }
+    private router:Router, private messageService:MessageService,
+  private storageService:StorageService) { }
 
 
   ngOnInit() {
@@ -77,7 +78,7 @@ export class LoginComponent {
   
             // Delay 2 seconds navigation in order to display succes message
             setTimeout(() => {
-              this.router.navigateByUrl("/summaryWhite");
+              this.router.navigateByUrl("/wineList");
             }, 2000); 
           }
         } 

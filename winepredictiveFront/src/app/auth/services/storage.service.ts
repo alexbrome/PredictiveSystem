@@ -99,4 +99,5 @@ export class StorageService {
     StorageService.logout();
     this.userChanged.emit(null); // Emitir evento de logout
   }
+ 
 }

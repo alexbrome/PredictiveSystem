@@ -30,7 +30,6 @@ import { Subscription } from 'rxjs';
 export class NavbarComponent implements OnInit, OnDestroy {
   idUser: any = StorageService.getUserId();
   user: any;
-  items: MenuItem[] | undefined;
   private userSubscription!: Subscription;
 
   constructor(
@@ -42,9 +41,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    // Inicializar con el usuario actual
-    this.user = StorageService.getUser();
-    this.getUserById();
+    this.idUser = StorageService.getUserId();
 
     // Suscribirse a los cambios del usuario
     this.userSubscription = this.storageService.getUserObservable().subscribe(user => {
@@ -53,49 +50,37 @@ export class NavbarComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    // Desuscribirse al destruir el componente
-    if (this.userSubscription) {
-      this.userSubscription.unsubscribe();
-    }
+    if (this.userSubscription) this.userSubscription.unsubscribe();
   }
 
-  isCustomerLoggedIn(): Boolean {
-    return StorageService.isCustomerLoggedIn();
-  }
-
-  isAdminLoggedIn(): Boolean {
-    return StorageService.isAdminLoggedIn();
-  }
-
-  getUserById() {
-    this.userService.getUserById(this.idUser).subscribe(
-      (data: any) => {
-        this.user = data;
-      },
-      (error) => {
-        console.error('Error fetching user:', error);
-      }
+  getUserById(): void {
+    this.userService.getUserById(Number(this.idUser)).subscribe(
+      data => StorageService.saveUser(data),
+      error => console.error('Error fetching user:', error)
     );
   }
 
-  logOut(event: Event) {
+  isCustomerLoggedIn(): boolean {
+    return StorageService.isCustomerLoggedIn();
+  }
+
+  isAdminLoggedIn(): boolean {
+    return StorageService.isAdminLoggedIn();
+  }
+
+  logOut(event: Event): void {
     this.confirmationService.confirm({
       target: event.target as EventTarget,
       message: 'Are you sure that you want to LogOut?',
       header: 'Confirmation',
       icon: 'pi pi-exclamation-triangle',
-      acceptIcon: "none",
-      rejectIcon: "none",
-      rejectButtonStyleClass: "p-button-text",
       accept: () => {
         StorageService.logout();
         this.messageService.add({ severity: 'info', summary: 'Success', detail: 'You have LoggedOut' });
         this.router.navigateByUrl("/", { skipLocationChange: true }).then(() => {
-          this.router.navigate([this.router.url]); // Forzar actualización del componente
+          this.router.navigate([this.router.url]);
         });
-        this.getUserById();
-      },
-      reject: () => {}
+      }
     });
   }
 }

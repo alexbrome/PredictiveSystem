@@ -2,30 +2,35 @@
 <p-toast></p-toast>
 <!--Left container(SELECT WINE)-->
 <div id="container">
-    <div id="sectionLeft" [ngClass]="{'hidden': isHidden}" class="slider-container">  
+    <div id="sectionLeft" [ngClass]="{'hidden': isHidden}" class="slider-container">
         <p-listbox id="pListBox" [options]="wines" [(ngModel)]="selectedWine" optionLabel="name"
-        [style]="{ width: '13rem' }" [listStyle]="{'max-height': '220px'}"
-        (onChange)="onWineSelect($event.value)" />
+            [style]="{ width: '13rem' }" [listStyle]="{'max-height': '220px'}"
+            (onChange)="onWineSelect($event.value)" />
     </div>
-    
+
     <!----------------Section Right--------------------->
     <div id="sectionRight">
         <div class="card">
             <p-table [value]="selectedPredictions" [tableStyle]="{'min-width': '60rem'}">
                 <ng-template pTemplate="caption" class="prediction-bar">
-                    
-                    <!-------- Contenedor principal con Flexbox ----------->
+
+                    <!-------- 3 buttons container----------->
                     <div class="prediction-bar">
-                        <p-button (click)="toggleVisibility($event)" label="Select Wine" severity="contrast" class="select-wine-button"></p-button>
+                        <p-button (click)="toggleVisibility($event)" label="Select Wine" severity="contrast"
+                            class="select-wine-button"></p-button>
+                            @if(!isCalendarVisible){
                         <p-toggleButton [(ngModel)]="isChartVisible" onLabel="View-Table" offLabel="View-Chart"
                             [onIcon]="'pi pi-chart-line'" [offIcon]="'pi pi-table'" styleClass="mr-2">
-                        </p-toggleButton>
+                        </p-toggleButton>}
+                        <p-button (click)="toggleCalendar()" label="Measure-Calendar" icon="pi pi-calendar" class="mr-2"
+                            [severity]="isCalendarVisible ? 'primary' : 'contrast'">
+                        </p-button>
 
                         <!----------- Clean Table button-------->
                         <div class="left-content">
-                            @if(!isChartVisible){
+                            @if(!isChartVisible && !isCalendarVisible){
                             <span id="prediction">Predictions List</span>
-                        }
+                            }
                             @else{
                             <span id="prediction">Chart</span>
                             }
@@ -38,51 +43,51 @@
                 </ng-template>
 
                 <ng-template pTemplate="header">
-                    @if (!isChartVisible) {
+                    @if (!isChartVisible && !isCalendarVisible) {
                     <tr>
-                       
+
                         <th>Date Created </th>
                         <th>Fixed Acidity
-                            &nbsp;<i class="pi pi-info-circle"
-                                pTooltip="Values should be between 5 and 10" tooltipPosition="top"></i>
+                            &nbsp;<i class="pi pi-info-circle" pTooltip="Values should be between 5 and 10"
+                                tooltipPosition="top"></i>
                         </th>
                         <th>Citric Acidity
-                            &nbsp;<i class="pi pi-info-circle"
-                                pTooltip="Values should be between 5 and 10" tooltipPosition="top"></i>
+                            &nbsp;<i class="pi pi-info-circle" pTooltip="Values should be between 5 and 10"
+                                tooltipPosition="top"></i>
                         </th>
                         <th>Free Sulfur Dioxide&nbsp;<i class="pi pi-info-circle"
                                 pTooltip="Values should be between 5 and 10" tooltipPosition="top"></i></th>
                         <th>Residual Sugar
-                            &nbsp;<i class="pi pi-info-circle"
-                                pTooltip="Values should be between 5 and 10" tooltipPosition="top"></i>
+                            &nbsp;<i class="pi pi-info-circle" pTooltip="Values should be between 5 and 10"
+                                tooltipPosition="top"></i>
                         </th>
-                        <th>Sulphates&nbsp;<i class="pi pi-info-circle"
-                            pTooltip="Values should be between 5 and 10" tooltipPosition="top"></i></th>
+                        <th>Sulphates&nbsp;<i class="pi pi-info-circle" pTooltip="Values should be between 5 and 10"
+                                tooltipPosition="top"></i></th>
                         <th>Total Sulfure Dioxide&nbsp;<i class="pi pi-info-circle"
-                            pTooltip="Values should be between 5 and 10" tooltipPosition="top"></i></th>
-                        <th>Ph&nbsp;<i class="pi pi-info-circle"
-                            pTooltip="Values should be between 5 and 10" tooltipPosition="top"></i></th>
-                        <th>Chlorides&nbsp;<i class="pi pi-info-circle"
-                            pTooltip="Values should be between 5 and 10" tooltipPosition="top"></i></th>
-                        <th>Density&nbsp;<i class="pi pi-info-circle"
-                            pTooltip="Values should be between 5 and 10" tooltipPosition="top"></i></th>
-                        <th>Alcohol&nbsp;<i class="pi pi-info-circle"
-                            pTooltip="Values should be between 5 and 10" tooltipPosition="top"></i></th>
-                       
-                         
+                                pTooltip="Values should be between 5 and 10" tooltipPosition="top"></i></th>
+                        <th>Ph&nbsp;<i class="pi pi-info-circle" pTooltip="Values should be between 5 and 10"
+                                tooltipPosition="top"></i></th>
+                        <th>Chlorides&nbsp;<i class="pi pi-info-circle" pTooltip="Values should be between 5 and 10"
+                                tooltipPosition="top"></i></th>
+                        <th>Density&nbsp;<i class="pi pi-info-circle" pTooltip="Values should be between 5 and 10"
+                                tooltipPosition="top"></i></th>
+                        <th>Alcohol&nbsp;<i class="pi pi-info-circle" pTooltip="Values should be between 5 and 10"
+                                tooltipPosition="top"></i></th>
+
+
                         <th>Quality</th>
                         <th>Actions</th>
                         <th>AI</th>
-                        
+
                     </tr>
                     }
                 </ng-template>
 
                 <ng-template pTemplate="body" let-prediction>
-                    @if (!isChartVisible) {
-                   <!--TODO
+                    @if (!isChartVisible && !isCalendarVisible) {
+                    <!--TODO
                    <tr (click)="onRowClick(prediction)"></tr>-->
-                        <tr>
+                    <tr>
                         <td>{{ prediction.dateCreated | date:'dd/MM/YYYY HH:mm'}}</td>
 
                         <td>{{prediction.fixedAcidity}}&nbsp;
@@ -145,78 +150,84 @@
                                     tooltipPosition="top" style="color: orange;"></i>
                                 }
                         </td>
-                      
-                        
+
+
                         <td [ngClass]="{'red-class': prediction.quality < 6, 'blue-class': prediction.quality === 6, 
                         'green-class': prediction.quality > 6}">
                             {{prediction.quality}}</td>
-                            <td>
-                                <button class="icon-button" pTooltip="Delete this prediction" tooltipPosition="left"
+                        <td>
+                            <button class="icon-button" pTooltip="Delete this prediction" tooltipPosition="left"
                                 (click)="deletePrediction(prediction.id)">
                                 <i class="pi pi-trash"></i> &nbsp;&nbsp;
-                            </button>                          
-                    </td>
-                    <td>
-                        <button class="icon-button" pTooltip="Improve measurements with AI solutions" tooltipPosition="left"
-                        (click)="goToIAChat(prediction.id)" >
-                        <img src="../../images/chat-gpt.png" alt="">
-                    </button>  
-                         
-                           
-                    </td>
-                             
+                            </button>
+                        </td>
+                        <td>
+                            <button class="icon-button" pTooltip="Improve measurements with AI solutions"
+                                tooltipPosition="left" (click)="goToIAChat(prediction.id)">
+                                <img src="../../images/chat-gpt.png" alt="">
+                            </button>
+
+
+                        </td>
+
                     </tr>
                     }
                 </ng-template>
 
-     <!------Empty message if there are no valus of predictions---------->
+                <!------Empty message if there are no valus of predictions---------->
+                @if(!isChartVisible){
                 <ng-template pTemplate="emptymessage">
-                    @if(!isChartVisible){
                     <tr>
                         <td colspan="13" class="text-center">No Data&nbsp;&nbsp;&nbsp;
                             <i class="pi pi-database " style="font-size: 2rem"></i>
                         </td>
                     </tr>
-                    }
                 </ng-template>
+                }
             </p-table>
 
         </div>
         <!------Chart----------->
-        @if(isChartVisible) {
-            <div class="container-chart">
-                <!-- Checkboxes alineados a la izquierda -->
-                <div class="checkboxes-container">
-                    <div>
-                        <p-checkbox [binary]="true" (onChange)="onClickSelectAllCheckBoxes($event)" [(ngModel)]="isAllSelected"/>
-                        Select All
-                    </div>
-                    <br>
-                    <div *ngFor="let property of wineProperties" class="checkboxes">
-                        <p-checkbox  
-                            [binary]="true"
-                            [name]="property.label"
-                            [value]="property.label"
-                            (onChange)="onCheckboxChange($event, property.label)"
-                            [ngModel]="selectedProperties.includes(property.label)" 
-                        />
-                        &nbsp; {{property.label}}
-                    </div>
+        @if(isChartVisible && !isCalendarVisible) {
+        <div class="container-chart">
+            <!-- Checkboxes alineados a la izquierda -->
+            <div class="checkboxes-container">
+                <div>
+                    <p-checkbox [binary]="true" (onChange)="onClickSelectAllCheckBoxes($event)"
+                        [(ngModel)]="isAllSelected" />
+                    Select All
                 </div>
-            
-                <!-- Gráficas organizadas en columna -->
-                <div class="chartOption-container">
-                    <div class="chartOption" *ngFor="let property of selectedProperties">
-                        <p-chart type="line" [data]="chartData[property]" [options]="chartOptions" 
-                            style="width: 70%; max-width: 50%; height: 100%;" class="h-[40rem]" >
-                        </p-chart>
-                    </div>
+                <br>
+                <div *ngFor="let property of wineProperties" class="checkboxes">
+                    <p-checkbox [binary]="true" [name]="property.label" [value]="property.label"
+                        (onChange)="onCheckboxChange($event, property.label)"
+                        [ngModel]="selectedProperties.includes(property.label)" />
+                    &nbsp; {{property.label}}
                 </div>
-                
             </div>
-            
+
+            <!-- Gráficas organizadas en columna -->
+            <div class="chartOption-container">
+                <div class="chartOption" *ngFor="let property of selectedProperties">
+                    <p-chart type="line" [data]="chartData[property]" [options]="chartOptions"
+                        style="width: 70%; max-width: 50%; height: 100%;" class="h-[40rem]">
+                    </p-chart>
+                </div>
+            </div>
+
+        </div>
+
+        }
+        <!--Calendar-->
+        @if(isCalendarVisible){
+            <div class="calendar">
+                <full-calendar [options]="calendarOptions"></full-calendar>
+            </div>
+        
         }
     </div>
 
-    
+
+
+
 </div>

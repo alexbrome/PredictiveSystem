@@ -240,4 +240,10 @@ getWinesByUserId(){
   );
  }
 
+//Check if form is completed
+isFormIncomplete(): boolean {
+  return this.wineForm.invalid;
+}
+
+
 }

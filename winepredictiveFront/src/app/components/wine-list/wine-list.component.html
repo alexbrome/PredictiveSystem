@@ -55,6 +55,9 @@
             </td>
         </tr>
     </ng-template>
+    <div class="card flex justify-center">
+        <p-paginator (onPageChange)="onPageChange($event)" [first]="1" [rows]="4" [totalRecords]="wines.length" [rowsPerPageOptions]="[10, 20, 30]" />
+    </div>
 </p-table>
 </div>
 

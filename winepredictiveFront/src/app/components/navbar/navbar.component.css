@@ -12,8 +12,9 @@ i{
 }
 .avatar{
     display: flex;
-    gap: 10%;
     align-items: center;
+    gap: 1rem;
+    white-space: nowrap;
 }
 
 #title-start{
@@ -25,6 +26,16 @@ i{
 }
 p-toolbar{
 animation: slideInFromBottom 6s ease-out  forwards;
+}
+
+.logout-container {
+    display: flex;
+    align-items: center;
+}
+.userName {
+    color: white;
+    font-weight: bold;
+    white-space: nowrap;
 }
 
 /*Animation from bottom*/

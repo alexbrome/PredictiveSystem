@@ -269,3 +269,34 @@ p-chart {
   box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.7);
   text-align: center;
 }
+
+/*Calendar*/
+.calendar {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 2rem;
+  width: 70%;
+  height: cal(100vh - 20%); /* ocupa toda la altura de la ventana */
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+::ng-deep .fc {
+  width:80%;
+  max-width: 70%;
+  height: auto;
+}
+
+::ng-deep .fc-view-harness {
+  min-height: 50vh;
+}
+
+::ng-deep .fc-daygrid-body {
+  height: auto !important;
+}
+
+::ng-deep .fc-scrollgrid {
+  overflow: visible !important;
+}
+

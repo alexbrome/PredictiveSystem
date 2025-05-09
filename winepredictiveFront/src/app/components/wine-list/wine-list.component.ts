@@ -18,6 +18,7 @@ import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { Router } from '@angular/router';
 import { Measure } from '../../models/Measure';
 import { MeasureService } from '../../services/measure.service';
+import { PaginatorModule, PaginatorState } from 'primeng/paginator';
 
 
 
@@ -35,7 +36,8 @@ import { MeasureService } from '../../services/measure.service';
     CalendarModule,
     ToastModule,
     CommonModule,
-    ConfirmDialogModule
+    ConfirmDialogModule,
+    PaginatorModule
   ],
   templateUrl: './wine-list.component.html',
   styleUrls: ['./wine-list.component.css'],
@@ -43,10 +45,13 @@ import { MeasureService } from '../../services/measure.service';
 })
 export class WineListComponent implements OnInit {
 
+  //Variables for paginator
+  first: number = 0;
+  rows: number = 10;
 
   //Variables to create new wine
   date: Date = new Date();
-  idUser: any = StorageService.getUserId();
+  idUser: any ;
   user: any = {};
   wineToSave: Wine = new Wine();
  
@@ -69,10 +74,12 @@ export class WineListComponent implements OnInit {
     private messageService: MessageService,
   private confirmationService: ConfirmationService,
   private router: Router,
-private measureService:MeasureService) { }
+private measureService:MeasureService,
+private storageService:StorageService) { }
 
 
   ngOnInit(): void {
+    this.idUser = StorageService.getUser().id;
     this.getUserById();
     this.getWinesByUserId();
   this.user = {};
@@ -238,4 +245,11 @@ createMeasure() {
     }
   );
 }
+
+//Paginator
+onPageChange(event: PaginatorState) {
+  this.first = event.first ?? 0;
+  this.rows = event.rows ?? 10;
+}
+
 }
