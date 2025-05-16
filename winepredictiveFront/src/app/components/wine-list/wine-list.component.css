@@ -24,12 +24,13 @@ p-button {
     animation: slideInFromBottom 1s ease-in forwards;
 }
 
+tr{
+    max-height: 0.2%;
+}
 
-
-td {
- 
-   
+#columnsTemplate{
     flex: 1;
+    max-height: 0.2%;
 }
 .th{
     justify-content: center;

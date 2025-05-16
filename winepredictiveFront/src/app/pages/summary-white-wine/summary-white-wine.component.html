@@ -18,14 +18,14 @@
                     <div class="prediction-bar">
                         <p-button (click)="toggleVisibility($event)" label="Select Wine" severity="contrast"
                             class="select-wine-button"></p-button>
-                            @if(!isCalendarVisible){
+                           
                         <p-toggleButton [(ngModel)]="isChartVisible" onLabel="View-Table" offLabel="View-Chart"
-                            [onIcon]="'pi pi-chart-line'" [offIcon]="'pi pi-table'" styleClass="mr-2">
-                        </p-toggleButton>}
+                            [onIcon]="'pi pi-chart-line'" [offIcon]="'pi pi-table'" styleClass="mr-2"  [hidden]="isCalendarVisible">
+                        </p-toggleButton>
                         <p-button (click)="toggleCalendar()" label="Measure-Calendar" icon="pi pi-calendar" class="mr-2"
                             [severity]="isCalendarVisible ? 'primary' : 'contrast'">
                         </p-button>
-
+                       
                         <!----------- Clean Table button-------->
                         <div class="left-content">
                             @if(!isChartVisible && !isCalendarVisible){
@@ -35,10 +35,11 @@
                             <span id="prediction">Chart</span>
                             }
                             <span id="wineName">{{ selectedWine?.name }}</span>
-                        </div>
-                        @if(!isChartVisible){
-                        <p-button label="Clean Table" [outlined]="true" severity="contrast" (click)="deleteTable()" />
-                        }
+                        </div>        
+                        @if(selectedWine?.name){           
+                        <p-button (click)="onGeneratePDF()" label="PDF" icon="pi pi-file-pdf" class="mr-2"
+                            severity="danger">
+                        </p-button>}
                     </div>
                 </ng-template>
 

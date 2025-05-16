@@ -276,7 +276,7 @@ p-chart {
   justify-content: center;
   align-items: center;
   padding: 2rem;
-  width: 70%;
+  width: 90%;
   height: cal(100vh - 20%); /* ocupa toda la altura de la ventana */
   box-sizing: border-box;
   overflow: hidden;

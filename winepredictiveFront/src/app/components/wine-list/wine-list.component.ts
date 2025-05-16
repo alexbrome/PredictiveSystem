@@ -82,7 +82,9 @@ private storageService:StorageService) { }
     this.idUser = StorageService.getUser().id;
     this.getUserById();
     this.getWinesByUserId();
-  this.user = {};
+   
+    
+    this.user = {};
   }
 
   getUserById() {
@@ -103,7 +105,9 @@ private storageService:StorageService) { }
         this.wines.forEach(wine => {
           // Asign most current quality
           wine.quality = this.getLatestQuality(wine);
-
+          
+          console.log(wine);
+          
         });
 
       },
@@ -160,10 +164,10 @@ private storageService:StorageService) { }
   }
 
   deleteWine(id: any) {
- console.log("Delete wine, id del vino a eliminar: ", id);
+
  
     this.confirmationService.confirm({
-      message: '¿Are you sure to delete this prediction?',
+      message: '¿Are you sure to delete this wine?',
       header: 'Confirm',
       icon: 'pi pi-exclamation-triangle',
       accept: () => {

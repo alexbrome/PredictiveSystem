@@ -35,7 +35,7 @@
     </ng-template>
 
     <!-------Table Columns-------->
-    <ng-template pTemplate="body" let-wine>
+    <ng-template pTemplate="body" let-wine id="columnsTemplate">
         <tr>
             <td>{{ wine.dateCreated | date:'dd/MM/yyyy HH:mm'}}</td>
             <td>{{ wine.name }}</td>
@@ -43,7 +43,7 @@
                 @if(wine.quality){
                 <p-rating [(ngModel)]="wine.quality" [cancel]="false" [stars]="8" [disabled]="true"></p-rating>
             }@else{
-                <h4>No Data Predictions yet</h4>
+                <b>No Data Predictions yet</b>
             }
             </td>
             <!----------Button delete----------->

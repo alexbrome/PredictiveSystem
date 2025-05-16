@@ -30,6 +30,8 @@ import { FullCalendarModule } from '@fullcalendar/angular';
 import { CalendarOptions } from '@fullcalendar/core'; // useful for typechecking
 import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin, { DateClickArg } from '@fullcalendar/interaction';
+import  generatePDF  from '../../PDF/pdfWines'; // Importa la función de generación de PDF
+import { UserService } from '../../services/user.service';
 
 
 
@@ -69,7 +71,7 @@ export class SummaryWhiteWineComponent implements OnInit {
   selectedPredictionDates: string[] = [];
   wineName: any = null;
   idUser: any;
-
+  user:any = {}
   /*Dropodown values*/
   wineProperties = [
     { label: "Fixed Acidity", value: "fixedAcidity" },
@@ -138,9 +140,21 @@ export class SummaryWhiteWineComponent implements OnInit {
     private dataSharingService: DataSharingService, private router: Router,
     private chatService: ChatServiceService, private datePipe: DatePipe,
     private measureService: MeasureService,
+    private userService: UserService,
   ) { }
 
   ngOnInit(): void {
+     this.userService.getUserById(+StorageService.getUser().id).subscribe(
+       (user: string) => {
+         this.user= user;
+       },
+       (error) => {
+         console.error('Error fetching user name:', error);
+       }
+     );
+     console.log("UserName: ", this.user);
+     
+    
     // Initialize chart options
     this.selectedProperties = this.wineProperties.map(property => property.label);
     this.selectedProperty = this.wineProperties.map(property => property.value);
@@ -160,7 +174,7 @@ export class SummaryWhiteWineComponent implements OnInit {
 
     //Load Measures by idwine
     this.fetchMeasures(wineId ?? 0);
-    
+
     //Calendar options view
     Chart.register(annotationPlugin);
 
@@ -224,6 +238,8 @@ export class SummaryWhiteWineComponent implements OnInit {
 
   //Get selected wine 
   onWineSelect(selectedWine: any): void {
+    console.log('Selected Wine:', this.selectedWine);
+    
     this.fetchMeasures(this.selectedWine.id); // Fetch measures for the selected wine
     if (!selectedWine) return;
 
@@ -487,20 +503,43 @@ export class SummaryWhiteWineComponent implements OnInit {
   private updateCalendarEventsFromMeasures(): void {
     this.calendarEvents = this.measures.map(measure => ({
       title: measure.description,
-      date: this.datePipe.transform(measure.created, 'yyyy-MM-dd'), // Asegúrate que `measure.date` sea tipo Date o ISO string
-     // allDay: true
+      date: this.datePipe.transform(measure.created, 'yyyy-MM-dd'), 
+    
     }));
-/*
-    this.calendarOptions = {
-      ...this.calendarOptions,
-      events: this.calendarEvents
-    };*/
-   
+    // Actualiza las opciones del calendario con los eventos
     this.calendarOptions.events = this.calendarEvents;
     console.log("Calendar Events: ", this.calendarEvents);
-   
-    
-    
   }
+
+  //Generate Logo For PDF from IMAGEN
+  getBase64ImageFromAssets(path: string): Promise<string> {
+    return new Promise((resolve, reject) => {
+      const img = new Image();
+      img.crossOrigin = 'Anonymous';
+      img.src = path;
+      img.onload = () => {
+        const canvas = document.createElement('canvas');
+        canvas.width = img.width;
+        canvas.height = img.height;
+        const ctx = canvas.getContext('2d');
+        ctx?.drawImage(img, 0, 0);
+        const dataURL = canvas.toDataURL('../../images/Color-del-vino.png.png');
+        resolve(dataURL);
+      };
+      img.onerror = error => reject(error);
+    });
+  }
+
+  onGeneratePDF() {
+
+    this.getBase64ImageFromAssets('../../images/vino_g.jpg').then(base64 => {
+      generatePDF(this.wines, this.user.name, this.datePipe.transform(new Date(), 'dd/MM/yyyy')!, this.selectedWine.name, this.selectedWine.winePredictions, base64);
+    });
+   // generatePDF(this.wines, this.user.name, this.datePipe.transform(new Date(), 'dd/MM/yyyy')!, this.selectedWine.name, this.selectedWine.winePredictions);
+   
+  }
+
+
+
 
 }
