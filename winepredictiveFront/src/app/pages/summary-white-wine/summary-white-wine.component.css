@@ -300,3 +300,8 @@ p-chart {
   overflow: visible !important;
 }
 
+.text-left {
+  text-align: left !important;
+}
+
+

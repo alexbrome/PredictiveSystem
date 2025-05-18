@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { AbstractControl, FormControl, FormGroup, ReactiveFormsModule, ValidatorFn, Validators } from '@angular/forms';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { ButtonModule } from 'primeng/button';
 import { HttpClient } from '@angular/common/http';
@@ -48,19 +48,74 @@ export class WhiteWinePageComponent implements OnInit{
   wineForm: FormGroup;
 
   /*form fields*/
-  fixed_acidity: FormControl = new FormControl('',[Validators.required,Validators.min(0)])
-  volatile_acidity: FormControl = new FormControl('',[Validators.required,Validators.min(0)])
-  citric_acidity: FormControl = new FormControl('',[Validators.required,Validators.min(0)])
-  residual_sugar: FormControl = new FormControl('',[Validators.required,Validators.min(0)])
-  chlorides: FormControl = new FormControl('',[Validators.required,Validators.min(0)])
-  free_sulfur_dioxide: FormControl = new FormControl('',[Validators.required,Validators.min(0)])
-  total_sulfur_dioxide: FormControl = new FormControl('',[Validators.required,Validators.min(0)])
-  density: FormControl = new FormControl('',[Validators.required,Validators.min(0)])
-  ph: FormControl = new FormControl('',[Validators.required,Validators.min(0)])
-  sulphates: FormControl = new FormControl('',[Validators.required,Validators.min(0)])
-  alcohol: FormControl = new FormControl('',[Validators.required,Validators.min(0)])
+  fixed_acidity: FormControl = new FormControl('', [
+    Validators.required,
+    Validators.min(0),
+    this.maxDigitsValidator(5)
+  ]);
+  
+  volatile_acidity: FormControl = new FormControl('', [
+    Validators.required,
+    Validators.min(0),
+    this.maxDigitsValidator(5)
+  ]);
+  
+  citric_acidity: FormControl = new FormControl('', [
+    Validators.required,
+    Validators.min(0),
+    this.maxDigitsValidator(5)
+  ]);
+  
+  residual_sugar: FormControl = new FormControl('', [
+    Validators.required,
+    Validators.min(0),
+    this.maxDigitsValidator(5)
+  ]);
+  
+  chlorides: FormControl = new FormControl('', [
+    Validators.required,
+    Validators.min(0),
+    this.maxDigitsValidator(5)
+  ]);
+  
+  free_sulfur_dioxide: FormControl = new FormControl('', [
+    Validators.required,
+    Validators.min(0),
+    this.maxDigitsValidator(5)
+  ]);
+  
+  total_sulfur_dioxide: FormControl = new FormControl('', [
+    Validators.required,
+    Validators.min(0),
+    this.maxDigitsValidator(5)
+  ]);
+  
+  density: FormControl = new FormControl('', [
+    Validators.required,
+    Validators.min(0),
+    this.maxDigitsValidator(5)
+  ]);
+  
+  ph: FormControl = new FormControl('', [
+    Validators.required,
+    Validators.min(0),
+    this.maxDigitsValidator(5)
+  ]);
+  
+  sulphates: FormControl = new FormControl('', [
+    Validators.required,
+    Validators.min(0),
+    this.maxDigitsValidator(5)
+  ]);
+  
+  alcohol: FormControl = new FormControl('', [
+    Validators.required,
+    Validators.min(0),
+    this.maxDigitsValidator(5)
+  ]);
   quality: any = 0;
   
+
   ngOnInit(): void {
     this.getWinesByUserId();
     this.wineForm.reset();
@@ -103,18 +158,23 @@ export class WhiteWinePageComponent implements OnInit{
   /*Submit form*/
  
 handleSubmit() {
+  // Verify if a wine has been been selected
   if(this.selectedWine.invalid){
     
     //Valid Form
     this.messageService.add({ severity: 'error', summary: 'error', detail: 'Must fill out wine name field' });
   } else {
+    //Valid Form
     if (this.wineForm.invalid ) {
       this.messageService.add({ severity: 'error', summary: 'error', detail: 'Must fill out all fields' });
-    } else {
+
+    } 
+    //Valid Form
+    else {
       this.loading = true; // Mostrar spinner
 
       const formData = this.wineForm.value;
-
+      // Data to send IA API
       const dataToSend = [
         parseFloat(formData.fixed_acidity || '0'),
         parseFloat(formData.volatile_acidity || '0'),
@@ -128,15 +188,15 @@ handleSubmit() {
         parseFloat(formData.sulphates || '0'),
         parseFloat(formData.alcohol || '0'),
       ];
-
+      // Data to send python API
       this.whiteWineQualityService.predictWineQuality(dataToSend).subscribe(
         (response: { quality: Number; }) => {
           this.quality = response.quality;
-
+          // Save the quality in the predictionData object
           this.dataSharingService.setNameWine(this.selectWineFormGroup.value);
           this.dataSharingService.setWhiteWineData(dataToSend);
           this.dataSharingService.setWhiteWineQualityPredicted(this.quality);
-
+         // set 5 seconds to predict quality
           setTimeout(() => { 
             this.loading = false; // hide spinner
             this.router.navigate(['whiteWine-page/whiteWineCharts']);
@@ -215,7 +275,7 @@ handleSubmit() {
               // Redirige después de que el spinner haya desaparecido
               this.router.navigate(['/summaryWhite', this.selectedWine.value.id]);
            //   this.router.navigate(['/chat', predictionId]);
-              this.messageService.add({ severity: 'success', summary: 'Éxito', detail: '¡Predicción guardada con éxito!' });
+              this.messageService.add({ severity: 'success', summary: 'Éxito', detail: '¡Prediction sabed successfully!' });
             }, 5000);
           }
         );
@@ -245,5 +305,19 @@ isFormIncomplete(): boolean {
   return this.wineForm.invalid;
 }
 
+//Validator for max digits
+ maxDigitsValidator(maxDigits: number): ValidatorFn {
+  return (control: AbstractControl) => {
+    if (control.value == null) return null;
+
+    const onlyDigits = control.value.toString().replace(/\D/g, '');
+
+    return onlyDigits.length > maxDigits
+      ? { maxDigits: { requiredLength: maxDigits, actualLength: onlyDigits.length } }
+      : null;
+  };
+}
 
 }
+
+

@@ -39,8 +39,8 @@ const generatePDF = (
 
   const predictions = [
     [
-      { text: "Fixed Acidity", style: "tableHeader" },
      
+      { text: "Fixed Acidity", style: "tableHeader" },
       { text: "Free sulfurDioxide", style: "tableHeader" },
       { text: "Redisual Sugar", style: "tableHeader" },
       { text: "Sulphates", style: "tableHeader" },
@@ -54,8 +54,8 @@ const generatePDF = (
     ...winePredictions.map((winePrediciton) => {
 
       return [
+       
         winePrediciton.fixedAcidity || '',
-        
         winePrediciton.freeSulfurDioxide || '',
         winePrediciton.residualSugar || '',
         winePrediciton.sulphates || '',
@@ -172,7 +172,7 @@ const generatePDF = (
     pageOrientation: 'landscape'
   };
 
-  pdfMake.createPdf(docDefinition).open();
+  pdfMake.createPdf(docDefinition).download(`Report-${wineName}-${fecha}.pdf`);
 };
 
 export default generatePDF;

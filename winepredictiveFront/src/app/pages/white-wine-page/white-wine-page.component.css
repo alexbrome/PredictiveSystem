@@ -95,3 +95,7 @@ h1{
   b{
     color: red;
   }
+
+  .text-danger{
+    color: red;
+  }

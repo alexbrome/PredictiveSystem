@@ -228,6 +228,26 @@
         }
     </div>
 
+    <p-dialog header="Measure Data" [draggable]="true" [resizable]="true" [modal]="true" 
+    [(visible)]="isMeasureDialogVisible" [style]="{ width: '50rem', height: '50rem' }">
+
+    <p-table [value]="events">
+        <ng-template pTemplate="header">
+          <tr>
+            <th class="text-left">Date</th>
+            <th class="text-left">Title</th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-event>
+          <tr>
+            <td class="text-left">{{ event.date | date:'short' }}</td>
+            <td class="text-left">{{ event.title }}</td>
+          </tr>
+        </ng-template>
+      </p-table>
+      
+
+</p-dialog>
 
 
 

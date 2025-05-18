@@ -5,7 +5,7 @@ import { TableModule } from 'primeng/table';
 import { WineService } from '../../services/wine.service';
 import { ButtonModule } from 'primeng/button';
 import { RatingModule } from 'primeng/rating';
-import { FormGroup, FormsModule } from '@angular/forms';
+import { AbstractControl, FormGroup, FormsModule, ValidatorFn } from '@angular/forms';
 import { DialogModule } from 'primeng/dialog';
 import { InputTextModule } from 'primeng/inputtext';
 import { FloatLabelModule } from 'primeng/floatlabel';
@@ -64,7 +64,7 @@ export class WineListComponent implements OnInit {
   //Creating Measure
   createMeasureDialogVisible: boolean = false;
   measureDate:any = new Date();
-  measureDescription: string = '';
+  measureDescription: any = '';
   selectedWineId: number = 0;
   measureToSave: Measure = new Measure(this.measureDescription, this.measureDate, this.selectedWineId);
 
@@ -254,6 +254,19 @@ createMeasure() {
 onPageChange(event: PaginatorState) {
   this.first = event.first ?? 0;
   this.rows = event.rows ?? 10;
+}
+
+//Validator for maximun characters
+ maxDigitsValidator(maxDigits: number): ValidatorFn {
+  return (control: AbstractControl) => {
+    if (control.value == null) return null;
+
+    const onlyDigits = control.value.toString().replace(/\D/g, '');
+
+    return onlyDigits.length > maxDigits
+      ? { maxDigits: { requiredLength: maxDigits, actualLength: onlyDigits.length } }
+      : null;
+  };
 }
 
 }

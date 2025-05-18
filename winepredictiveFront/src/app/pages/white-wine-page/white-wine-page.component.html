@@ -41,57 +41,91 @@
                 <h4>Fixed Acidity</h4>
                 <p-inputNumber placeholder="g/dm^3" formControlName="fixed_acidity" mode="decimal"
                     [minFractionDigits]="0" [maxFractionDigits]="7" inputId="decimalOnly" [useGrouping]="false" />
+                    <div class="text-danger" *ngIf="wineForm.get('fixed_acidity')?.errors?.['maxDigits'] && wineForm.get('fixed_acidity')?.touched">
+                        5 numbers maximum 
+                      </div>
             </div>
             <!--volatile acidity-->
             <div>
                 <h4>Volatile Acidity</h4>
                 <p-inputNumber placeholder="g/dm^3" formControlName="volatile_acidity" mode="decimal"
                     [minFractionDigits]="0" [maxFractionDigits]="7" inputId="decimalOnly" [useGrouping]="false" />
+                    <!--Validation-->
+                    <div class="text-danger" *ngIf="wineForm.get('volatile_acidity')?.errors?.['maxDigits'] && wineForm.get('fixed_acidity')?.touched">
+                        5 numbers maximum 
+                      </div>
             </div>
             <div>
                 <h4>Citric Acidity</h4>
                 <p-inputNumber placeholder="g/dm^3" formControlName="citric_acidity" mode="decimal"
                     [minFractionDigits]="0" [maxFractionDigits]="7" inputId="decimalOnly" [useGrouping]="false" />
+                    <div class="text-danger" *ngIf="wineForm.get('citric_acidity')?.errors?.['maxDigits'] && wineForm.get('fixed_acidity')?.touched">
+                        5 numbers maximum 
+                      </div>
             </div>
             <div>
                 <h4>Residual sugar Acidity</h4>
                 <p-inputNumber placeholder="g/dm^3" formControlName="residual_sugar" mode="decimal"
                     [minFractionDigits]="0" [maxFractionDigits]="7" inputId="decimalOnly" [useGrouping]="false" />
+                    <div class="text-danger" *ngIf="wineForm.get('residual_sugar')?.errors?.['maxDigits'] && wineForm.get('fixed_acidity')?.touched">
+                        5 numbers maximum 
+                      </div>
             </div>
             <div>
                 <h4>Chlorides</h4>
                 <p-inputNumber placeholder="g/dm^3" formControlName="chlorides" mode="decimal" [minFractionDigits]="0"
                     [maxFractionDigits]="7" inputId="decimalOnly" [useGrouping]="false" />
+                    <div class="text-danger" *ngIf="wineForm.get('chlorides')?.errors?.['maxDigits'] && wineForm.get('fixed_acidity')?.touched">
+                        5 numbers maximum 
+                      </div>
             </div>
             <div>
                 <h4>Free sulfur dioxide</h4>
                 <p-inputNumber placeholder="g/dm^3" formControlName="free_sulfur_dioxide" mode="decimal"
                     [minFractionDigits]="0" [maxFractionDigits]="7" inputId="decimalOnly" [useGrouping]="false" />
+                    <div class="text-danger" *ngIf="wineForm.get('free_sulfur_dioxide')?.errors?.['maxDigits'] && wineForm.get('fixed_acidity')?.touched">
+                        5 numbers maximum 
+                      </div>
             </div>
             <div>
                 <h4>Total sulfur dioxide</h4>
                 <p-inputNumber placeholder="g/dm^3" formControlName="total_sulfur_dioxide" mode="decimal"
                     [minFractionDigits]="0" [maxFractionDigits]="7" inputId="decimalOnly" [useGrouping]="false" />
+                    <div class="text-danger" *ngIf="wineForm.get('total_sulfur_dioxide')?.errors?.['maxDigits'] && wineForm.get('fixed_acidity')?.touched">
+                        5 numbers maximum 
+                      </div>
             </div>
             <div>
                 <h4>Density</h4>
                 <p-inputNumber placeholder="g/dm^3" formControlName="density" mode="decimal" [minFractionDigits]="0"
                     [maxFractionDigits]="7" inputId="decimalOnly" [useGrouping]="false" />
+                    <div class="text-danger" *ngIf="wineForm.get('density')?.errors?.['maxDigits'] && wineForm.get('fixed_acidity')?.touched">
+                        5 numbers maximum 
+                      </div>
             </div>
             <div>
                 <h4>PH</h4>
                 <p-inputNumber placeholder="g/dm^3" formControlName="ph" mode="decimal" [minFractionDigits]="0"
                     [maxFractionDigits]="7" inputId="decimalOnly" [useGrouping]="false" />
+                    <div class="text-danger" *ngIf="wineForm.get('ph')?.errors?.['maxDigits'] && wineForm.get('fixed_acidity')?.touched">
+                        5 numbers maximum 
+                      </div>
             </div>
             <div>
                 <h4>Sulphates</h4>
                 <p-inputNumber placeholder="g/dm^3" formControlName="sulphates" mode="decimal" [minFractionDigits]="0"
                     [maxFractionDigits]="7" inputId="decimalOnly" [useGrouping]="false" />
+                    <div class="text-danger" *ngIf="wineForm.get('sulphates')?.errors?.['maxDigits'] && wineForm.get('fixed_acidity')?.touched">
+                        5 numbers maximum 
+                      </div>
             </div>
             <div>
                 <h4>Alcohol</h4>
                 <p-inputNumber placeholder="%100ml" formControlName="alcohol" mode="decimal" [minFractionDigits]="0"
                     [maxFractionDigits]="7" inputId="decimalOnly" [useGrouping]="false" />
+                    <div class="text-danger" *ngIf="wineForm.get('alcohol')?.errors?.['maxDigits'] && wineForm.get('fixed_acidity')?.touched">
+                        5 numbers maximum 
+                      </div>
             </div>
             <button id="submit-button" [raised]="true"  pButton pRipple label="Save Prediction" severity="secondary"
                 class="p-button-info">

@@ -27,11 +27,12 @@ import { Measure } from '../../models/Measure';
 import { Chart, ChartData, ChartOptions, TooltipItem } from 'chart.js';
 import annotationPlugin from 'chartjs-plugin-annotation';
 import { FullCalendarModule } from '@fullcalendar/angular';
-import { CalendarOptions } from '@fullcalendar/core'; // useful for typechecking
+import { CalendarOptions, EventSourceInput } from '@fullcalendar/core'; // useful for typechecking
 import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin, { DateClickArg } from '@fullcalendar/interaction';
 import  generatePDF  from '../../PDF/pdfWines'; // Importa la función de generación de PDF
 import { UserService } from '../../services/user.service';
+import { DialogModule } from 'primeng/dialog';
 
 
 
@@ -53,7 +54,8 @@ import { UserService } from '../../services/user.service';
     ToastModule,
     DropdownModule,
     CheckboxModule,
-    FullCalendarModule
+    FullCalendarModule,
+    DialogModule
   ],
   providers: [ConfirmationService, MessageService, DatePipe],
   templateUrl: './summary-white-wine.component.html',
@@ -71,7 +73,11 @@ export class SummaryWhiteWineComponent implements OnInit {
   selectedPredictionDates: string[] = [];
   wineName: any = null;
   idUser: any;
-  user:any = {}
+  user:any = {};
+  isMeasureDialogVisible: boolean = false;
+  //events to show at calendar dat dialog
+   events: any[] = [];
+
   /*Dropodown values*/
   wineProperties = [
     { label: "Fixed Acidity", value: "fixedAcidity" },
@@ -129,7 +135,10 @@ export class SummaryWhiteWineComponent implements OnInit {
     };
   
     handleDateClick(arg: DateClickArg) {
-      alert('date click! ' + arg.dateStr)
+      this.isMeasureDialogVisible = true;
+      this.events = this.calendarEvents.filter(event => event.date === arg.dateStr);
+      console.log("Clicked date: ", this.events);
+      
     }
 
 
@@ -287,6 +296,7 @@ export class SummaryWhiteWineComponent implements OnInit {
     }
   }
 
+  //delete prediction
   deletePrediction(id: number) {
     this.confirmationService.confirm({
       message: '¿Are you sure to delete this prediction?',
@@ -314,6 +324,7 @@ export class SummaryWhiteWineComponent implements OnInit {
 
   }
 
+  /*No use For Now
   goToPredictionChart(id: number): void {
     // Get wineselected by ID
     const selectedPrediction = this.winePrectionsList.find(prediction => prediction.id === id);
@@ -347,8 +358,9 @@ export class SummaryWhiteWineComponent implements OnInit {
     } else {
       console.error('Prediction not found');
     }
-  }
+  }*/
 
+//Go to chat page
   goToIAChat(predictionId: number) {
     this.router.navigate(['/chat', predictionId]);
   }
@@ -477,7 +489,7 @@ export class SummaryWhiteWineComponent implements OnInit {
     }
   }
 
-
+//Fetch Measures by wineId
   fetchMeasures(wineId: number): void {
     this.measureService.getMeasuresByWineId(wineId).subscribe(
       (data: Measure[]) => {
@@ -500,6 +512,7 @@ export class SummaryWhiteWineComponent implements OnInit {
 
   }
 
+//View of Chart
   private updateCalendarEventsFromMeasures(): void {
     this.calendarEvents = this.measures.map(measure => ({
       title: measure.description,
@@ -530,12 +543,12 @@ export class SummaryWhiteWineComponent implements OnInit {
     });
   }
 
+  //Generate PDF
   onGeneratePDF() {
-
     this.getBase64ImageFromAssets('../../images/vino_g.jpg').then(base64 => {
       generatePDF(this.wines, this.user.name, this.datePipe.transform(new Date(), 'dd/MM/yyyy')!, this.selectedWine.name, this.selectedWine.winePredictions, base64);
     });
-   // generatePDF(this.wines, this.user.name, this.datePipe.transform(new Date(), 'dd/MM/yyyy')!, this.selectedWine.name, this.selectedWine.winePredictions);
+   
    
   }
 
