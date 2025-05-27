@@ -34,7 +34,7 @@ export class LoginComponent {
       email:["",[Validators.email,Validators.required]],
       password:["",[Validators.required,Validators.minLength(8)]]
     })
-    StorageService.saveUser(null);
+    //StorageService.saveUser(null);
   }
 
 

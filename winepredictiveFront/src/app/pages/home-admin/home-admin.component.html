@@ -1,132 +1,91 @@
 <p-confirmDialog></p-confirmDialog>
 <p-toast></p-toast>
+
 <div class="container">
   <!-- Left column -->
   <div class="column left">
     <div class="usersDiv">
       <h3>Users</h3>
-     <p-button label="New"  routerLink="/signup"  icon="pi pi-user" size="small" class="create-button" />
+      <p-button label="New" routerLink="/signup" icon="pi pi-user" size="small" class="create-button" />
     </div>
     <hr>
     <ul>
-      <li *ngFor="let user of users" (click)="selectUser(user)" [ngClass]="{'selected-user': selectedUser === user}" class="userList">
+      <li *ngFor="let user of users" (click)="selectUser(user)" [ngClass]="{ 'selected-user': selectedUser === user }" class="userList">
         <span>{{ user.name }}</span>&nbsp;&nbsp;
-        <p-button  icon="pi pi-trash" severity="danger" (click)="deleteUser(user.id)"/>
+        <p-button icon="pi pi-trash" severity="danger" (click)="deleteUser(user.id)" />
       </li>
     </ul>
   </div>
 
-  <!--  central Column-->
+  <!-- Central column -->
   <div class="column center">
     <h3>Wines</h3>
     <hr>
     <ul>
-      <li *ngFor="let wine of wines" (click)="selectWine(wine)" [ngClass]="{'selected-wine': selectedWine === wine}">
+      <li *ngFor="let wine of wines" (click)="selectWine(wine)" [ngClass]="{ 'selected-wine': selectedWine === wine }">
         {{ wine.name }}
       </li>
     </ul>
-
   </div>
 
   <!-- Right column -->
   <div class="column right">
     <h3>Wine Predictions</h3>
     <hr>
-    <div *ngFor="let prediction of predictions">
 
-      @if(predictionsIsEmpty == false){
-        <div class="prediction">
-          <table class="table">
-            <tr>
-            
-              <td><b>Date :</b></td>
-              <td><b>{{ prediction.dateCreated | date:'dd/MM/yyyy HH:mm' }}</b></td>
-            </tr>
-            <tr>
-              <td><b>Quality</b>:</td>
-              <td><b>{{ prediction.quality }}</b>&nbsp;&nbsp;
-                <p-rating [(ngModel)]= "prediction.quality" [readonly]="true" [stars]="9" [cancel]="false" />
-              </td>
-            </tr>
-            <tr>
-              <td colspan="2">
-                <button class="btn-info"   (click)="showDialogInfo(prediction)">Info</button>&nbsp;&nbsp;
-                <button class="btn-info" (click)="deleteWinePredictionById(prediction.id)">Delete</button>    
-                       <!--Dialog info Wine Prediction--> 
-                       <p-dialog header="Wine Prediction Info" [modal]="true" [(visible)]="dialogIsVisible" [style]="{ width: '25rem' }">
-                        <table border="1" style="width: 100%; border-collapse: collapse;">
-                          <thead>
-                            <tr>
-                              <th>Property</th>
-                              <th>Value</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            <tr>
-                              <td>Fixed Acidity</td>
-                              <td>{{ selectedPrediction.fixedAcidity }}</td>
-                            </tr>
-                            <tr>
-                              <td>Volatile Acidity</td>
-                              <td>{{ selectedPrediction.volatileAcidity }}</td>
-                            </tr>
-                            <tr>
-                              <td>Citric Acid</td>
-                              <td>{{ selectedPrediction.citricAcid }}</td>
-                            </tr>
-                            <tr>
-                              <td>Residual Sugar</td>
-                              <td>{{ selectedPrediction.residualSugar }}</td>
-                            </tr>
-                            <tr>
-                              <td>Chlorides</td>
-                              <td>{{ selectedPrediction.chlorides }}</td>
-                            </tr>
-                            <tr>
-                              <td>Free Sulfur Dioxide</td>
-                              <td>{{ selectedPrediction.freeSulfurDioxide }}</td>
-                            </tr>
-                            <tr>
-                              <td>Total Sulfur Dioxide</td>
-                              <td>{{ selectedPrediction.totalSulfureDioxide }}</td>
-                            </tr>
-                            <tr>
-                              <td>Density</td>
-                              <td>{{ selectedPrediction.density }}</td>
-                            </tr>
-                            <tr>
-                              <td>pH</td>
-                              <td>{{ selectedPrediction.ph }}</td>
-                            </tr>
-                            <tr>
-                              <td>Sulphates</td>
-                              <td>{{ selectedPrediction.sulphates }}</td>
-                            </tr>
-                            <tr>
-                              <td>Alcohol</td>
-                              <td>{{ selectedPrediction.alcohol }}</td>
-                            </tr>
-                            <tr>
-                              <td>Quality</td>
-                              <td>{{ selectedPrediction.quality }}</td>
-                            </tr>
-                            <tr>
-                              <td>Date Created</td>
-                              <td>{{ selectedPrediction.dateCreated | date:'dd/MM/yyyy HH:mm' }}</td>
-                            </tr>
-                          </tbody>
-                        </table>
-                      </p-dialog>
-                      
-              </td>
-            </tr>
-          </table>
-        </div>
-        
-      }@else{
+    @if (!predictionsIsEmpty) {
+      <div *ngFor="let prediction of predictions" class="prediction">
+        <table class="table">
+          <tr>
+            <td><b>Date :</b></td>
+            <td><b>{{ prediction.dateCreated | date:'dd/MM/yyyy HH:mm' }}</b></td>
+          </tr>
+          <tr>
+            <td><b>Quality</b>:</td>
+            <td>
+              <b>{{ prediction.quality }}</b>&nbsp;&nbsp;
+              <p-rating [(ngModel)]="prediction.quality" [readonly]="true" [stars]="9" [cancel]="false" />
+            </td>
+          </tr>
+          <tr>
+            <td colspan="2">
+              <button class="btn-info" (click)="showDialogInfo(prediction)">Info</button>&nbsp;&nbsp;
+              <button class="btn-info" (click)="deleteWinePredictionById(prediction.id)">Delete</button>
+
+              <!-- Dialog info Wine Prediction -->
+              <p-dialog header="Wine Prediction Info" [modal]="true" [(visible)]="dialogIsVisible" [style]="{ width: '25rem' }">
+                <table border="1" style="width: 100%; border-collapse: collapse;">
+                  <thead>
+                    <tr>
+                      <th>Property</th>
+                      <th>Value</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr><td>Fixed Acidity</td><td>{{ selectedPrediction.fixedAcidity }}</td></tr>
+                    <tr><td>Volatile Acidity</td><td>{{ selectedPrediction.volatileAcidity }}</td></tr>
+                    <tr><td>Citric Acid</td><td>{{ selectedPrediction.citricAcid }}</td></tr>
+                    <tr><td>Residual Sugar</td><td>{{ selectedPrediction.residualSugar }}</td></tr>
+                    <tr><td>Chlorides</td><td>{{ selectedPrediction.chlorides }}</td></tr>
+                    <tr><td>Free Sulfur Dioxide</td><td>{{ selectedPrediction.freeSulfurDioxide }}</td></tr>
+                    <tr><td>Total Sulfur Dioxide</td><td>{{ selectedPrediction.totalSulfureDioxide }}</td></tr>
+                    <tr><td>Density</td><td>{{ selectedPrediction.density }}</td></tr>
+                    <tr><td>pH</td><td>{{ selectedPrediction.ph }}</td></tr>
+                    <tr><td>Sulphates</td><td>{{ selectedPrediction.sulphates }}</td></tr>
+                    <tr><td>Alcohol</td><td>{{ selectedPrediction.alcohol }}</td></tr>
+                    <tr><td>Quality</td><td>{{ selectedPrediction.quality }}</td></tr>
+                    <tr><td>Date Created</td><td>{{ selectedPrediction.dateCreated | date:'dd/MM/yyyy HH:mm' }}</td></tr>
+                  </tbody>
+                </table>
+              </p-dialog>
+            </td>
+          </tr>
+        </table>
+      </div>
+    } @else {
       <b>No predictions so far</b>
-      }
-      <hr>
-    </div>
+    }
+
+    <hr>
   </div>
 </div>

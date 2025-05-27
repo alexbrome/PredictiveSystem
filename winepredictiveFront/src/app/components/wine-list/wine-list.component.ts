@@ -41,7 +41,7 @@ import { PaginatorModule, PaginatorState } from 'primeng/paginator';
   ],
   templateUrl: './wine-list.component.html',
   styleUrls: ['./wine-list.component.css'],
-  providers: [MessageService,ConfirmationService]
+  providers: [MessageService, ConfirmationService]
 })
 export class WineListComponent implements OnInit {
 
@@ -51,10 +51,10 @@ export class WineListComponent implements OnInit {
 
   //Variables to create new wine
   date: Date = new Date();
-  idUser: any ;
+  idUser: any;
   user: any = {};
   wineToSave: Wine = new Wine();
- 
+
 
   //Variables to list wines
   lista: any[] = [];
@@ -63,7 +63,7 @@ export class WineListComponent implements OnInit {
 
   //Creating Measure
   createMeasureDialogVisible: boolean = false;
-  measureDate:any = new Date();
+  measureDate: any = new Date();
   measureDescription: any = '';
   selectedWineId: number = 0;
   measureToSave: Measure = new Measure(this.measureDescription, this.measureDate, this.selectedWineId);
@@ -72,18 +72,18 @@ export class WineListComponent implements OnInit {
   constructor(private userService: UserService,
     private wineService: WineService,
     private messageService: MessageService,
-  private confirmationService: ConfirmationService,
-  private router: Router,
-private measureService:MeasureService,
-private storageService:StorageService) { }
+    private confirmationService: ConfirmationService,
+    private router: Router,
+    private measureService: MeasureService,
+    ) { }
 
 
   ngOnInit(): void {
     this.idUser = StorageService.getUser().id;
     this.getUserById();
     this.getWinesByUserId();
-   
-    
+
+
     this.user = {};
   }
 
@@ -105,9 +105,9 @@ private storageService:StorageService) { }
         this.wines.forEach(wine => {
           // Asign most current quality
           wine.quality = this.getLatestQuality(wine);
-          
+
           console.log(wine);
-          
+
         });
 
       },
@@ -136,6 +136,8 @@ private storageService:StorageService) { }
   createWine() {
     this.wineToSave.idUser = this.idUser;
 
+      if(this.wineToSave.name.length > 2){
+    
     // Service to save wine
     this.wineService.createWine(this.wineToSave).subscribe(
       (resp) => {
@@ -160,12 +162,12 @@ private storageService:StorageService) { }
           detail: 'Error saving wine'
         });
       }
-    );
+    );}
   }
 
   deleteWine(id: any) {
 
- 
+
     this.confirmationService.confirm({
       message: '¿Are you sure to delete this wine?',
       header: 'Confirm',
@@ -205,68 +207,75 @@ private storageService:StorageService) { }
     this.createWineDialogVisible = true;
   }
 
-  showDialogMeasure(wineId:number) {
+  showDialogMeasure(wineId: number) {
     this.selectedWineId = wineId;
     this.createMeasureDialogVisible = true;
 
-    }
+  }
 
-   goToSummary(id: any) {
-      this.router.navigate(['/summaryWhite',id]);
+  goToSummary(id: any) {
+    this.router.navigate(['/summaryWhite', id]);
 
-}
+  }
 
-createMeasure() {       
-  this.measureToSave.created = this.measureDate;
-  this.measureToSave.idWine = this.selectedWineId;
-  this.measureToSave.description = this.measureDescription;
-  console.log(this.measureToSave);
+  createMeasure() {
+    if (
+      this.measureDescription &&
+      this.measureDescription.trim().length >= 4 &&
+      this.measureDescription.trim().length <= 100
+    ) {
+      this.measureToSave.created = this.measureDate;
+      this.measureToSave.idWine = this.selectedWineId;
+      this.measureToSave.description = this.measureDescription.trim();
   
-  this.measureService.createMeasure(this.measureToSave).subscribe(
-    
-    
-    (resp) => {
-      console.log(resp);
-
-      // close modal
-      this.createMeasureDialogVisible = false;
-
-      //Sucess message
+      this.measureService.createMeasure(this.measureToSave).subscribe(
+        (resp) => {
+          console.log(resp);
+          this.createMeasureDialogVisible = false;
+  
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Success',
+            detail: '¡Measure saved successfully!'
+          });
+  
+          this.getWinesByUserId();
+        },
+        (error) => {
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Error',
+            detail: 'Error saving measure'
+          });
+        }
+      );
+    } else {
       this.messageService.add({
-        severity: 'success',
-        summary: 'Succes',
-        detail: '¡Measure saved successfully!'
-      });
-      this.getWinesByUserId();
-    },
-    //Error message
-    (error) => {
-      this.messageService.add({
-        severity: 'error',
-        summary: 'Error',
-        detail: 'Error saving measure'
+        severity: 'warn',
+        summary: 'Validation',
+        detail: 'Description must be between 4 and 100 characters.'
       });
     }
-  );
-}
+  }
+  
 
-//Paginator
-onPageChange(event: PaginatorState) {
-  this.first = event.first ?? 0;
-  this.rows = event.rows ?? 10;
-}
+  //Paginator
+  onPageChange(event: PaginatorState) {
+    this.first = event.first ?? 0;
+    this.rows = event.rows ?? 10;
+  }
 
-//Validator for maximun characters
- maxDigitsValidator(maxDigits: number): ValidatorFn {
-  return (control: AbstractControl) => {
-    if (control.value == null) return null;
+  //Validator for maximun characters
+  maxDigitsValidator(maxDigits: number): ValidatorFn {
+    return (control: AbstractControl) => {
+      if (control.value == null) return null;
 
-    const onlyDigits = control.value.toString().replace(/\D/g, '');
+      const onlyDigits = control.value.toString().replace(/\D/g, '');
 
-    return onlyDigits.length > maxDigits
-      ? { maxDigits: { requiredLength: maxDigits, actualLength: onlyDigits.length } }
-      : null;
-  };
-}
+      return onlyDigits.length > maxDigits
+        ? { maxDigits: { requiredLength: maxDigits, actualLength: onlyDigits.length } }
+        : null;
+    };
+  }
 
 }

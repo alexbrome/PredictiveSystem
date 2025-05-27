@@ -75,7 +75,8 @@ export class NavbarComponent implements OnInit, OnDestroy {
       header: 'Confirmation',
       icon: 'pi pi-exclamation-triangle',
       accept: () => {
-        StorageService.logout();
+        StorageService.logout(); 
+        window.localStorage.removeItem('USER');
         this.messageService.add({ severity: 'info', summary: 'Success', detail: 'You have LoggedOut' });
         this.router.navigateByUrl("/", { skipLocationChange: true }).then(() => {
           this.router.navigate([this.router.url]);

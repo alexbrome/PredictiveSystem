@@ -107,8 +107,9 @@
 
 
   <div class="buttons_container">
-    <h2>Select one property to improve??</h2><br><br>
-    <p-listbox [options]="filteredItems" [(ngModel)]="selectedProperty" class="w-full md:w-56" /><br><br>
+    <h2>Select one property to improve this wine</h2><br><br>
+    <p-listbox [options]="filteredItems" [(ngModel)]="selectedProperty" class="w-full md:w-56" 
+    /><br><br>
     <div>
       <p-button (onClick)="askAI(selectedProperty)">Ask AI</p-button>
     </div>
@@ -132,7 +133,8 @@
     </ul>
     <div class="bottom_wrapper clearfix">
       <div class="message_input_wrapper">
-        <input class="message_input" placeholder="Message..." [(ngModel)]="messageInput" />
+        <input class="message_input" placeholder="Message..." [(ngModel)]="messageInput" (keydown.enter)="sendMessage()" />
+
       </div>
       <div class="send_message" (click)="sendMessage()">
         <div class="icon"></div>

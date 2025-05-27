@@ -11,7 +11,9 @@
     <!----------------Section Right--------------------->
     <div id="sectionRight">
         <div class="card">
-            <p-table [value]="selectedPredictions" [tableStyle]="{'min-width': '60rem'}">
+            <p-table [value]="selectedPredictions" [tableStyle]="{'min-width': '60rem'}" [paginator]="true" [rows]="4"
+            [sortField]="'dateCreated'" [sortOrder]="-1" alwaysShowPaginator="false"
+            >
                 <ng-template pTemplate="caption" class="prediction-bar">
 
                     <!-------- 3 buttons container----------->
@@ -47,32 +49,32 @@
                     @if (!isChartVisible && !isCalendarVisible) {
                     <tr>
 
-                        <th>Date Created </th>
+                        <th pSortableColumn="dateCreated">Date Created </th>
                         <th>Fixed Acidity
-                            &nbsp;<i class="pi pi-info-circle" pTooltip="Values should be between 5 and 10"
+                            &nbsp;<i class="pi pi-info-circle" pTooltip="Values should be between 6 and 9"
                                 tooltipPosition="top"></i>
                         </th>
                         <th>Citric Acidity
-                            &nbsp;<i class="pi pi-info-circle" pTooltip="Values should be between 5 and 10"
+                            &nbsp;<i class="pi pi-info-circle" pTooltip="Values should be between 0.24 and 0.29"
                                 tooltipPosition="top"></i>
                         </th>
                         <th>Free Sulfur Dioxide&nbsp;<i class="pi pi-info-circle"
-                                pTooltip="Values should be between 5 and 10" tooltipPosition="top"></i></th>
+                                pTooltip="Values should be between 15 and 57" tooltipPosition="top"></i></th>
                         <th>Residual Sugar
-                            &nbsp;<i class="pi pi-info-circle" pTooltip="Values should be between 5 and 10"
+                            &nbsp;<i class="pi pi-info-circle" pTooltip="Values should be between 0.8 and 14"
                                 tooltipPosition="top"></i>
                         </th>
-                        <th>Sulphates&nbsp;<i class="pi pi-info-circle" pTooltip="Values should be between 5 and 10"
+                        <th>Sulphates&nbsp;<i class="pi pi-info-circle" pTooltip="Values should be between 0.31 and 0.8"
                                 tooltipPosition="top"></i></th>
                         <th>Total Sulfure Dioxide&nbsp;<i class="pi pi-info-circle"
-                                pTooltip="Values should be between 5 and 10" tooltipPosition="top"></i></th>
-                        <th>Ph&nbsp;<i class="pi pi-info-circle" pTooltip="Values should be between 5 and 10"
+                                pTooltip="Values should be between 83 and 202" tooltipPosition="top"></i></th>
+                        <th>Ph&nbsp;<i class="pi pi-info-circle" pTooltip="Values should be between 2.9 and 3.40"
                                 tooltipPosition="top"></i></th>
-                        <th>Chlorides&nbsp;<i class="pi pi-info-circle" pTooltip="Values should be between 5 and 10"
+                        <th>Chlorides&nbsp;<i class="pi pi-info-circle" pTooltip="Values should be between 0.018 and 0.121"
                                 tooltipPosition="top"></i></th>
-                        <th>Density&nbsp;<i class="pi pi-info-circle" pTooltip="Values should be between 5 and 10"
+                        <th>Density&nbsp;<i class="pi pi-info-circle" pTooltip="Values should be between 0.9 and 1"
                                 tooltipPosition="top"></i></th>
-                        <th>Alcohol&nbsp;<i class="pi pi-info-circle" pTooltip="Values should be between 5 and 10"
+                        <th>Alcohol&nbsp;<i class="pi pi-info-circle" pTooltip="Values should be between 8 and 13"
                                 tooltipPosition="top"></i></th>
 
 
@@ -92,50 +94,50 @@
                         <td>{{ prediction.dateCreated | date:'dd/MM/YYYY HH:mm'}}</td>
 
                         <td>{{prediction.fixedAcidity}}&nbsp;
-                            @if(prediction.fixedAcidity < 5 || prediction.fixedAcidity> 10){
-                                <i class="pi pi-info-circle" pTooltip="Warning!!Values usually are between 5 and 10"
+                            @if(prediction.fixedAcidity < 6 || prediction.fixedAcidity> 9){
+                                <i class="pi pi-info-circle" pTooltip="Warning!!Values usually are between 6 and 9"
                                     tooltipPosition="top" style="color: orange;"></i>
                                 }
                         </td>
                         <td>{{prediction.citricAcid}}&nbsp;
-                            @if(prediction.citricAcid < 0 || prediction.citricAcid> 0.5){
-                                <i class="pi pi-info-circle" pTooltip="Warning!!Values usually are between 0 and 0.5"
+                            @if(prediction.citricAcid < 0.24 || prediction.citricAcid> 0.29){
+                                <i class="pi pi-info-circle" pTooltip="Warning!!Values usually are between 0.24 and 0.29"
                                     tooltipPosition="top" style="color: orange;"></i>
                                 }
                         </td>
                         <td>{{prediction.freeSulfurDioxide}}&nbsp;
-                            @if(prediction.freeSulfurDioxide < 10 || prediction.freeSulfurDioxide> 80){
-                                <i class="pi pi-info-circle" pTooltip="Warning!!Values usually are between 0.1 and 0.7"
+                            @if(prediction.freeSulfurDioxide < 15 || prediction.freeSulfurDioxide> 57){
+                                <i class="pi pi-info-circle" pTooltip="Warning!!Values usually are between 15 and 57"
                                     tooltipPosition="top" style="color: orange;"></i>
                                 }
                         </td>
                         <td>{{prediction.residualSugar}}&nbsp;
-                            @if(prediction.residualSugar < 1 || prediction.residualSugar> 25){
-                                <i class="pi pi-info-circle" pTooltip="Warning!!Values usually are between 1 and 25"
+                            @if(prediction.residualSugar < 0.8 || prediction.residualSugar> 14){
+                                <i class="pi pi-info-circle" pTooltip="Warning!!Values usually are between 0.8 and 14"
                                     tooltipPosition="top" style="color: orange;"></i>
                                 }
                         </td>
                         <td>{{prediction.sulphates}}&nbsp;
-                            @if(prediction.sulphates < 0.1 || prediction.sulphates> 0.8){
-                                <i class="pi pi-info-circle" pTooltip="Warning!!Values usually are between 0.1 and 0.7"
+                            @if(prediction.sulphates < 0.31 || prediction.sulphates> 0.8){
+                                <i class="pi pi-info-circle" pTooltip="Warning!!Values usually are between 0.31 and 0.8"
                                     tooltipPosition="top" style="color: orange;"></i>
                                 }
                         </td>
                         <td>{{prediction.totalSulfureDioxide}}&nbsp;
-                            @if(prediction.totalSulfureDioxide < 50 || prediction.totalSulfureDioxide> 270){
-                                <i class="pi pi-info-circle" pTooltip="Warning!!Values usually are between 50 and 270"
+                            @if(prediction.totalSulfureDioxide < 83 || prediction.totalSulfureDioxide> 202){
+                                <i class="pi pi-info-circle" pTooltip="Warning!!Values usually are between 83 and 202"
                                     tooltipPosition="top" style="color: orange;"></i>
                                 }
                         </td>
-                        <td>{{prediction.ph}}&nbsp;
-                            @if(prediction.ph < 3 || prediction.ph> 4){
-                                <i class="pi pi-info-circle" pTooltip="Warning!!Values usually are between 3 and 4"
+                        <td class="ph">{{prediction.ph}}&nbsp;
+                            @if(prediction.ph < 2.9 || prediction.ph> 3.40){
+                                <i class="pi pi-info-circle" pTooltip="Warning!!Values usually are between 2.9 and 3.4"
                                     tooltipPosition="top" style="color: orange;"></i>
                                 }
                         </td>
                         <td>{{prediction.chlorides}}&nbsp;
-                            @if(prediction.chlorides < 0 || prediction.chlorides> 0.1){
-                                <i class="pi pi-info-circle" pTooltip="Warning!!Values usually are between 3 and 4"
+                            @if(prediction.chlorides < 0.018 || prediction.chlorides> 0.121){
+                                <i class="pi pi-info-circle" pTooltip="Warning!!Values usually are between 0.018  and 0.121"
                                     tooltipPosition="top" style="color: orange;"></i>
                                 }
                         </td>
@@ -147,7 +149,7 @@
                         </td>
                         <td>{{prediction.alcohol}}&nbsp;
                             @if(prediction.alcohol < 8 || prediction.alcohol> 13){
-                                <i class="pi pi-info-circle" pTooltip="Warning!!Values usually are between 8 and 12"
+                                <i class="pi pi-info-circle" pTooltip="Warning!!Values usually are between 8 and 13"
                                     tooltipPosition="top" style="color: orange;"></i>
                                 }
                         </td>
@@ -176,7 +178,8 @@
                 </ng-template>
 
                 <!------Empty message if there are no valus of predictions---------->
-                @if(!isChartVisible){
+                <!--
+                @if(!selectedWine.winePredictions) {
                 <ng-template pTemplate="emptymessage">
                     <tr>
                         <td colspan="13" class="text-center">No Data&nbsp;&nbsp;&nbsp;
@@ -184,7 +187,7 @@
                         </td>
                     </tr>
                 </ng-template>
-                }
+                }-->
             </p-table>
 
         </div>

@@ -10,11 +10,11 @@
     <hr>
 </div>
 <hr>
-<br><br>
+
 <div class="table-container">
 
     <!--Table Body -->
-<p-table [value]="wines"  class="table" [sortField]="'quality'" [sortOrder]="-1">
+<p-table [value]="wines"  class="table" [sortField]="'quality'" [sortOrder]="-1" [paginator]="true" [rows]="5">
 
     <!-----------Table Rows-------------->
     <ng-template pTemplate="header">
@@ -66,12 +66,17 @@
 <!----------------------Dialog to Create Wine-------------->
 <p-dialog header="Create Wine" [draggable]="true" [resizable]="true" [modal]="true" [(visible)]="createWineDialogVisible" [style]="{ width: '25rem' }">
     <div class="flex align-items-center gap-3 mb-3">
-        <p-floatLabel position="left">
-            <input  type="text" pInputText  [(ngModel)] = "wineToSave.name" maxlength="25" #wineName="ngModel" required/>
-            <label for="Wine Name">Wine name</label>
+        <p for="Wine Name">Wine name</p>
+        <p-floatLabel position="left">          
+            <input  type="text" pInputText  [(ngModel)] = "wineToSave.name" maxlength="25" 
+            minlength="3" #wineName="ngModel" required/>           
         </p-floatLabel>
-        <div class="text-danger" *ngIf="wineToSave.name.length > 24">
-           25 characters maximun
+        <div *ngIf="wineName.invalid && wineName.touched" class="p-error mt-1">
+            <div *ngIf="wineName.errors?.['required']">This field is required.</div>
+            <div *ngIf="wineName.errors?.['minlength']">Minimum length is 3 characters.</div>
+            <div class="text-danger" *ngIf="wineToSave.name.length > 24">
+                25 characters maximun
+          </div>
           </div>
           
     </div><br>
@@ -86,21 +91,45 @@
 
 
 <!----------------------Dialog to Create Measure-------------->
-<p-dialog header="Create Measure" [draggable]="true" [resizable]="true" [modal]="true" [(visible)]="createMeasureDialogVisible" [style]="{ width: '30rem',height: '40rem' }">
-    <div class="flex align-items-center gap-3 mb-3">
-        <p-floatLabel position="left">
-            <input  type="text" pInputText  [(ngModel)] = "measureDescription" maxlength="100"/>
-            <label for="Description">Description</label>
-        </p-floatLabel>
-        <div class="text-danger" *ngIf="measureDescription.length > 100">
-            100 characters maximun
-          </div>
-    </div><br>
-    <div class="flex align-items-center gap-3 mb-5">      
-        <p-calendar [(ngModel)]="measureDate" [disabled]="false"/>    
-    </div><br>
-    <div class="flex justify-content-end gap-2">
-        <p-button label="Cancel" severity="secondary" (onClick)="createWineDialogVisible = false" />
-        <p-button label="Save" (onClick)="createMeasure()" />
+<p-dialog header="Create Measure"
+          [draggable]="true"
+          [resizable]="true"
+          [modal]="true"
+          [(visible)]="createMeasureDialogVisible"
+          [style]="{ width: '30rem', height: '35rem' }">
+
+  <div class="flex flex-column gap-2 mb-3">
+    <label for="desc">Measure Description</label><br><br>
+    <p-floatLabel>
+      <input id="desc"
+             type="text"
+             pInputText
+             [(ngModel)]="measureDescription"
+             name="description"
+             minlength="4"
+             maxlength="100"
+             #descModel="ngModel"
+             required />
+     
+    </p-floatLabel>
+    
+    <div *ngIf="descModel.invalid && descModel.touched" class="p-error">
+      <div *ngIf="descModel.errors?.['required']">This field is required.</div>
+      <div *ngIf="descModel.errors?.['minlength']">Minimum 4 characters.</div>
+      <div class="text-danger" *ngIf="measureDescription?.length > 100">
+        Maximum 100 characters.
+      </div>
     </div>
+  </div>
+  <br><br>
+  <div class="flex flex-column gap-2 mb-5">
+    <label for="calendar">Measure Date</label><br>
+    <p-calendar [(ngModel)]="measureDate" inputId="calendar" />
+  </div>
+  <br><br>
+  <div class="flex justify-content-end gap-2">
+    <p-button label="Cancel" severity="secondary" (onClick)="createMeasureDialogVisible = false" />
+    <p-button label="Save" (onClick)="createMeasure()" [disabled]="descModel.invalid" />
+  </div>
+
 </p-dialog>

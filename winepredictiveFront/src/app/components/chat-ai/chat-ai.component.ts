@@ -77,13 +77,14 @@ this.getPredictionByIdPrediction(+this.predictionId);
 
 //Send message IA
 sendMessage() {
+
+  
   const chatMessage = {
     message: this.messageInput,
     user: "user", // Indica que este mensaje es del usuario
   } as ChatMessage;
-
-  console.log("Llega al componente");
-
+  
+// Send meesage to backend
   this.chatService.sendMessage("ABC", chatMessage);
 
   // Añadimos el mensaje del usuario a la lista combinada
@@ -96,7 +97,7 @@ sendMessage() {
 listenerMessage() {
   this.chatService.getMessageSubject().subscribe((messages: any[]) => {
     console.log("Mensajes recibidos del backend: ", messages);
-
+   // const formattedMessage = messages.replace(/\* /g, '\n');
     // Obtener el último mensaje recibido
     const lastMessage = messages[messages.length - 1];
     if (lastMessage) {

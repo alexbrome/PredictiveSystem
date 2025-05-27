@@ -37,7 +37,7 @@
 /* right container styles */
 #sectionRight {
   flex: 1; /* Ocupa el resto del espacio disponible */
-  background-color: #f5f2f2; /* Color de fondo para visualización (opcional) */
+  background-color: #ffffff; /* Color de fondo para visualización (opcional) */
   animation: slideInFromBottom 1s ease-out  forwards;
 }
 
@@ -302,6 +302,10 @@ p-chart {
 
 .text-left {
   text-align: left !important;
+}
+
+.ph{
+  width: 7%;
 }
 
 

@@ -46,6 +46,10 @@ tr{
     align-items: center; /* Centra el contenido verticalmente */
 }
 
+.text-danger{
+    color: red;
+}
+
 /*Animation*/
 @keyframes slideInFromBottom {
     0% {
