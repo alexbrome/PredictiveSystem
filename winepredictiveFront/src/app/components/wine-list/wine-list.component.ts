@@ -75,6 +75,7 @@ export class WineListComponent implements OnInit {
     private confirmationService: ConfirmationService,
     private router: Router,
     private measureService: MeasureService,
+    
     ) { }
 
 
@@ -105,9 +106,6 @@ export class WineListComponent implements OnInit {
         this.wines.forEach(wine => {
           // Asign most current quality
           wine.quality = this.getLatestQuality(wine);
-
-          console.log(wine);
-
         });
 
       },

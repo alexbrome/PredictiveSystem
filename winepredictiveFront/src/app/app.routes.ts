@@ -8,16 +8,23 @@ import { SummaryWhiteWineComponent } from './pages/summary-white-wine/summary-wh
 import { WineListComponent } from './components/wine-list/wine-list.component';
 import { HomeAdminComponent } from './pages/home-admin/home-admin.component';
 import { ChatAIComponent } from './components/chat-ai/chat-ai.component';
+import { NotFoundPageComponent } from './Guards/not-found-page/not-found-page.component';
+import { routeAdminGuard } from './Guards/routeAdminGuard';
+import { UnauthorizedAccesComponent } from './Guards/unauthorized-acces/unauthorized-acces.component';
+import { routeCustomerGuard } from './Guards/routeCustomerGuard';
 
 export const routes: Routes = [
  
-    { path: 'whiteWine-page', component: WhiteWinePageComponent },
-    { path: 'main' ,component:MainPageComponent },
+    { path: 'whiteWine-page', component: WhiteWinePageComponent ,canActivate: [ routeCustomerGuard ]},
+    { path: 'main' ,component:MainPageComponent , canActivate: [ routeCustomerGuard ]},
     { path: 'signup', component : SignupComponent },
-    { path: 'summaryWhite/:wineId', component : SummaryWhiteWineComponent },
-    { path: 'wineList', component : WineListComponent },
-    { path: 'homeAdmin', component : HomeAdminComponent },
-    { path: '', component: LoginComponent },
-    { path:'chat/:predictionId',component:ChatAIComponent},
+    { path: 'summaryWhite/:wineId', component : SummaryWhiteWineComponent , canActivate: [ routeCustomerGuard ]},
+    { path: 'wineList', component : WineListComponent , canActivate: [ routeCustomerGuard ]},
+    { path: 'homeAdmin', component : HomeAdminComponent, canActivate: [ routeAdminGuard ] },
+    { path: '', component: LoginComponent,  },
+    { path:'chat/:predictionId',component:ChatAIComponent ,canActivate: [ routeCustomerGuard ]},
+    { path: 'unauthorized', component: UnauthorizedAccesComponent },
+    { path: '**', component: NotFoundPageComponent },
+   
    
 ];
