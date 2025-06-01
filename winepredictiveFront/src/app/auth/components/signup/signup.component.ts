@@ -15,55 +15,58 @@ import { ToastModule } from 'primeng/toast';
   ],
   templateUrl: './signup.component.html',
   styleUrl: './signup.component.css',
-  providers: [MessageService,ToastModule]
+  providers: [MessageService, ToastModule]
 })
 export class SignupComponent {
 
-  signupForm!:FormGroup
+  signupForm!: FormGroup;
 
+  constructor(private fb: FormBuilder,
+              private authService: AuthServiceService,
+              private messageService: MessageService,
+              private router: Router) { }
 
-  constructor(private fb:FormBuilder,
-    private authService:AuthServiceService,
-    private messageService:MessageService,
-    private router:Router) { }
-   
-   
-    ngOnInit() {
-      this.signupForm = this.fb.group({
-        name:[null,[Validators.required]],
-        email:[null,[Validators.required,Validators.email]],
-        password:[null,[Validators.required, Validators.minLength(8)]],
-        checkPassword:[null,[Validators.required,this.confirmationValidate]],
-      })
-    }
-  
-    confirmationValidate = (control: FormControl):{  [s:string]:boolean }=>{
-    if(!control.value){
-      return {required:true };
-    }else if(control.value !== this.signupForm.controls['password'].value){
-      return {confirm: true , error :true}
-    }
-    return {}
-   };
-   
-  
-  //Create user
-  register() {
-    this.authService.register(this.signupForm.value).subscribe((res) => {  
-      if (res.id != null) {
-        this.messageService.add({
-          severity: 'success',
-          summary: 'Congratulations!',
-          detail: 'User has been registered',
-        });
-        // Delay navigation to give time to show the message
-        setTimeout(() => {
-          this.router.navigateByUrl("/homeAdmin");
-        }, 2000);
-      }
-    }, (error: any) => {});
+  ngOnInit() {
+    this.signupForm = this.fb.group({
+      name: [null, [Validators.required]],
+      email: [null, [Validators.required, Validators.email]],
+      password: [null, [Validators.required, Validators.minLength(8)]],
+      checkPassword: [null, [Validators.required, this.confirmationValidate.bind(this)]],
+    });
   }
-  
-  
 
+  // Custom validation for password confirmation
+  // This function checks if the confirmation password matches the original password
+  confirmationValidate(control: FormControl): { [s: string]: boolean } {
+    if (!control.value) {
+      return { required: true };
+    } else if (control.value !== this.signupForm.controls['password'].value) {
+      return { confirm: true, error: true };
+    }
+    return {};
+  }
+
+  // Create user
+  register() {
+    if (this.signupForm.valid) {
+      this.authService.register(this.signupForm.value).subscribe((res) => {
+        if (res.id != null) {
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Congratulations!',
+            detail: 'User has been registered',
+          });
+          // Redirect to login page      
+            this.router.navigateByUrl("/homeAdmin");       
+        }
+      }, (error: any) => {});
+      // Reset the form after successful registration
+    } else {
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Error',
+        detail: 'Please fill in all required fields correctly.',
+      });
+    }
+  }
 }

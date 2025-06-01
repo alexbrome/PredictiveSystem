@@ -78,7 +78,9 @@ console.log(34);
     this.userService.getAllUsers().subscribe(
       {
         next: (data) => {
-          this.users = data;      
+          this.users = data.filter((user: any) => user.name != 'Admin'); // Filtrar solo usuarios con rol 'USER'   
+          console.log(this.users);
+            
         },
         error: (err) => {
           console.log("Error al cargar los usuarios");
@@ -91,6 +93,10 @@ console.log(34);
     this.wineService.getAllWinesByUserId(userId).subscribe({
       next: (data) => {
         this.wines = data;
+        if (this.wines.length === 0) {
+          this.messageService.add({ severity: 'info', summary: 'No Wines Found', detail: 'This user has no wines.' });
+        }
+        
       },
       error: (err) => {
         console.error('Error loading wines:', err);
