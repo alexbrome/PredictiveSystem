@@ -38,6 +38,39 @@ animation: slideInFromBottom 6s ease-out  forwards;
     white-space: nowrap;
 }
 
+/*botones navbar activos*/
+.active-link {
+  position: relative;
+  font-weight: bold;
+  color: white;
+}
+
+.active-link::after {
+  content: '';
+  position: absolute;
+  bottom: -6px; /* distancia debajo del texto */
+  left: 50%;
+  transform: translateX(-50%);
+  width: 70%; /* ajusta el ancho de la línea según tu gusto */
+  height: 3px;
+  background: linear-gradient(90deg, #00c6ff, #0072ff, #00c6ff);
+  border-radius: 5px;
+  background-size: 200% auto;
+  animation: animateLine 3s linear infinite;
+}
+
+
+@keyframes animateLine {
+  0% {
+    background-position: 0%;
+  }
+  100% {
+    background-position: 200%;
+  }
+}
+
+
+
 /*Animation from bottom*/
 @keyframes slideInFromBottom {
     0% {

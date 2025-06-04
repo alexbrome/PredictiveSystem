@@ -47,26 +47,43 @@ export class SignupComponent {
   }
 
   // Create user
-  register() {
-    if (this.signupForm.valid) {
-      this.authService.register(this.signupForm.value).subscribe((res) => {
-        if (res.id != null) {
+register() {
+  if (this.signupForm.valid) {
+    this.authService.register(this.signupForm.value).subscribe((res) => {
+      if (res.id != null) {
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Congratulations!',
+          detail: 'User has been registered',
+        });
+
+        // Espera un poco antes de navegar (por ejemplo, 2 segundos)
+        setTimeout(() => {
+          this.router.navigateByUrl("/homeAdmin");
+        }, 2000);
+      }
+    }, (error: any) => {
+       if (error.status === 409 && error.error?.message?.includes('Email')) {
           this.messageService.add({
-            severity: 'success',
-            summary: 'Congratulations!',
-            detail: 'User has been registered',
+            severity: 'error',
+            summary: 'Email already exists',
+            detail: 'Please choose a different email.',
           });
-          // Redirect to login page      
-            this.router.navigateByUrl("/homeAdmin");       
+        } else {
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Error',
+            detail: 'Please fill in all required fields correctly.',
+          });
         }
-      }, (error: any) => {});
-      // Reset the form after successful registration
-    } else {
-      this.messageService.add({
-        severity: 'error',
-        summary: 'Error',
-        detail: 'Please fill in all required fields correctly.',
-      });
-    }
+    });
+  } else {
+    this.messageService.add({
+      severity: 'error',
+      summary: 'Error',
+      detail: 'Please fill in all required fields correctly.',
+    });
   }
+}
+
 }

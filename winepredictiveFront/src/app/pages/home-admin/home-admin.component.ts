@@ -123,6 +123,7 @@ console.log(34);
   selectUser(user: any): void {
     this.selectedUser = user;
     this.loadWinesForUserId(user.id);
+    this.predictions = []; // Limpiar predicciones al seleccionar un nuevo usuario
   }
   
   selectWine(wine: any): void {

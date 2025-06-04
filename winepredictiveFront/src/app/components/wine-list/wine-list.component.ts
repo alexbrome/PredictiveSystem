@@ -49,11 +49,11 @@ export class WineListComponent implements OnInit {
   first: number = 0;
   rows: number = 10;
 
-  //Variables to create new wine
-  date: Date = new Date();
-  idUser: any;
-  user: any = {};
-  wineToSave: Wine = new Wine();
+//Variables to create new wine
+date: Date = new Date();
+idUser: any;
+user: any = {};
+wineToSave: Wine = new Wine();
 
 
   //Variables to list wines
