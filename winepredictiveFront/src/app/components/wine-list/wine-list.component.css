@@ -50,6 +50,13 @@ tr{
     color: red;
 }
 
+#noData{
+  display: flex;
+  flex-direction: row;
+    margin-left: 160%;
+    
+}
+
 /*Animation*/
 @keyframes slideInFromBottom {
     0% {
