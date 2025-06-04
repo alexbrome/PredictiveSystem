@@ -11,7 +11,7 @@
     <!----------------Section Right--------------------->
     <div id="sectionRight">
         <div class="card">
-            <p-table [value]="selectedPredictions" [tableStyle]="{'min-width': '60rem'}" [paginator]="true" [rows]="4"
+            <p-table [value]="selectedPredictions" [tableStyle]="{'min-width': '60rem'}"  [paginator]="!isChartVisible && !isCalendarVisible" [rows]="4"
             [sortField]="'dateCreated'" [sortOrder]="-1" alwaysShowPaginator="false"
             >
                 <ng-template pTemplate="caption" class="prediction-bar">

@@ -12,6 +12,7 @@ import { ConfirmationService, MenuItem, MessageService } from 'primeng/api';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ToastModule } from 'primeng/toast';
 import {  RouterModule } from '@angular/router';
+import { TableModule } from 'primeng/table';
 
 
 
@@ -22,7 +23,8 @@ import {  RouterModule } from '@angular/router';
     NgFor,CommonModule,
     ButtonModule,RatingModule,FormsModule,DialogModule,
     ConfirmDialogModule,
-    ToastModule,RouterModule
+    ToastModule,RouterModule,
+    TableModule
   ],
  
   providers:[DatePipe,ConfirmationService,MessageService],

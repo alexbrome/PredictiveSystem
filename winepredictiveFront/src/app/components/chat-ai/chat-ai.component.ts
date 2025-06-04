@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { AfterViewChecked, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { ChatService } from '../../services/chat.service';
 import { ActivatedRoute } from '@angular/router';
 import { ChatMessage } from '../../models/chat-message';
@@ -33,7 +33,9 @@ interface AutoCompleteCompleteEvent {
   styleUrl: './chat-ai.component.css',
   
 })
-export class ChatAIComponent implements OnInit{
+export class ChatAIComponent implements OnInit, AfterViewChecked{
+
+ @ViewChild('chatWindow') chatWindow!: ElementRef;
 
 messageInput:string = "";
 userId:string = "";
@@ -57,8 +59,8 @@ constructor(private chatService:ChatService,
 
 ngOnInit(): void {
   /*Properties for properties list*/
- this.filteredItems = ["FixedAcidity", "VolatileAcidity", "CitricAcid", "ResidualSugar", "Chlorides", "FreeSulfurDioxide", "TotalSulfurDioxide", "Density", "pH", "Sulphates", "Alcohol"];
- 
+  this.filteredItems = ["FixedAcidity", "VolatileAcidity", "CitricAcid", "ResidualSugar", "Chlorides", "FreeSulfurDioxide", "TotalSulfurDioxide", "Density", "pH", "Sulphates", "Alcohol"];
+  
   this.chatService.joinRoom("ABC"); 
   
   this.userId = this.route.snapshot.params["userId"];
@@ -71,9 +73,23 @@ ngOnInit(): void {
   this.route.paramMap.subscribe(params => {
     this.predictionId = params.get('predictionId') || '';
   });
-this.getPredictionByIdPrediction(+this.predictionId);
- 
+  this.getPredictionByIdPrediction(+this.predictionId);
+  
 }
+
+// Scroll to bottom of chat window
+ngAfterViewChecked(): void {
+  this.scrollToBottom();
+}
+
+// Scroll to the bottom of the chat window
+scrollToBottom(): void {
+    if (this.chatWindow) {
+      this.chatWindow.nativeElement.scrollTop = this.chatWindow.nativeElement.scrollHeight;
+    }
+  }
+
+
 
 //Send message IA
 sendMessage() {
