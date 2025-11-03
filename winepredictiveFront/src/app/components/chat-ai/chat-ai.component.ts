@@ -1,4 +1,4 @@
-import { AfterViewChecked, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { AfterViewChecked, Component, ElementRef, NgZone, OnInit, ViewChild } from '@angular/core';
 import { ChatService } from '../../services/chat.service';
 import { ActivatedRoute } from '@angular/router';
 import { ChatMessage } from '../../models/chat-message';
@@ -49,10 +49,13 @@ messageListAllMessages:any[] = [];
 selectedProperty = '';
 filteredItems:any[] = [];
 
+private messageSubscribed = false; // evitar múltiples suscripciones al BehaviorSubject
+
 constructor(private chatService:ChatService,
   private route:ActivatedRoute,
   private winePredictionService: WinePredictionsService,
-  private messageService:MessageService
+  private messageService:MessageService,
+  private ngZone: NgZone
 ){
 
 }
@@ -61,19 +64,19 @@ ngOnInit(): void {
   /*Properties for properties list*/
   this.filteredItems = ["FixedAcidity", "VolatileAcidity", "CitricAcid", "ResidualSugar", "Chlorides", "FreeSulfurDioxide", "TotalSulfurDioxide", "Density", "pH", "Sulphates", "Alcohol"];
   
+  // Suscribirse UNA vez al subject que emite mensajes del backend
+  this.listenerMessage();
+
+  // Solicitar al servicio unirse a la sala (el servicio se encargará de subscribirse cuando haya conexión)
   this.chatService.joinRoom("ABC"); 
   
   this.userId = this.route.snapshot.params["userId"];
-  // Primero, esperamos que el cliente se haya conectado para suscribirnos
-  this.chatService.stompClient.onConnect = () => {
-    this.listenerMessage();  // Después de la conexión, escuchamos los mensajes
-    this.chatService.subscribeToRoom("ABC");
-  };
+
   //Route paramMap to get the predictionId from the URL
   this.route.paramMap.subscribe(params => {
     this.predictionId = params.get('predictionId') || '';
+    this.getPredictionByIdPrediction(+this.predictionId);
   });
-  this.getPredictionByIdPrediction(+this.predictionId);
   
 }
 
@@ -111,10 +114,11 @@ sendMessage() {
 
 //Recieve message IA
 listenerMessage() {
+  if (this.messageSubscribed) return;
+  this.messageSubscribed = true;
+
   this.chatService.getMessageSubject().subscribe((messages: any[]) => {
     console.log("Mensajes recibidos del backend: ", messages);
-   // const formattedMessage = messages.replace(/\* /g, '\n');
-    // Obtener el último mensaje recibido
     const lastMessage = messages[messages.length - 1];
     if (lastMessage) {
       const formattedMessage = {
@@ -122,16 +126,20 @@ listenerMessage() {
         user: "IA"
       };
 
-      // Remover el mensaje temporal si existe
-      const tempIndex = this.messageListAllMessages.findIndex(
-        msg => msg.user === "IA" && msg.message === "I am working on your response..."
-      );
-      if (tempIndex !== -1) {
-        this.messageListAllMessages.splice(tempIndex, 1);
-      }
+      // Ejecutar mutaciones del array dentro de NgZone para forzar detección de cambios
+      this.ngZone.run(() => {
+        // Remover el mensaje temporal si existe
+        const tempIndex = this.messageListAllMessages.findIndex(
+          msg => msg.user === "IA" && msg.message === "I am working on your response..."
+        );
+        if (tempIndex !== -1) {
+          this.messageListAllMessages.splice(tempIndex, 1);
+        }
 
-      // Añadir el mensaje real de la IA a la lista
-      this.messageListAllMessages.push(formattedMessage);
+        // Añadir el mensaje real de la IA a la lista
+        this.messageListAllMessages.push(formattedMessage);
+      });
+
       console.log('Mensaje recibido de la IA:', formattedMessage.message);
     }
   });

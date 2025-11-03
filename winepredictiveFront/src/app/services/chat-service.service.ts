@@ -24,8 +24,8 @@ private socket!:Socket;
     }
     return authHeaders;
   }
+private readonly apiUrl = 'http://localhost:8081/api/v1/llm'; // URL del backend
 
-  private readonly apiUrl = 'http://localhost:8081/api/v1/llm'; // URL del backend
 
   // Método para hacer la solicitud de chat
   chat(query: string): Observable<any> {

@@ -1,26 +1,21 @@
-# Usa una imagen base con Node.js
-FROM node:16 as build
-
-# Establece el directorio de trabajo
+# Etapa 1: construir la app Angular
+# Etapa 1: build de Angular
+FROM node:20 AS build
 WORKDIR /app
-
-# Copia package.json y package-lock.json
 COPY package*.json ./
-
-# Instala las dependencias
 RUN npm install
-
-# Copia el resto de la aplicación
 COPY . .
+RUN npm run build 
 
-# Construye la aplicación para producción
-RUN npm run build -- --prod
+# Etapa 2: servir con Nginx
+FROM nginx:1.28.0
+# Copiamos la carpeta browser que contiene los archivos del build
+COPY --from=build /app/dist/winepredictive-front/browser /usr/share/nginx/html
 
-# Stage 2: Servir la aplicación usando Nginx
-FROM nginx:alpine
-COPY --from=build /app/dist/WINEPREDICTIVEFRONT /usr/share/nginx/html
+# Eliminamos el default.conf de nginx y usamos el nuestro
+RUN rm /etc/nginx/conf.d/default.conf
+COPY nginx.conf /etc/nginx/conf.d
 
-# Exponer el puerto
 EXPOSE 80
-
 CMD ["nginx", "-g", "daemon off;"]
+

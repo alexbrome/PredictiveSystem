@@ -1,3 +1,12 @@
+import sys
+import os
+
+# Forzar el path donde está Flask instalado
+site_packages = r"C:\Users\a930960\PythonPortable\Lib\site-packages"
+if site_packages not in sys.path:
+    sys.path.insert(0, site_packages)
+
+
 from flask import Flask, request, jsonify
 import joblib
 import numpy as np

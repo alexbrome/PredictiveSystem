@@ -2,13 +2,15 @@ import { Injectable } from '@angular/core';
 import { Measure } from '../models/Measure';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { environment } from '../../enviroments/enviroment.prod';
 
 @Injectable({
   providedIn: 'root'
 })
 export class MeasureService {
 
-  private apiUrl = 'http://localhost:8081/api/measure';
+//private apiUrl = 'http://localhost:8081/api/measure';
+private apiUrl = environment.apiBaseUrl + '/measure';
 
   constructor(private http:HttpClient) { }
 

@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { environment } from '../../enviroments/enviroment.prod';
 
 @Injectable({
   providedIn: 'root'
@@ -8,7 +9,8 @@ import { Observable } from 'rxjs';
 export class RedWineServiceService {
 
  
-  private apiUrl = 'http://localhost:5000/predict/red'; 
+//private apiUrl = 'http://localhost:5000/predict/red'; 
+private apiUrl = environment.apiBaseUrl + '/predict/red';
 
   constructor(private http: HttpClient) { }
 

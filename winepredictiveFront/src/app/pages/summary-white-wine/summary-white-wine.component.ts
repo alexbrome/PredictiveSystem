@@ -525,7 +525,7 @@ export class SummaryWhiteWineComponent implements OnInit {
   }
 
   //Generate Logo For PDF from IMAGEN
-  getBase64ImageFromAssets(path: string): Promise<string> {
+ getBase64ImageFromAssets(path: string): Promise<string> {
     return new Promise((resolve, reject) => {
       const img = new Image();
       img.crossOrigin = 'Anonymous';
@@ -544,6 +544,7 @@ export class SummaryWhiteWineComponent implements OnInit {
   }
 
   //Generate PDF
+  
   onGeneratePDF() {
     this.getBase64ImageFromAssets('../../images/vino_g.jpg').then(base64 => {
       generatePDF(this.wines, this.user.name, this.datePipe.transform(new Date(), 'dd/MM/yyyy')!, this.selectedWine.name, this.selectedWine.winePredictions, base64);

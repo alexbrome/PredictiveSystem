@@ -16,6 +16,7 @@ import { TableModule } from 'primeng/table';
 
 
 
+
 @Component({
   selector: 'app-home-admin',
   standalone: true,
@@ -159,7 +160,8 @@ console.log(34);
     this.dialogIsVisible = true;
   }
 
-  deleteUser(userId: any): void {
+  deleteUser(userId: any,event:MouseEvent): void {
+    
     this.confirmationService.confirm({
       message: 'Are you sure you want to delete this user?',
       header: 'Delete Confirmation',

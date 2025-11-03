@@ -1,13 +1,15 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { environment } from '../../enviroments/enviroment.prod';
 
 @Injectable({
   providedIn: 'root'
 })
 export class WhiteWineServiceService {
 
-  private apiUrl = 'http://localhost:5000/predict/white'; 
+  //private apiUrl = 'http://localhost:5000/predict/white'; 
+  private apiUrl = environment.apiBaseUrl + '/predict/white';
 
   constructor(private http: HttpClient) { }
 

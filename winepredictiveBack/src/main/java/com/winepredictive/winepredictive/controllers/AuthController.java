@@ -1,6 +1,7 @@
 package com.winepredictive.winepredictive.controllers;
 
 import java.util.Optional;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
 import com.winepredictive.winepredictive.dto.AuthenticationRequest;
 import com.winepredictive.winepredictive.dto.AuthenticationResponse;
 import com.winepredictive.winepredictive.dto.SignupRequest;
@@ -72,7 +74,7 @@ public class AuthController {
 	public AuthenticationResponse createAuthenticationToken(@RequestBody AuthenticationRequest authenticationRequest)
 			throws BadCredentialsException, DisabledException, UsernameNotFoundException {		
 		try {
-			
+			System.err.println("AuthController - login attempt for user: " + authenticationRequest.getEmail());
 			authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authenticationRequest.getEmail(),
 					authenticationRequest.getPassword()));
 

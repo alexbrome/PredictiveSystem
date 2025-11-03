@@ -1,24 +1,84 @@
-version: '3.8'
+version: "3.9"
+
 services:
-  angular-app:
-    build: 
-      context: ./winepredictiveFront # Ruta a la carpeta del proyecto Angular
-      dockerfile: Dockerfile
+  db:
+    image: mysql:8.0
+    #container_name: wine_db
+    restart: unless-stopped
+    environment:
+    
+      MYSQL_DATABASE: wineprediction
+      MYSQL_ROOT_PASSWORD: root
+      # Si quieres crear un user no-root:
+      # MYSQL_USER: wineuser
+      # MYSQL_PASSWORD: winepass
     ports:
-      - "4200:80"   # El contenedor expone el puerto 80 y lo mapea al 4200 local
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
     networks:
-      - app-network
+      - wine_net 
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-proot"]
+      interval: 10s
+      timeout: 10s
+      retries: 10
 
-
-  spring-backend:
+  backend:
     build:
-      context: ./winepredictiveBack  # Ruta a la carpeta de tu proyecto Spring
+      context: ./winepredictiveBack
       dockerfile: Dockerfile
+    #container_name: wine_backend
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      # Spring Boot admite sobrescribir properties mediante vars de entorno.
+      SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/wineprediction?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: root
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+      SPRING_DATASOURCE_HOST: db
+      SPRING_DATASOURCE_PORT: 3306
     ports:
-      - "8080:8080"
+      - "8081:8081"
     networks:
-      - app-network
+      - wine_net
+
+  frontend:
+    build:
+      context: ./winepredictiveFront
+      dockerfile: Dockerfile
+    #container_name: wine_frontend
+    restart: unless-stopped
+    depends_on:
+      - backend
+    ports:
+      - "4200:80" # mapear puerto 80 del contenedor a 4200 en tu máquina para mantener la costumbre
+    networks:
+      - wine_net
+
+  # Servicio opcional para ejecutar Cypress manualmente (no se levanta por defecto)
+  cypress:
+    image: cypress/included:12.17.0
+    container_name: wine_cypress
+    working_dir: /e2e
+    volumes:
+      - ./cypressPredictiveSystem:/e2e:cached
+    environment:
+      - CYPRESS_baseUrl=http://localhost:4200
+    # perfil 'e2e' para no arrancarlo con docker compose up por defecto
+    profiles: ["e2e"]
+    networks:
+      - wine_net
+    # Comando por defecto para tener el contenedor disponible:
+    entrypoint: ["tail", "-f", "/dev/null"]
+
+volumes:
+  mysql_data:
 
 networks:
-  app-network:
+  wine_net:
+    name: wine_net
     driver: bridge

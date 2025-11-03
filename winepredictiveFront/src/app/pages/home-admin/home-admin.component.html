@@ -10,10 +10,21 @@
     </div>
     <hr>
     <ul>
-      <li *ngFor="let user of users" (click)="selectUser(user)" [ngClass]="{ 'selected-user': selectedUser === user }" class="userList">
-        <span>{{ user.name }}</span>&nbsp;&nbsp;
-        <p-button icon="pi pi-trash" severity="danger" (click)="deleteUser(user.id)" />
-      </li>
+     <li *ngFor="let user of users" 
+    (click)="selectUser(user)" 
+    [ngClass]="{ 'selected-user': selectedUser === user }" 
+    class="userList">
+  
+  <span>{{ user.name }}</span>&nbsp;&nbsp;
+
+  <p-button 
+    icon="pi pi-trash" 
+    severity="danger" 
+    (click)="deleteUser(user.id, $event)" 
+  ></p-button>
+
+</li>
+
     </ul>
   </div>
 

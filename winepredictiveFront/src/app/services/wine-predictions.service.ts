@@ -3,15 +3,19 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { WinePrediction } from '../models/winePrediction';
 import { StorageService } from '../auth/services/storage.service';
-import { response } from 'express';
+import { environment } from '../../enviroments/enviroment.prod';
+
 
 @Injectable({
   providedIn: 'root'
 })
 export class WinePredictionsService {
 
-  private apiUrl = 'http://localhost:8081/api/winePredictions';
-  private apiUrlWinePredictionById = 'http://localhost:8081/api/winePredictions/getWinePrediction';
+ // private apiUrl = 'http://localhost:8081/api/winePredictions';
+  //private apiUrlWinePredictionById = 'http://localhost:8081/api/winePredictions/getWinePrediction';
+  private apiUrl = environment.apiBaseUrl + '/winePredictions';
+  private apiUrlWinePredictionById = environment.apiBaseUrl + '/winePredictions/getWinePrediction';
+  
   constructor(private http:HttpClient) { }
 
   getPredictionsByIdWine(idWine: number): Observable<any[]> {

@@ -2,13 +2,16 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, catchError, tap, throwError } from 'rxjs';
 import { StorageService } from '../auth/services/storage.service';
+import { environment } from '../../enviroments/enviroment.prod';
 
 @Injectable({
   providedIn: 'root'
 })
 export class WineService {
-  private apiUrl = 'http://localhost:8081/api/wine';  
-  private apiPredictions = 'http://localhost:8081/api/winePredictions';  
+  //private apiUrl = 'http://localhost:8081/api/wine';  
+  private apiUrl = environment.apiBaseUrl + '/wine';
+ // private apiPredictions = 'http://localhost:8081/api/winePredictions';  
+ private apiPredictions = environment.apiBaseUrl + '/winePredictions';
 
   constructor(private http: HttpClient) { }
 
