@@ -3,21 +3,14 @@ version: "3.9"
 services:
   db:
     image: mysql:8.0
-    #container_name: wine_db
     restart: unless-stopped
     environment:
-    
       MYSQL_DATABASE: wineprediction
       MYSQL_ROOT_PASSWORD: root
-      # Si quieres crear un user no-root:
-      # MYSQL_USER: wineuser
-      # MYSQL_PASSWORD: winepass
     ports:
       - "3306:3306"
     volumes:
       - mysql_data:/var/lib/mysql
-    networks:
-      - wine_net 
     healthcheck:
       test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-proot"]
       interval: 10s
@@ -28,13 +21,11 @@ services:
     build:
       context: ./winepredictiveBack
       dockerfile: Dockerfile
-    #container_name: wine_backend
     restart: unless-stopped
     depends_on:
       db:
         condition: service_healthy
     environment:
-      # Spring Boot admite sobrescribir properties mediante vars de entorno.
       SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/wineprediction?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
       SPRING_DATASOURCE_USERNAME: root
       SPRING_DATASOURCE_PASSWORD: root
@@ -43,42 +34,43 @@ services:
       SPRING_DATASOURCE_PORT: 3306
     ports:
       - "8081:8081"
-    networks:
-      - wine_net
 
   frontend:
     build:
       context: ./winepredictiveFront
       dockerfile: Dockerfile
-    #container_name: wine_frontend
     restart: unless-stopped
     depends_on:
       - backend
     ports:
-      - "4200:80" # mapear puerto 80 del contenedor a 4200 en tu máquina para mantener la costumbre
-    networks:
-      - wine_net
+      - "4200:80"
 
-  # Servicio opcional para ejecutar Cypress manualmente (no se levanta por defecto)
   cypress:
     image: cypress/included:12.17.0
     container_name: wine_cypress
     working_dir: /e2e
     volumes:
-      - ./cypressPredictiveSystem:/e2e:cached
+      - ./cypressPredictiveSystem:/e2e
     environment:
-      - CYPRESS_baseUrl=http://localhost:4200
-    # perfil 'e2e' para no arrancarlo con docker compose up por defecto
+      - CYPRESS_baseUrl=http://frontend
     profiles: ["e2e"]
-    networks:
-      - wine_net
-    # Comando por defecto para tener el contenedor disponible:
     entrypoint: ["tail", "-f", "/dev/null"]
+
+  jenkins:
+    image: jenkins/jenkins:lts
+    container_name: predictivesystem-jenkins
+    privileged: true
+    user: root
+    restart: unless-stopped
+    ports:
+      - "8085:8080"
+      - "50000:50000"
+    environment:
+      - DOCKER_HOST=unix:///var/run/docker.sock
+    volumes:
+      - jenkins_home:/var/jenkins_home        # workspace y configuraciones persistentes
+      - /var/run/docker.sock:/var/run/docker.sock  # permite ejecutar docker dentro de Jenkins
 
 volumes:
   mysql_data:
-
-networks:
-  wine_net:
-    name: wine_net
-    driver: bridge
+  jenkins_home:
